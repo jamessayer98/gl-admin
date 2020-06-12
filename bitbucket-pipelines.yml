@@ -8,26 +8,25 @@ image: node:10.15.3
 pipelines:
   branches:
     staging:
-      default:     
-        - step:
-            name: Deploy
-            script:
-              - apt-get update
-              - apt-get install -y zip
-              - npm install
-              - npm run build
-              - cp appspec.yml build/
-              - zip -r gl-management-portal.zip build/*
-              - pipe: atlassian/aws-code-deploy:0.5.2
-                variables:
-                  COMMAND: 'upload'
-                  APPLICATION_NAME: 'portal.staging.gerberlabs.com'
-                  DEPLOYMENT_GROUP: 'DG1'
-                  S3_BUCKET: 'gl-staging-deployment'
-                  ZIP_FILE: 'gl-management-portal.zip'
-              - pipe: atlassian/aws-code-deploy:0.5.2
-                variables:
-                  COMMAND: 'deploy'
-                  APPLICATION_NAME: 'portal.staging.gerberlabs.com'
-                  DEPLOYMENT_GROUP: 'DG1'
-                  S3_BUCKET: 'gl-staging-deployment'
+      - step:
+          name: Deploy
+          script:
+            - apt-get update
+            - apt-get install -y zip
+            - npm install
+            - npm run build
+            - cp appspec.yml build/
+            - zip -r gl-management-portal.zip build/*
+            - pipe: atlassian/aws-code-deploy:0.5.2
+              variables:
+                COMMAND: 'upload'
+                APPLICATION_NAME: 'portal.staging.gerberlabs.com'
+                DEPLOYMENT_GROUP: 'DG1'
+                S3_BUCKET: 'gl-staging-deployment'
+                ZIP_FILE: 'gl-management-portal.zip'
+            - pipe: atlassian/aws-code-deploy:0.5.2
+              variables:
+                COMMAND: 'deploy'
+                APPLICATION_NAME: 'portal.staging.gerberlabs.com'
+                DEPLOYMENT_GROUP: 'DG1'
+                S3_BUCKET: 'gl-staging-deployment'
