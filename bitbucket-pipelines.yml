@@ -15,7 +15,7 @@ pipelines:
             - apt-get install -y zip
             - npm install
             - npm run build
-            - cp appspec.yml build/
+            - cp appspec.yml build/appspec.yml
             - zip -r gl-management-portal.zip build/*
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
