@@ -15,9 +15,10 @@ pipelines:
             - apt-get update
             - apt-get install -y zip
             - npm install
+            - echo "REACT_APP_API_URL=http://api.staging.gerberlabs.com:3000" > .env
             - npm run build
             - cp appspec.yml build/appspec.yml
-            - zip -r gl-management-portal.zip *
+            - zip -rq gl-management-portal.zip *
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'upload'
