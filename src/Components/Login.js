@@ -1,6 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { makeStyles, Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
+import { makeStyles, Grid, Paper, TextField, Button } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Lock as LockIcon } from '@material-ui/icons';
 import * as Formik from 'formik';
