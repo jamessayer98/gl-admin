@@ -10,6 +10,7 @@ pipelines:
     staging:
       - step:
           name: Deploy
+          deployment: staging
           script:
             - apt-get update
             - apt-get install -y zip
