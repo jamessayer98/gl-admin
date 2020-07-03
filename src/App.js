@@ -6,25 +6,13 @@ import Auth from './Services/Auth';
 
 import PrivateRoute from './Components/PrivateRoute';
 import Login from './Components/Login';
+import Dashboard from './Components/Dashboard';
+import UserList from './Components/User';
 
 import './Assets/style.css';
 
 const NotFound = () => {
   return <h1>404 Not Found</h1>
-};
-
-const Dashboard = ({ history }) => {
-  return (
-    <div>
-      <h1>You're in!</h1>
-      <p>
-        <Button onClick={() => {
-          Auth.logout();
-          history.push('/');
-        }} color="primary" variant="contained">Log Out</Button>
-      </p>
-    </div>
-  );
 };
 
 const App = () => {
@@ -45,6 +33,7 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Login} />
         <PrivateRoute path="/dashboard" component={Dashboard} />
+        <PrivateRoute path="/users" component={UserList} />
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>
