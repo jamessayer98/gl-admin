@@ -9,18 +9,20 @@ class CRUD {
     }
 
     static handleError(err) {
-        if (err.response) {
-            if (err.response.status === 401) {
-                Auth.logout();
-                History.push('/');
-            } else {
-                console.log(err.response);
-            }
-        } else if (err.request) {
-            console.log(err.request);
+      if (err.response) {
+        if (err.response.status === 401) {
+          Auth.logout();
+          History.push('/');
         } else {
-            console.log(err);
+          console.error(err.message + ': ' + err.request.responseURL);
         }
+      } else if (err.request) {
+          console.log(err.request);
+      } else {
+          console.log(err);
+      }
+
+      return err;
     }
 
     static create(user) {
@@ -53,7 +55,6 @@ class CRUD {
 }
 
 const checkAuth = () => {
-    console.log('Checking auth');
     return Axios
         .get('/')
         .then(() => true)

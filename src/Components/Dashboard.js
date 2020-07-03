@@ -3,12 +3,12 @@ import {
   Typography
 } from '@material-ui/core';
 
-import Nav from './Nav';
+import { DefaultLayout } from './Layout';
 
 export default function Dashboard({ history }) {
   return (
-    <Nav title="Dashboard">
+    <DefaultLayout title="Dashboard">
       <Typography>Welcome to the Gerber Labs Management Portal!</Typography>
-    </Nav>
+    </DefaultLayout>
   );
 };

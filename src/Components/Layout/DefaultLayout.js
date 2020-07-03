@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
 import {
@@ -21,11 +21,11 @@ import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
   ChevronRight as ChevronRightIcon,
-  ChevronLeft as ChevronLeftIcon,
-  InsertDriveFile as InsertDriveFileIcon
+  ChevronLeft as ChevronLeftIcon
 } from '@material-ui/icons';
 
-import Auth from '../Services/Auth';
+// import Auth from '../Services/Auth';
+import ProfileMenu from './ProfileMenu';
 
 const drawerWidth = 240;
 
@@ -93,15 +93,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Nav({ title, history, children }) {
+export default function Default({ title, history, children }) {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-  const handleLogout = () => {
-    Auth.logout();
-    history.push('/');
-  }
+  // const handleLogout = () => {
+  //   Auth.logout();
+  //   history.push('/');
+  // }
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -183,11 +183,5 @@ export default function Nav({ title, history, children }) {
         {children}
       </main>
     </div>
-  );
-}
-
-export function ProfileMenu() {
-  return (
-    <Typography>User Profile</Typography>
   );
 }

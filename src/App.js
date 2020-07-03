@@ -1,13 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Button } from '@material-ui/core';
 
 import Auth from './Services/Auth';
 
 import PrivateRoute from './Components/PrivateRoute';
 import Login from './Components/Login';
 import Dashboard from './Components/Dashboard';
-import UserList from './Components/User';
+import { UserPage } from './Components/User';
 
 import './Assets/style.css';
 
@@ -33,7 +32,7 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={Login} />
         <PrivateRoute path="/dashboard" component={Dashboard} />
-        <PrivateRoute path="/users" component={UserList} />
+        <PrivateRoute path="/users" component={UserPage} />
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>
