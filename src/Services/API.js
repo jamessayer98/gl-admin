@@ -4,7 +4,7 @@ import Axios from './Axios';
 
 class CRUD {
     static handleResponse(res) {
-        return res.data;
+      return res.data;
     }
 
     static handleError(err) {
@@ -24,46 +24,46 @@ class CRUD {
     }
 
     static create(user) {
-        return Axios
-            .post(`/${this.endpoint}`, user)
-            .then(this.handleResponse)
-            .catch(this.handleError);
+      return Axios
+        .post(`/${this.endpoint}`, user)
+        .then(this.handleResponse)
+        .catch(this.handleError);
     }
 
     static get(id) {
-        return Axios
-            .get(`/${this.endpoint}/${id}`)
-            .then(this.handleResponse)
-            .catch(this.handleError);
+      return Axios
+        .get(`/${this.endpoint}/${id}`)
+        .then(this.handleResponse)
+        .catch(this.handleError);
     }
 
     static getAll() {
-        return Axios
-            .get(`/${this.endpoint}`)
-            .then(this.handleResponse)
-            .catch(this.handleError);
+      return Axios
+        .get(`/${this.endpoint}`)
+        .then(this.handleResponse)
+        .catch(this.handleError);
     }
 
     static update(id, user) {
-        return Axios
-            .post(`/${this.endpoint}/${id}`, user)
-            .then(this.handleResponse)
-            .catch(this.handleError);
+      return Axios
+        .post(`/${this.endpoint}/${id}`, user)
+        .then(this.handleResponse)
+        .catch(this.handleError);
     }
 }
 
 const checkAuth = () => {
-    return Axios
-        .get('/')
-        .then(() => true)
-        .catch(CRUD.handeError);
+  return Axios
+    .get('/')
+    .then(() => true)
+    .catch(CRUD.handeError);
 };
 
 class Users extends CRUD {
-    static endpoint = 'users';
+  static endpoint = 'users';
 }
 
 export default {
-    checkAuth,
-    Users
+  checkAuth,
+  Users
 };
