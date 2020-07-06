@@ -12,6 +12,8 @@ import {
 
 import API from '../../../Services/API';
 
+import ListFilter from '../../Shared/ListFilter';
+
 const useStyles = makeStyles((theme) => ({
   button: {
     marginBottom: theme.spacing(3)
@@ -28,8 +30,27 @@ export default function UserList() {
       .catch(err => console.log('yay?'));
   }, []);
 
+  const handleSearch = (event) => {
+    console.log('TODO: Implement search');
+  };
+
+  const handleExampleFilterChange = (event) => {
+    console.log('TODO: Implement actual filtering, this is just here as an example');
+  };
+
   return (
     <React.Fragment>
+      <ListFilter
+        title="Show Users"
+        onSearch={handleSearch}
+      >
+        <select id="example" onChange={handleExampleFilterChange}>
+          <option>Choose Option</option>
+          <option value="1">Option 1</option>
+          <option value="2">Option 2</option>
+        </select>
+      </ListFilter>
+
       <RouterLink
         to="/users/new"
       >
