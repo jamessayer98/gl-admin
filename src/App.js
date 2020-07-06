@@ -29,10 +29,22 @@ export default function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={LoginPage} />
-        <PrivateRoute path="/dashboard" component={DashboardPage} />
-        <PrivateRoute path="/users" component={UserPage} />
-        <Route component={NotFoundPage} />
+        <Route
+          exact
+          path="/"
+          component={LoginPage}
+        />
+        <PrivateRoute
+          path="/dashboard"
+          component={DashboardPage}
+        />
+        <PrivateRoute
+          path="/users"
+          component={UserPage}
+        />
+        <Route
+          component={NotFoundPage}
+        />
       </Switch>
     </BrowserRouter>
   );

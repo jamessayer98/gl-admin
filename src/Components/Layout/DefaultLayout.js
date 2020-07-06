@@ -106,7 +106,9 @@ export default function Default({ title, history, children }) {
   };
 
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+    >
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -151,29 +153,51 @@ export default function Default({ title, history, children }) {
           }),
         }}
       >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
+        <div
+          className={classes.toolbar}
+        >
+          <IconButton
+            onClick={handleDrawerClose}
+          >
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
         <Divider />
         <List>
-          <ListItem button key="dashboard" component={RouterLink} to="/dashboard">
+          <ListItem
+            button
+            key="dashboard"
+            component={RouterLink}
+            to="/dashboard"
+          >
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            <ListItemText
+              primary="Dashboard"
+            />
           </ListItem>
-          <ListItem button key="users" component={RouterLink} to="/users">
+          <ListItem
+            button
+            key="users"
+            component={RouterLink}
+            to="/users"
+          >
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
-            <ListItemText primary="Users" />
+            <ListItemText
+              primary="Users"
+            />
           </ListItem>
         </List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+      <main
+        className={classes.content}
+      >
+        <div
+          className={classes.toolbar}
+        />
         {children}
       </main>
     </div>

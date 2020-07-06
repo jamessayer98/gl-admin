@@ -30,7 +30,9 @@ export default function UserList() {
 
   return (
     <React.Fragment>
-      <RouterLink to="/users/new">
+      <RouterLink
+        to="/users/new"
+      >
         <Button
           className={classes.button}
           variant="contained"
@@ -41,8 +43,12 @@ export default function UserList() {
         </Button>
       </RouterLink>
 
-      <TableContainer component={Paper}>
-        <Table size="small">
+      <TableContainer
+        component={Paper}
+      >
+        <Table
+          size="small"
+        >
           <TableHead>
             <TableRow>
               <TableCell>Username</TableCell>

@@ -74,31 +74,55 @@ export default function ProfileMenu() {
     <React.Fragment>
       {user && (
         <React.Fragment>
-          <IconButton onClick={handleClick}>
+          <IconButton
+            onClick={handleClick}
+          >
             <Avatar>
               <PersonIcon />
             </Avatar>
           </IconButton>
-          <Popper className={classes.popper} id={menuId} open={menuOpen} anchorEl={menuAnchorEl}>
+          <Popper
+            className={classes.popper}
+            id={menuId}
+            open={menuOpen}
+            anchorEl={menuAnchorEl}
+          >
             <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
+              <ClickAwayListener
+                onClickAway={handleClose}
+              >
                 <React.Fragment>
-                  <Box className={classes.username}>
-                    <PersonIcon fontSize="large" />
+                  <Box
+                    className={classes.username}
+                  >
+                    <PersonIcon
+                      fontSize="large"
+                    />
                     <Typography>
                       {user.username}
                     </Typography>
                   </Box>
                   <Divider />
-                  <MenuList autoFocusItem={menuOpen} id="menu_list_grow">
-                    <MenuItem onClick={handleClose} disabled>
+                  <MenuList
+                    autoFocusItem={menuOpen}
+                    id="menu_list_grow"
+                  >
+                    <MenuItem
+                      onClick={handleClose}
+                      disabled
+                    >
                       My Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose} disabled>
+                    <MenuItem
+                      onClick={handleClose}
+                      disabled
+                    >
                       Preferences
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={handleLogout}>
+                    <MenuItem
+                      onClick={handleLogout}
+                    >
                       Logout
                     </MenuItem>
                   </MenuList>

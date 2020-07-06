@@ -7,7 +7,9 @@ export default function UserPage() {
   const [title] = React.useState('Users');
 
   return (
-    <DefaultLayout title={title}>
+    <DefaultLayout
+      title={title}
+    >
       <UserList />
     </DefaultLayout>
   );

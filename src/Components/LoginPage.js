@@ -103,9 +103,16 @@ export default function LoginPage({ history, location }) {
             onSubmit={handleSubmit}
           >
             {({ errors, status, isSubmitting }) => (
-              <Formik.Form autoComplete="off">
+              <Formik.Form
+                autoComplete="off"
+              >
                 {status && (
-                  <Alert className={classes.error} severity="error">{status}</Alert>
+                  <Alert
+                    className={classes.error}
+                    severity="error"
+                  >
+                    {status}
+                  </Alert>
                 )}
                 <Formik.Field
                   as={TextField}
