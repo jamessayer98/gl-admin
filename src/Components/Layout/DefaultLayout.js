@@ -24,8 +24,7 @@ import {
   ChevronLeft as ChevronLeftIcon
 } from '@material-ui/icons';
 
-// import Auth from '../Services/Auth';
-import ProfileMenu from './ProfileMenu';
+import ProfileMenu from '../ProfileMenu';
 
 const drawerWidth = 240;
 
@@ -97,11 +96,6 @@ export default function Default({ title, history, children }) {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-
-  // const handleLogout = () => {
-  //   Auth.logout();
-  //   history.push('/');
-  // }
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);

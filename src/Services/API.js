@@ -1,4 +1,3 @@
-import History from './History';
 import Auth from './Auth';
 import Axios from './Axios';
 
@@ -12,7 +11,6 @@ class CRUD {
       if (err.response) {
         if (err.response.status === 401) {
           Auth.logout();
-          History.push('/');
         } else {
           console.error(err.message + ': ' + err.request.responseURL);
         }

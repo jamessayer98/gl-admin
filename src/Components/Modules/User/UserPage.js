@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DefaultLayout } from '../Layout';
+import DefaultLayout from '../../Layout/DefaultLayout';
 import UserList from './UserList';
 
 export default function UserPage() {

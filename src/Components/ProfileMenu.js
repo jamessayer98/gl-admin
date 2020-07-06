@@ -16,7 +16,7 @@ import {
   Person as PersonIcon
 } from '@material-ui/icons';
 
-import Auth from '../../Services/Auth';
+import Auth from '../Services/Auth';
 
 const useStyles = makeStyles((theme) => ({
   popper: {
@@ -66,6 +66,7 @@ export default function ProfileMenu() {
   };
 
   const handleLogout = () => {
+    Auth.logout();
     return;
   };
 

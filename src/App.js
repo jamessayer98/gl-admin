@@ -4,17 +4,16 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Auth from './Services/Auth';
 
 import PrivateRoute from './Components/PrivateRoute';
-import Login from './Components/Login';
-import Dashboard from './Components/Dashboard';
-import { UserPage } from './Components/User';
+
+import LoginPage from './Components/LoginPage';
+import DashboardPage from './Components/DashboardPage';
+import NotFoundPage from './Components/NotFoundPage';
+
+import { UserPage } from './Components/Modules/User';
 
 import './Assets/style.css';
 
-const NotFound = () => {
-  return <h1>404 Not Found</h1>
-};
-
-const App = () => {
+export default function App() {
   React.useEffect(() => {
     if (window.location.pathname !== '/') {
       Auth
@@ -30,13 +29,11 @@ const App = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={Login} />
-        <PrivateRoute path="/dashboard" component={Dashboard} />
+        <Route exact path="/" component={LoginPage} />
+        <PrivateRoute path="/dashboard" component={DashboardPage} />
         <PrivateRoute path="/users" component={UserPage} />
-        <Route component={NotFound} />
+        <Route component={NotFoundPage} />
       </Switch>
     </BrowserRouter>
   );
 }
-
-export default App;

@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Login = ({ history, location }) => {
+export default function LoginPage({ history, location }) {
   const classes = useStyles();
 
   function handleSubmit({ username, password }, { setStatus, setSubmitting }) {
@@ -142,5 +142,3 @@ const Login = ({ history, location }) => {
     </Grid>
   );
 }
- 
-export default Login;
