@@ -1,7 +1,6 @@
 import Auth from './Auth';
 import Axios from './Axios';
 
-
 class CRUD {
   static handleResponse(res) {
     return res.data;
