@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Link as RouterLink } from 'react-router-dom';
 import {
   CssBaseline,
   AppBar,
@@ -9,22 +8,17 @@ import {
   IconButton,
   Drawer,
   Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   makeStyles,
   useTheme
 } from '@material-ui/core';
 import {
   Menu as MenuIcon,
-  Dashboard as DashboardIcon,
-  People as PeopleIcon,
   ChevronRight as ChevronRightIcon,
   ChevronLeft as ChevronLeftIcon
 } from '@material-ui/icons';
 
-import ProfileMenu from '../ProfileMenu';
+import ProfileMenu from './ProfileMenu';
+import MainMenu from './MainMenu';
 
 const drawerWidth = 240;
 
@@ -95,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Default({ title, history, children }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -163,34 +157,7 @@ export default function Default({ title, history, children }) {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          <ListItem
-            button
-            key="dashboard"
-            component={RouterLink}
-            to="/dashboard"
-          >
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Dashboard"
-            />
-          </ListItem>
-          <ListItem
-            button
-            key="users"
-            component={RouterLink}
-            to="/users"
-          >
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Users"
-            />
-          </ListItem>
-        </List>
+        <MainMenu />
       </Drawer>
       <main
         className={classes.content}
