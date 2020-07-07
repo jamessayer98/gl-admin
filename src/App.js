@@ -39,7 +39,7 @@ export default function App() {
           component={DashboardPage}
         />
         <PrivateRoute
-          path="/users"
+          path="/users/:id?"
           component={UserPage}
         />
         <Route

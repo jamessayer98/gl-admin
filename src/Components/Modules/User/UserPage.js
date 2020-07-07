@@ -1,16 +1,29 @@
 import React from 'react';
 
 import DefaultLayout from '../../Layout/DefaultLayout';
-import UserList from './UserList';
+import { UserList, UserDialog } from './';
 
-export default function UserPage() {
+export default function UserPage({ match, history }) {
   const [title] = React.useState('Users');
+  const [listKey, setListKey] = React.useState(1);
+
+  const handleUserDialogComplete = message => {
+    setListKey(listKey + 1);
+    history.push('/users');
+  };
 
   return (
     <DefaultLayout
       title={title}
     >
-      <UserList />
+      <UserList key={listKey}/>
+
+      {match.params.id && (
+        <UserDialog
+          userId={match.params.id}
+          onComplete={handleUserDialogComplete}
+        />
+      )}
     </DefaultLayout>
   );
 };

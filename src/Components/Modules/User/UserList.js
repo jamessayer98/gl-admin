@@ -51,7 +51,8 @@ export default function UserList() {
         </select>
       </ListFilter>
 
-      <RouterLink
+      <Link
+        component={RouterLink}
         to="/users/new"
       >
         <Button
@@ -62,7 +63,7 @@ export default function UserList() {
         >
           New User
         </Button>
-      </RouterLink>
+      </Link>
 
       <TableContainer
         component={Paper}
