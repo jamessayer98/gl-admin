@@ -62,7 +62,19 @@ class Users extends CRUD {
   static endpoint = 'users';
 }
 
+class Orders extends CRUD {
+  static endpoint = 'orders';
+
+  static getAllWithCustomers() {
+    return Axios
+      .get(`/${this.endpoint}?withCustomers=1`)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
+}
+
 export default {
   checkAuth,
-  Users
+  Users,
+  Orders
 };

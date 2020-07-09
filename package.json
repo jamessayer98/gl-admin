@@ -13,6 +13,7 @@
     "clsx": "^1.1.1",
     "formik": "^2.1.4",
     "history": "^5.0.0",
+    "material-table": "^1.64.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",

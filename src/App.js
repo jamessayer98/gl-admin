@@ -10,6 +10,8 @@ import DashboardPage from './Components/DashboardPage';
 import NotFoundPage from './Components/NotFoundPage';
 
 import { UserPage } from './Components/Modules/User';
+import { OrderPage } from './Components/Modules/Order';
+import { SettingsPage } from './Components/Modules/Settings';
 
 import './Assets/style.css';
 
@@ -41,6 +43,14 @@ export default function App() {
         <PrivateRoute
           path="/users/:id?"
           component={UserPage}
+        />
+        <PrivateRoute
+          path="/orders/:id?"
+          component={OrderPage}
+        />
+        <PrivateRoute
+          path="/settings"
+          component={SettingsPage}
         />
         <Route
           component={NotFoundPage}

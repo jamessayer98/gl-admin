@@ -17,13 +17,13 @@ import {
   Settings as SettingsIcon
 } from '@material-ui/icons';
 
-function MainMenuItem({ key, label, icon }) {
+function MainMenuItem({ endpoint, label, icon }) {
   return (
     <ListItem
       button
-      key={key}
+      key={endpoint}
       component={RouterLink}
-      to={`/${key}`}
+      to={`/${endpoint}`}
     >
       <ListItemIcon>
         {icon}
@@ -39,38 +39,38 @@ export default function MainMenu() {
   return (
     <List>
       <MainMenuItem
-        key="dashboard"
+        endpoint="dashboard"
         label="Dashboard"
         icon={<DashboardIcon />}
       />
       <MainMenuItem
-        key="orders"
+        endpoint="orders"
         label="Orders"
         icon={<ShoppingBasketIcon />}
       />
       <MainMenuItem
-        key="customers"
+        endpoint="customers"
         label="Customers"
         icon={<FaceIcon />}
       />
       <MainMenuItem
-        key="coupons"
+        endpoint="coupons"
         label="Coupons"
         icon={<LocalOfferIcon />}
       />
       <Divider />
       <MainMenuItem
-        key="users"
+        endpoint="users"
         label="Users"
         icon={<PeopleIcon />}
       />
       <MainMenuItem
-        key="product"
+        endpoint="product"
         label="Product"
         icon={<LaptopIcon />}
       />
       <MainMenuItem
-        key="settings"
+        endpoint="settings"
         label="Settings"
         icon={<SettingsIcon />}
       />
