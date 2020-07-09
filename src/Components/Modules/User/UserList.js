@@ -11,6 +11,9 @@ export default function UserList({ history }) {
 
   return (
     <ListTable
+      options={{
+        filtering: true
+      }}
       actions={[
         {
           icon: tableIcons.Add,
