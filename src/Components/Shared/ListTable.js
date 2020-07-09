@@ -18,7 +18,7 @@ import ViewColumn from '@material-ui/icons/ViewColumn';
 
 import MaterialTable from 'material-table';
 
-const tableIcons = {
+export const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
   Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
@@ -41,7 +41,7 @@ const tableIcons = {
 export default function ListTable({ icons, options, ...props }) {
   let _icons = icons ? icons : tableIcons;
   let _options = {
-    pageSize: 20,
+    pageSize: 10,
     padding: 'dense',
     search: true,
     ...options

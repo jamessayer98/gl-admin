@@ -16,7 +16,7 @@ export default function UserPage({ match, history }) {
     <DefaultLayout
       title={title}
     >
-      <UserList key={listKey}/>
+      <UserList key={listKey} history={history} />
 
       {match.params.id && (
         <UserDialog
