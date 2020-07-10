@@ -73,8 +73,13 @@ class Orders extends CRUD {
   }
 }
 
+class Customers extends CRUD {
+  static endpoint = 'customers';
+}
+
 export default {
   checkAuth,
   Users,
-  Orders
+  Orders,
+  Customers
 };
