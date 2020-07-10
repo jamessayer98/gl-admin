@@ -4,6 +4,7 @@ import ListTable, { tableIcons } from '../../Shared/ListTable';
 
 export default function UserList({ history }) {
   const [users, setUsers] = React.useState([]);
+  const [filteringEnabled, setFilteringEnabled] = React.useState(false);
 
   React.useEffect(() => {
     API.Users.getAll().then(users => setUsers(users))
@@ -12,9 +13,15 @@ export default function UserList({ history }) {
   return (
     <ListTable
       options={{
-        filtering: true
+        filtering: filteringEnabled
       }}
       actions={[
+        {
+          icon: tableIcons.Filter,
+          tooltip: 'Toggle Filtering',
+          isFreeAction: true,
+          onClick: () => setFilteringEnabled(!filteringEnabled)
+        },
         {
           icon: tableIcons.Add,
           tooltip: 'Add User',
