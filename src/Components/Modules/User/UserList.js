@@ -1,13 +1,19 @@
 import React from 'react';
 import API from '../../../Services/API';
+import Auth from '../../../Services/Auth';
 import ListTable, { tableIcons } from '../../Shared/ListTable';
 
 export default function UserList({ history }) {
+  const [authUser, setAuthUser] = React.useState(null);
   const [users, setUsers] = React.useState([]);
   const [filteringEnabled, setFilteringEnabled] = React.useState(false);
 
   React.useEffect(() => {
     API.Users.getAll().then(users => setUsers(users))
+  }, []);
+
+  React.useEffect(() => {
+    Auth.currentUser.subscribe(data => data ? setAuthUser(data.user) : setAuthUser(null));
   }, []);
 
   return (
@@ -36,8 +42,8 @@ export default function UserList({ history }) {
         rowData => ({
           icon: tableIcons.Delete,
           tooltip: 'Delete User',
-          onClick: (event, rowData) => alert('Not implemented. Yes, this is a soft-delete. No you cannot delete SuperAdmins lolol.'),
-          disabled: rowData.type === 0
+          onClick: (event, rowData) => console.log(authUser),
+          disabled: rowData.type === 0 || authUser === null || authUser.role > rowData.type
         })
       ]}
       columns={[
