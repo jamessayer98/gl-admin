@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import API from '../../../Services/API';
 
 import { TextField } from '../../Shared/FormFields';
+import { parseGLID } from '../../Shared/GLID';
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
@@ -64,7 +65,7 @@ export default function UserForm({ userId, onComplete }) {
         setUser(defaultUser);
       } else {
         API.Users
-          .get(userId)
+          .get(parseGLID(userId))
           .then(user => setUser(user));
       }
     }
@@ -98,7 +99,7 @@ export default function UserForm({ userId, onComplete }) {
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         let promise;
-        const userId = user._id;
+        const userId = parseGLID(user.glid);
 
         if (userId) {
           promise = API.Users.update(userId, values);

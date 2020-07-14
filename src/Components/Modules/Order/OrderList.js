@@ -1,6 +1,7 @@
 import React from 'react';
 import API from '../../../Services/API';
 import ListTable from '../../Shared/ListTable';
+import GLID from '../../Shared/GLID';
 
 export default function OrderList() {
   const [orders, setOrders] = React.useState([]);
@@ -14,7 +15,7 @@ export default function OrderList() {
     <ListTable
       columns={[
         { title: 'Ordered On', field: 'date', type: 'datetime' },
-        { title: 'Order ID', field: 'orderId' },
+        { title: 'Order ID', field: 'glid', render: rowData => <GLID id={rowData.glid} /> },
         { title: 'Customer', field: 'customer' },
         { title: 'Email', field: 'email' },
         { title: 'Board Count', field: 'boardCount' },
@@ -25,7 +26,7 @@ export default function OrderList() {
       data={orders.map((order, index) => {
         return {
           date: order.createdOn,
-          orderId: order._id,
+          glid: order.glid,
           customer: order.customer.firstName + ' ' + order.customer.lastName,
           email: order.customer.email,
           boardCount: order.details.boardCount,

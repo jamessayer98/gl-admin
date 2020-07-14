@@ -2,6 +2,7 @@ import React from 'react';
 import API from '../../../Services/API';
 import Auth from '../../../Services/Auth';
 import ListTable, { tableIcons } from '../../Shared/ListTable';
+import GLID, { makeGLID } from '../../Shared/GLID';
 
 export default function UserList({ history }) {
   const [authUser, setAuthUser] = React.useState(null);
@@ -37,7 +38,7 @@ export default function UserList({ history }) {
         {
           icon: tableIcons.Edit,
           tooltip: 'Edit User',
-          onClick: (event, rowData) => history.push(`/users/${rowData.id}`)
+          onClick: (event, rowData) => history.push(`/users/${makeGLID(rowData.glid)}`)
         },
         rowData => ({
           icon: tableIcons.Delete,
@@ -48,7 +49,7 @@ export default function UserList({ history }) {
       ]}
       columns={[
         { title: 'Name', field: 'name' },
-        { title: 'User ID', field: 'id' },
+        { title: 'User ID', field: 'glid', render: rowData => <GLID id={rowData.glid} /> },
         { title: 'Type', field: 'type', lookup: { 0: 'Super Admin', 1: 'Admin', 2: 'Manufacturer' } },
         { title: 'Email', field: 'email' },
         { title: 'Last Login', field: 'lastLogin', type: 'datetime' },
@@ -56,7 +57,7 @@ export default function UserList({ history }) {
       ]}
       data={users.map(user => ({
         name: user.name,
-        id: user._id,
+        glid: user.glid,
         type: user.role,
         email: user.email,
         lastLogin: user.loggedInOn || '-',
