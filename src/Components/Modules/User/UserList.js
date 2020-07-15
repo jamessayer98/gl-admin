@@ -1,8 +1,8 @@
 import React from 'react';
 import API from '../../../Services/API';
 import Auth from '../../../Services/Auth';
-import ListTable, { tableIcons } from '../../Shared/ListTable';
-import GLID, { makeGLID } from '../../Shared/GLID';
+import ListTable, { tableIcons } from '../../UI/ListTable';
+import GLID, { makeGLID } from '../../UI/GLID';
 
 export default function UserList({ history }) {
   const [authUser, setAuthUser] = React.useState(null);

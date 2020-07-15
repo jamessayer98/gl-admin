@@ -11,8 +11,8 @@ import {
   Edit as EditIcon
 } from '@material-ui/icons';
 import API from '../../../Services/API';
-import { parseGLID } from '../../Shared/GLID';
-import Address from '../../Shared/Address';
+import { parseGLID } from '../../UI/GLID';
+import Address from '../../UI/Address';
 
 const useInfoPanelStyles = makeStyles(theme => ({
   root: {

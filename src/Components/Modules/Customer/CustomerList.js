@@ -1,7 +1,7 @@
 import React from 'react';
 import API from '../../../Services/API';
-import ListTable, { tableIcons } from '../../Shared/ListTable';
-import GLID from '../../Shared/GLID';
+import ListTable, { tableIcons } from '../../UI/ListTable';
+import GLID from '../../UI/GLID';
 
 export default function CustomerList({ history }) {
   const [customers, setCustomers] = React.useState([]);

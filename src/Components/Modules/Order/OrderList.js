@@ -1,7 +1,7 @@
 import React from 'react';
 import API from '../../../Services/API';
-import ListTable, { tableIcons } from '../../Shared/ListTable';
-import GLID, { makeGLID } from '../../Shared/GLID';
+import ListTable, { tableIcons } from '../../UI/ListTable';
+import GLID, { makeGLID } from '../../UI/GLID';
 
 export default function OrderList({ history }) {
   const [orders, setOrders] = React.useState([]);

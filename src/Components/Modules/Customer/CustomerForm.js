@@ -11,7 +11,7 @@ import * as yup from 'yup';
 
 import API from '../../../Services/API';
 
-import { TextField } from '../../Shared/FormFields';
+import { TextField } from '../../UI/FormFields';
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
