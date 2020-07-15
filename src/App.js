@@ -10,6 +10,7 @@ import DashboardPage from './Components/DashboardPage';
 import NotFoundPage from './Components/NotFoundPage';
 
 import { UserPage } from './Components/Modules/User';
+import { CustomerPage } from './Components/Modules/Customer';
 import { OrderPage } from './Components/Modules/Order';
 import { SettingsPage } from './Components/Modules/Settings';
 
@@ -45,7 +46,15 @@ export default function App() {
           component={UserPage}
         />
         <PrivateRoute
+<<<<<<< HEAD
           path="/orders"
+=======
+          path="/customers/:id?"
+          component={CustomerPage}
+        />
+        <PrivateRoute
+          path="/orders/:id?"
+>>>>>>> fb7599a77859d71743a1067a50348eb4a82618a5
           component={OrderPage}
         />
         <PrivateRoute
