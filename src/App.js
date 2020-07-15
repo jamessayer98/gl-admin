@@ -45,7 +45,7 @@ export default function App() {
           component={UserPage}
         />
         <PrivateRoute
-          path="/orders/:id?"
+          path="/orders"
           component={OrderPage}
         />
         <PrivateRoute

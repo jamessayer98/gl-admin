@@ -1,7 +1,7 @@
 import React from 'react';
 
 export function parseGLID(glid) {
-  return parseInt(glid.replace('GL', ''));
+  return parseInt(String(glid).replace('GL', ''));
 }
 
 export function makeGLID(id) {
@@ -9,7 +9,6 @@ export function makeGLID(id) {
 }
 
 export default function GLID({ id }) {
-  console.log(makeGLID(id));
   return (
     <span>{makeGLID(id)}</span>
   );

@@ -1,29 +1,31 @@
 import React from 'react';
 
 import DefaultLayout from '../../Layout/DefaultLayout';
-import { OrderList } from './';
+import { OrderList, OrderViewer } from './';
+import PrivateRoute from '../../PrivateRoute';
+import { Switch } from 'react-router-dom';
 
-export default function OrderPage({ match, history }) {
+function OrderListPage({ history }) {
+  const [key] = React.useState(1);
+  return <OrderList key={key} history={history}/>;
+}
+
+function OrderViewPage({ match }) {
+  const [key] = React.useState(1);
+  return <OrderViewer key={key} orderId={match.params.id} />;
+}
+
+export default function OrderPage({ match }) {
   const [title] = React.useState('Orders');
-  const [listKey] = React.useState(1);
-
-  // const handleOrderDialogComplete = message => {
-  //   setListKey(listKey + 1);
-  //   history.push('/orders');
-  // };
 
   return (
     <DefaultLayout
       title={title}
     >
-      <OrderList key={listKey} />
-
-      {/*match.params.id && (
-        <UserDialog
-          userId={match.params.id}
-          onComplete={handleOrderDialogComplete}
-        />
-      )*/}
+      <Switch>
+        <PrivateRoute exact path={`${match.path}/`} component={OrderListPage} />
+        <PrivateRoute exact path={`${match.path}/:id`} component={OrderViewPage} />
+      </Switch>
     </DefaultLayout>
   );
 };

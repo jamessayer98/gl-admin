@@ -1,9 +1,9 @@
 import React from 'react';
 import API from '../../../Services/API';
-import ListTable from '../../Shared/ListTable';
-import GLID from '../../Shared/GLID';
+import ListTable, { tableIcons } from '../../Shared/ListTable';
+import GLID, { makeGLID } from '../../Shared/GLID';
 
-export default function OrderList() {
+export default function OrderList({ history }) {
   const [orders, setOrders] = React.useState([]);
 
   React.useEffect(() => {
@@ -13,6 +13,13 @@ export default function OrderList() {
 
   return (
     <ListTable
+      actions={[
+        {
+          icon: tableIcons.Visibility,
+          tooltip: 'View Order',
+          onClick: (event, rowData) => history.push(`/orders/${makeGLID(rowData.glid)}`)
+        }
+      ]}
       columns={[
         { title: 'Ordered On', field: 'date', type: 'datetime' },
         { title: 'Order ID', field: 'glid', render: rowData => <GLID id={rowData.glid} /> },
