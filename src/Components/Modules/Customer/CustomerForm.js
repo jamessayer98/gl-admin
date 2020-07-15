@@ -65,7 +65,7 @@ export default function CustomerForm({ customerId, onComplete }) {
     }
   }, [customerId]);
 
-  if (customer && customer._id) {
+  if (customer && customer.glid) {
     delete formSchema.password;
     delete formSchema.passwordConfirmation;
   }
@@ -91,7 +91,7 @@ export default function CustomerForm({ customerId, onComplete }) {
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         let promise;
-        const customerId = customer._id;
+        const customerId = customer.glid;
 
         if (customerId) {
           promise = API.Customers.update(customerId, values);

@@ -1,6 +1,7 @@
 import React from 'react';
 import API from '../../../Services/API';
 import ListTable, { tableIcons } from '../../Shared/ListTable';
+import GLID from '../../Shared/GLID';
 
 export default function CustomerList({ history }) {
   const [customers, setCustomers] = React.useState([]);
@@ -31,7 +32,7 @@ export default function CustomerList({ history }) {
         {
           icon: tableIcons.Edit,
           tooltip: 'Edit Customer',
-          onClick: (event, rowData) => history.push(`/customers/${rowData.id}`)
+          onClick: (event, rowData) => history.push(`/customers/${rowData.glid}`)
         },
         rowData => ({
           icon: tableIcons.Delete,
@@ -42,13 +43,13 @@ export default function CustomerList({ history }) {
       ]}
       columns={[
         { title: 'Name', field: 'name' },
-        { title: 'Customer ID', field: 'id' },
+        { title: 'Customer ID', field: 'glid', render: rowData => <GLID id={rowData.glid} /> },
         { title: 'Email', field: 'email' },
         { title: 'Phone', field: 'phone'}
       ]}
       data={customers.map(customer => ({
         name: `${customer.firstName} ${customer.lastName}`,
-        id: customer._id,
+        glid: customer.glid,
         email: customer.email,
         phone: customer.phone
       }))}

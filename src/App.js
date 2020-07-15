@@ -46,15 +46,11 @@ export default function App() {
           component={UserPage}
         />
         <PrivateRoute
-<<<<<<< HEAD
-          path="/orders"
-=======
           path="/customers/:id?"
           component={CustomerPage}
         />
         <PrivateRoute
           path="/orders/:id?"
->>>>>>> fb7599a77859d71743a1067a50348eb4a82618a5
           component={OrderPage}
         />
         <PrivateRoute
