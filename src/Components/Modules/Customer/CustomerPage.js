@@ -1,7 +1,8 @@
 import React from 'react';
 
 import DefaultLayout from '../../Layout/DefaultLayout';
-import { CustomerList, CustomerDialog } from '.';
+import Modal from '../../UI/Modal';
+import { CustomerList, CustomerForm } from '.';
 
 export default function CustomerPage({ match, history }) {
   const [title] = React.useState('Customers');
@@ -19,10 +20,15 @@ export default function CustomerPage({ match, history }) {
       <CustomerList key={listKey} history={history} />
 
       {match.params.id && (
-        <CustomerDialog
-          customerId={match.params.id}
-          onComplete={handleCustomerDialogComplete}
-        />
+        <Modal
+          title={`${match.params.id === 'new' ? "New" : "Edit"} Customer`}
+          toRoute="/customers"
+          >
+          <CustomerForm
+            customerId={match.params.id}
+            onComplete={handleCustomerDialogComplete}
+          />
+        </Modal>
       )}
     </DefaultLayout>
   );

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import DefaultLayout from '../../Layout/DefaultLayout';
-import { UserList, UserDialog } from './';
+import Modal from '../../UI/Modal';
+import { UserList, UserForm } from './';
 
 export default function UserPage({ match, history }) {
   const [title] = React.useState('Users');
@@ -19,10 +20,15 @@ export default function UserPage({ match, history }) {
       <UserList key={listKey} history={history} />
 
       {match.params.id && (
-        <UserDialog
-          userId={match.params.id}
-          onComplete={handleUserDialogComplete}
-        />
+        <Modal
+          title={`${match.params.id === 'new' ? "New" : "Edit"} User`}
+          toRoute="/users"
+        >
+          <UserForm 
+            userId={match.params.id}
+            onComplete={handleUserDialogComplete}
+          />
+        </Modal>
       )}
     </DefaultLayout>
   );
