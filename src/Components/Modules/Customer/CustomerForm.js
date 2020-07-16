@@ -12,6 +12,9 @@ import * as yup from 'yup';
 import API from '../../../Services/API';
 
 import { TextField } from '../../UI/FormFields';
+import DropDown from '../../UI/DropDown';
+import US_STATES from '../../../Services/StaticData';
+
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
@@ -46,7 +49,10 @@ const formSchema = {
     .default(defaultCustomer.email),
   phone: yup.string()
     .required('A valid phone number is required')
-    .default(defaultCustomer.phone)
+    .default(defaultCustomer.phone),
+  state: yup.string()
+    .required('A valid US State is required')
+    .default("CA")
 };
 
 export default function CustomerForm({ customerId, onComplete }) {
@@ -135,6 +141,15 @@ export default function CustomerForm({ customerId, onComplete }) {
             margin="normal"
             fullWidth
           />
+          <formik.Field
+            component={DropDown}
+            name="state"
+            label="State"
+            margin="normal"
+            dataSource={US_STATES}
+            fullWidth
+          >           
+          </formik.Field>
           <Box className={classes.formActions}>
             <Button
               variant="contained"
