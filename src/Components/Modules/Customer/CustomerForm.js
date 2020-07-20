@@ -14,6 +14,7 @@ import API from '../../../Services/API';
 import { TextField } from '../../UI/FormFields';
 import DropDown from '../../UI/DropDown';
 import US_STATES from '../../../Services/StaticData';
+import { parseGLID } from '../../UI/GLID';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +66,7 @@ export default function CustomerForm({ customerId, onComplete }) {
         setCustomer(defaultCustomer);
       } else {
         API.Customers
-          .get(customerId)
+          .get(parseGLID(customerId))
           .then(customer => setCustomer(customer));
       }
     }
@@ -148,8 +149,7 @@ export default function CustomerForm({ customerId, onComplete }) {
             margin="normal"
             dataSource={US_STATES}
             fullWidth
-          >           
-          </formik.Field>
+          />
           <Box className={classes.formActions}>
             <Button
               variant="contained"

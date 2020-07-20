@@ -1,7 +1,7 @@
 import React from 'react';
 import API from '../../../Services/API';
 import ListTable, { tableIcons } from '../../UI/ListTable';
-import GLID from '../../UI/GLID';
+import GLID, { makeGLID } from '../../UI/GLID';
 
 export default function CustomerList({ history }) {
   const [customers, setCustomers] = React.useState([]);
@@ -32,7 +32,7 @@ export default function CustomerList({ history }) {
         {
           icon: tableIcons.Edit,
           tooltip: 'Edit Customer',
-          onClick: (event, rowData) => history.push(`/customers/${rowData.glid}`)
+          onClick: (event, rowData) => history.push(`/customers/${makeGLID(rowData.glid)}`)
         },
         rowData => ({
           icon: tableIcons.Delete,
