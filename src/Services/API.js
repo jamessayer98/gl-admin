@@ -71,6 +71,13 @@ class Orders extends CRUD {
       .then(this.handleResponse)
       .catch(this.handleError);
   }
+
+  static getOrdersByCustomer(customerId) {
+    return Axios
+      .get(`/${this.endpoint}/customer/${customerId}`)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
 }
 
 class Customers extends CRUD {
