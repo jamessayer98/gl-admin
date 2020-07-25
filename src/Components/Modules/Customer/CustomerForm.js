@@ -13,6 +13,7 @@ import { TextField } from '../../UI/FormFields';
 import DropDown from '../../UI/DropDown';
 import ButtonGroup from '../../UI/ButtonGroup';
 import { US_STATES, ACCOUNT_STATUS, PHONE_REGEX } from '../../../Services/StaticData';
+import { parseGLID } from '../../UI/GLID';
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
@@ -75,7 +76,7 @@ export default function CustomerForm({ customerId, onComplete }) {
         setCustomer(defaultCustomer);
       } else {
         API.Customers
-          .get(customerId)
+          .get(parseGLID(customerId))
           .then(customer => setCustomer(customer));
       }
     }
