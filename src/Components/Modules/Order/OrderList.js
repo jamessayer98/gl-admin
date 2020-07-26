@@ -3,7 +3,7 @@ import API from '../../../Services/API';
 import ListTable, { tableIcons } from '../../UI/ListTable';
 import GLID, { makeGLID, parseGLID } from '../../UI/GLID';
 
-export default function OrderList({ history, customerId, hideCustomer, hideActions }) {
+export default function OrderList({ history, customerId, hideCustomer, readOnly }) {
   const [orders, setOrders] = React.useState([]);
 
   React.useEffect(() => {
@@ -37,14 +37,15 @@ export default function OrderList({ history, customerId, hideCustomer, hideActio
 
   return (
     <ListTable
-      actions={hideActions ? null : actions}
+      options={readOnly ? { paging: false, search: false, tableLayout: "fixed" } : null}
+      actions={readOnly ? null : actions}
       columns={hideCustomer ? columns.filter(f => f.table !== 'customers') : columns}
       data={orders.map((order, index) => {
         return {
           date: order.createdOn,
           glid: order.glid,
-          customer: order.customer.firstName + ' ' + order.customer.lastName,
-          email: order.customer.email,
+          customer: order.customer && order.customer.firstName + ' ' + order.customer.lastName,
+          email: order.customer && order.customer.email,
           boardCount: order.details.boardCount,
           estArea: order.details.totalBoardArea,
           total: order.amounts.total,

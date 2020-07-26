@@ -12,7 +12,7 @@ import * as yup from 'yup';
 
 import API from '../../../Services/API';
 
-import { TextField } from '../../UI/FormFields';
+import { InputField } from '../../UI/FormFields';
 import { parseGLID } from '../../UI/GLID';
 
 const useStyles = makeStyles((theme) => ({
@@ -116,21 +116,21 @@ export default function UserForm({ userId, onComplete }) {
       {({ errors, isSubmitting }) => (
         <formik.Form autoComplete="off">
           <formik.Field
-            component={TextField}
+            component={InputField}
             name="username"
             label="Username"
             margin="normal"
             fullWidth
           />
           <formik.Field
-            component={TextField}
+            component={InputField}
             name="name"
             label="Name"
             margin="normal"
             fullWidth
           />
           <formik.Field
-            component={TextField}
+            component={InputField}
             name="email"
             label="Email"
             margin="normal"
@@ -139,7 +139,7 @@ export default function UserForm({ userId, onComplete }) {
           {!user._id && (
             <React.Fragment>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="password"
                 label="Password"
                 type="password"
@@ -147,7 +147,7 @@ export default function UserForm({ userId, onComplete }) {
                 fullWidth
               />
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="passwordConfirmation"
                 label="Password (confirm)"
                 type="password"

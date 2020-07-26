@@ -9,16 +9,14 @@ import * as yup from 'yup';
 
 import API from '../../../Services/API';
 
-import { TextField } from '../../UI/FormFields';
-import DropDown from '../../UI/DropDown';
-import ButtonGroup from '../../UI/ButtonGroup';
+import { InputField, DropDown, ButtonGroup } from '../../UI/FormFields';
 import { US_STATES, ACCOUNT_STATUS, PHONE_REGEX } from '../../../Services/StaticData';
 import { parseGLID } from '../../UI/GLID';
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(7),
     display: 'flex',
     justifyContent: 'flex-start',
   },
@@ -27,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center'
   },
   buttons: {
-    width: '90%'
+    width: '100%'
   }
 }));
 
@@ -62,7 +60,10 @@ const formSchema = {
     .matches(PHONE_REGEX, 'Phone number is not valid')
     .default(defaultCustomer.phone),
   address: yup.object().shape({
-      state: yup.string().required('US state is required')
+      street: yup.string().required('Shipping address 1 is required'),
+      city: yup.string().required('City is required'),
+      state: yup.string().required('US state is required'),
+      zip: yup.string().required('Zip is required')
   }),
 };
 
@@ -128,7 +129,7 @@ export default function CustomerForm({ customerId, onComplete }) {
           <Grid container spacing={4}>
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="firstName"
                 label="First Name"
                 margin="normal"
@@ -137,7 +138,7 @@ export default function CustomerForm({ customerId, onComplete }) {
             </Grid>
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="address.street"
                 label="Shipping Address 1"
                 margin="normal"
@@ -146,7 +147,7 @@ export default function CustomerForm({ customerId, onComplete }) {
             </Grid> 
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="lastName"
                 label="Last Name"
                 margin="normal"
@@ -155,7 +156,7 @@ export default function CustomerForm({ customerId, onComplete }) {
             </Grid> 
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="address.secondary"
                 label="Shipping Address 2"
                 margin="normal"
@@ -164,7 +165,7 @@ export default function CustomerForm({ customerId, onComplete }) {
             </Grid>
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="email"
                 label="Email"
                 margin="normal"
@@ -173,7 +174,7 @@ export default function CustomerForm({ customerId, onComplete }) {
             </Grid>
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="address.city"
                 label="City"
                 margin="normal"
@@ -182,7 +183,7 @@ export default function CustomerForm({ customerId, onComplete }) {
             </Grid>
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="phone"
                 label="Phone"
                 margin="normal"
@@ -205,11 +206,12 @@ export default function CustomerForm({ customerId, onComplete }) {
                 name="accountStatus"
                 label="Account Status"
                 dataSource={ACCOUNT_STATUS}
+                message="A blocked account cannot be used to login"
               />
             </Grid>
             <Grid item sm={6}>
               <formik.Field
-                component={TextField}
+                component={InputField}
                 name="address.zip"
                 label="Zip"
                 margin="normal"
@@ -217,18 +219,7 @@ export default function CustomerForm({ customerId, onComplete }) {
               />
             </Grid>          
           </Grid>                
-          <Grid container className={classes.formActions}>
-            <Grid item sm>
-              <Button
-                className={classes.buttons}
-                variant="outlined"
-                color="default"
-                margin="normal"
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-            </Grid>
+          <Grid container className={classes.formActions} spacing={2}>
             <Grid item sm>
               <Button
                 className={classes.buttons}

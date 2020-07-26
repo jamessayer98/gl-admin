@@ -2,18 +2,22 @@ import React from 'react';
 import { InputLabel, FormHelperText } from '@material-ui/core';
 import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab';
 
-export default function ButtonGroup({ field, form: { touched, errors }, ...props }) {
+export default function ButtonGroup({ field, form: { touched, errors, setFieldValue }, ...props }) {
   const { label, dataSource, ...rest } = props
-  const [buttonValue, setButtonValue] = React.useState(field.value);
   
   const handleChange = (event, newButtonValue) => {
-    setButtonValue(newButtonValue);
+    setFieldValue(field.name, newButtonValue)
   };
 
-  let items = [];
+  let items = null;
   if (dataSource) {
     items = dataSource.map(item => (
-        <ToggleButton key={item} value={item}>{item}</ToggleButton>
+        <ToggleButton
+          style={{width: `${100/dataSource.length}%`}}
+          key={item}
+          selected={item === field.value}
+          value={item}>{item}
+        </ToggleButton>
     ));
   }
 
@@ -21,16 +25,19 @@ export default function ButtonGroup({ field, form: { touched, errors }, ...props
     <React.Fragment>
       <InputLabel id={`${field.name}-label`}>{label}</InputLabel>
       <ToggleButtonGroup
-        value={buttonValue}
+        style={{width: "100%"}}
         exclusive
         onChange={handleChange}
         id={field.name}
         error={touched[field.name] && errors[field.name] && true}
+        name={field.name}
         {...rest}
       >
         {items}
       </ToggleButtonGroup>
-      <FormHelperText>{touched[field.name] && errors[field.name]}</FormHelperText>
+      <FormHelperText>
+        {rest.message}
+        {touched[field.name] && errors[field.name]}</FormHelperText>
     </React.Fragment>    
   );
 };

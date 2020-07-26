@@ -29,7 +29,8 @@ export default function CustomerPage({ match, history }) {
             customerId={match.params.id}
             onComplete={handleCustomerDialogComplete}
           />
-          <OrderList customerId={match.params.id} hideCustomer hideActions />
+          {match.params.id === 'new' ? null :
+            <OrderList customerId={match.params.id} hideCustomer readOnly />}
         </Modal>
       )}
     </DefaultLayout>
