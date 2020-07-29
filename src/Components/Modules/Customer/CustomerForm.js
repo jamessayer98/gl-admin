@@ -1,31 +1,31 @@
 import React from 'react';
 import {
   Box, Button, CircularProgress,
+  Grid,
   makeStyles
 } from '@material-ui/core';
-import {
-  Save as SaveIcon
-} from '@material-ui/icons';
 import * as formik from 'formik';
 import * as yup from 'yup';
 
 import API from '../../../Services/API';
 
-import { TextField } from '../../UI/FormFields';
-import DropDown from '../../UI/DropDown';
-import US_STATES from '../../../Services/StaticData';
+import { InputField, DropDown, ButtonGroup } from '../../UI/FormFields';
+import { US_STATES, ACCOUNT_STATUS, PHONE_REGEX } from '../../../Services/StaticData';
 import { parseGLID } from '../../UI/GLID';
-
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(7),
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   loader: {
     display: 'flex',
     justifyContent: 'center'
+  },
+  buttons: {
+    width: '100%'
   }
 }));
 
@@ -35,7 +35,14 @@ const defaultCustomer = {
   email: '',
   phone: '',
   accountStatus: 'Active',
-  signedUpOn: Date.now
+  signedUpOn: Date.now,
+  address: {
+    street: '',
+    secondary: '',
+    city: '',
+    state: '',
+    zip: ''
+  }
 };
 
 const formSchema = {
@@ -50,10 +57,14 @@ const formSchema = {
     .default(defaultCustomer.email),
   phone: yup.string()
     .required('A valid phone number is required')
+    .matches(PHONE_REGEX, 'Phone number is not valid')
     .default(defaultCustomer.phone),
-  state: yup.string()
-    .required('A valid US State is required')
-    .default("CA")
+  address: yup.object().shape({
+      street: yup.string().required('Shipping address 1 is required'),
+      city: yup.string().required('City is required'),
+      state: yup.string().required('US state is required'),
+      zip: yup.string().required('Zip is required')
+  }),
 };
 
 export default function CustomerForm({ customerId, onComplete }) {
@@ -72,17 +83,10 @@ export default function CustomerForm({ customerId, onComplete }) {
     }
   }, [customerId]);
 
-  if (customer && customer.glid) {
-    delete formSchema.password;
-    delete formSchema.passwordConfirmation;
-  }
-
   const validationSchema = yup.object().shape(formSchema);
 
   const loading = () => (
-    <Box
-      className={classes.loader}
-    >
+    <Box className={classes.loader}>
       <CircularProgress />
     </Box>
   );
@@ -93,7 +97,15 @@ export default function CustomerForm({ customerId, onComplete }) {
         firstName: customer.firstName,
         lastName: customer.lastName,
         email: customer.email,
-        phone: customer.phone
+        phone: customer.phone,        
+        accountStatus: customer.accountStatus,
+        address: {
+          street: customer.address.street,
+          secondary: customer.address.secondary,
+          city: customer.address.city,
+          state: customer.address.state,
+          zip: customer.address.zip
+        }        
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -114,54 +126,124 @@ export default function CustomerForm({ customerId, onComplete }) {
     >
       {({ errors, isSubmitting }) => (
         <formik.Form autoComplete="off">
-          <formik.Field
-            component={TextField}
-            name="firstName"
-            label="First Name"
-            margin="normal"
-            fullWidth
-          />
-          <formik.Field
-            component={TextField}
-            name="lastName"
-            label="Last Name"
-            margin="normal"
-            fullWidth
-          />
-          <formik.Field
-            component={TextField}
-            name="email"
-            label="Email"
-            margin="normal"
-            fullWidth
-          />
-          <formik.Field
-            component={TextField}
-            name="phone"
-            label="Phone"
-            margin="normal"
-            fullWidth
-          />
-          <formik.Field
-            component={DropDown}
-            name="state"
-            label="State"
-            margin="normal"
-            dataSource={US_STATES}
-            fullWidth
-          />
-          <Box className={classes.formActions}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              margin="normal"
-              startIcon={<SaveIcon />}
-              disabled={isSubmitting}
-            >
-              {(customer._id ? 'Update' : 'Create')} Customer
-            </Button>
-          </Box>
+          <Grid container spacing={4}>
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="firstName"
+                label="First Name"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="address.street"
+                label="Shipping Address 1"
+                margin="normal"
+                fullWidth
+              />
+            </Grid> 
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="lastName"
+                label="Last Name"
+                margin="normal"
+                fullWidth
+              />
+            </Grid> 
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="address.secondary"
+                label="Shipping Address 2"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="email"
+                label="Email"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="address.city"
+                label="City"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="phone"
+                label="Phone"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <formik.Field
+                component={DropDown}
+                name="address.state"
+                label="State"
+                dataSource={US_STATES}
+                dataKey="name"
+                dataValue="abbrev"                
+              />
+            </Grid> 
+            <Grid item sm={6}>
+              <formik.Field
+                component={ButtonGroup}
+                name="accountStatus"
+                label="Account Status"
+                dataSource={ACCOUNT_STATUS}
+                message="A blocked account cannot be used to login"
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <formik.Field
+                component={InputField}
+                name="address.zip"
+                label="Zip"
+                margin="normal"
+                fullWidth
+              />
+            </Grid>          
+          </Grid>                
+          <Grid container className={classes.formActions} spacing={2}>
+            <Grid item sm>
+              <Button
+                className={classes.buttons}
+                variant="contained"
+                color="secondary"
+                type="submit"
+                margin="normal"
+                disabled={isSubmitting}
+              >
+                Save
+              </Button>
+            </Grid>
+            <Grid item sm>
+              <Button
+                className={classes.buttons}
+                variant="outlined"
+                color="default"
+                margin="normal"
+                disabled={isSubmitting}
+              >
+                Delete
+              </Button>
+            </Grid>         
+          </Grid>
         </formik.Form>
       )}
     </formik.Formik>

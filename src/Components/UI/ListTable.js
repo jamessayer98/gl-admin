@@ -45,7 +45,6 @@ export default function ListTable({ icons, options, ...props }) {
   let _options = {
     pageSize: 10,
     padding: 'dense',
-    search: true,
     ...options
   };
   return <MaterialTable icons={_icons} options={_options} {...props} />;

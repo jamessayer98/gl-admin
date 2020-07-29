@@ -3,6 +3,7 @@ import React from 'react';
 import DefaultLayout from '../../Layout/DefaultLayout';
 import Modal from '../../UI/Modal';
 import { CustomerList, CustomerForm } from '.';
+import { OrderList } from '../Order';
 
 export default function CustomerPage({ match, history }) {
   const [title] = React.useState('Customers');
@@ -21,13 +22,15 @@ export default function CustomerPage({ match, history }) {
 
       {match.params.id && (
         <Modal
-          title={`${match.params.id === 'new' ? "New" : "Edit"} Customer`}
+          title={`${match.params.id === 'new' ? "New" : ""} Customer Account`}
           toRoute="/customers"
           >
           <CustomerForm
             customerId={match.params.id}
             onComplete={handleCustomerDialogComplete}
           />
+          {match.params.id === 'new' ? null :
+            <OrderList customerId={match.params.id} hideCustomer readOnly />}
         </Modal>
       )}
     </DefaultLayout>
