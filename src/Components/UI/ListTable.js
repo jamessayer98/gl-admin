@@ -45,23 +45,29 @@ function ListTableDateTime({ date }) {
     year: 'numeric', month: 'numeric', day: 'numeric',
     hour: 'numeric', minute: 'numeric'
   };
-  console.log(date);
   return (
     <span>{new Intl.DateTimeFormat('default', options).format(new Date(date))}</span>
   );
 };
 
-export default function ListTable({ icons, options, columns, ...props }) {
+export default function ListTable({ icons, options, columns, localization, ...props }) {
   let _icons = icons ? icons : tableIcons;
   let _options = {
     pageSize: 10,
     padding: 'dense',
     ...options
   };
+  let _localization = {
+    header: {
+      actions: ''
+    }
+  };
   columns.map(column => {
-    if (column.type == 'datetime') {
+    if (column.type === 'datetime') {
       column.render = rowdata => rowdata[column.field] && <ListTableDateTime date={rowdata[column.field]} />;
     }
+
+    return column;
   });
-  return <MaterialTable icons={_icons} options={_options} columns={columns} {...props} />;
+  return <MaterialTable icons={_icons} options={_options} columns={columns} localization={_localization} {...props} />;
 };

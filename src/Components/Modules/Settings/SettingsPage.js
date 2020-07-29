@@ -16,6 +16,8 @@ export default function SettingsPage() {
 
   const rows = [1, 2, 3, 4];
 
+  // Add "name" of category for each min area group
+
   return (
     <DefaultLayout
       title={title}
@@ -48,7 +50,7 @@ export default function SettingsPage() {
                 <TableRow>
                   <TableCell>
                     2
-                          </TableCell>
+                  </TableCell>
                   <TableCell>
                     <TextField
                       name="multi[0]"

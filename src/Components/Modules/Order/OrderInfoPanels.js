@@ -1,56 +1,110 @@
 import React from 'react';
-import { Typography, makeStyles, TableContainer, Table, TableRow, TableCell, TableBody, Box } from '@material-ui/core';
+import { Typography, makeStyles, TableContainer, Table, TableRow, TableCell, TableBody, Box, TextField } from '@material-ui/core';
 import { Edit as EditIcon, Save as SaveIcon } from '@material-ui/icons';
 import InfoPanel from '../../UI/InfoPanel';
 import Address from '../../UI/Address';
 import Currency from '../../UI/Currency';
+import Modal from '../../UI/Modal';
+import { OrderCustomerInfoForm } from './Forms';
+import OrderShippingAddressForm from './Forms/OrderShippingAddressForm';
+import OrderNotesForm from './Forms/OrderNotesForm';
 
-export function CustomerInfoPanel({ customer }) {
+export function CustomerInfoPanel({ order }) {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [orderState, setOrderState] = React.useState(order);
+
   return (
     <InfoPanel
       title="Customer Info"
-      onEdit={() => alert('edit the customer!')}
+      onEdit={() => setDialogOpen(true)}
     >
       <Typography>
-        {customer.firstName} {customer.lastName}
+        {orderState.customer.firstName} {orderState.customer.lastName}
       </Typography>
       <Typography>
-        {customer.email}
+        {orderState.customer.email}
       </Typography>
       <Typography>
-        {customer.phone}
+        {orderState.customer.phone}
       </Typography>
+
+      {dialogOpen && <Modal
+        title="Edit Order Customer Info"
+        onClose={() => setDialogOpen(false)}
+      >
+        <OrderCustomerInfoForm
+          order={orderState}
+          onComplete={(message, order) => {
+            setOrderState(order);
+            setDialogOpen(false);
+          }}
+        />
+      </Modal>}
     </InfoPanel>
   );
 }
 
-export function ShippingInfoPanel({ customer }) {
+export function ShippingInfoPanel({ order }) {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [orderState, setOrderState] = React.useState(order);
+
   return (
     <InfoPanel
       title="Shipping Address"
-      onEdit={() => alert('edit the address!')}
+      onEdit={() => setDialogOpen(true)}
     >
-      <Address data={customer.address} />
+      <Address data={orderState.customer.address} />
+
+      {dialogOpen && <Modal
+        title="Edit Order Customer Info"
+        onClose={() => setDialogOpen(false)}
+      >
+        <OrderShippingAddressForm
+          order={orderState}
+          onComplete={(message, order) => {
+            setOrderState(order);
+            setDialogOpen(false);
+          }}
+        />
+      </Modal>}
     </InfoPanel>
   );
 };
 
-export function NotesInfoPanel({ notes }) {
+export function NotesInfoPanel({ order }) {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [orderState, setOrderState] = React.useState(order);
+  
   return (
     <InfoPanel
       title="Order Notes"
-      onEdit={() => alert('edit the notes!')}
+      onEdit={() => {
+        setDialogOpen(true);
+      }}
     >
-      {notes !== '' && (
+      {orderState.notes !== '' && (
         <Typography>
-          {notes}
+          {orderState.notes}
         </Typography>
       )}
-      {notes === '' && (
+      {orderState.notes === '' && (
         <Typography color="textSecondary">
           No notes yet
         </Typography>
       )}
+      
+      {dialogOpen && <Modal
+        title="Edit Order Customer Info"
+        onClose={() => setDialogOpen(false)}
+      >
+        <OrderNotesForm
+          order={orderState}
+          onComplete={(message, order) => {
+            setOrderState(order);
+            setDialogOpen(false);
+          }}
+        />
+      </Modal>}
     </InfoPanel>
   )
 }

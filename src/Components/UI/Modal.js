@@ -18,8 +18,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Modal({ title, toRoute, children }) {
+export default function Modal({ title, onClose, toRoute, children }) {
   const classes = useStyles();
+  let closeButton = null;
+
+  if (toRoute !== undefined) {
+    closeButton = (
+      <RouterLink to={toRoute}>
+        <IconButton
+          edge="end"
+          aria-label="Close"
+        >
+          <CloseIcon />
+        </IconButton>
+      </RouterLink>
+    );
+  } else {
+    closeButton = (
+      <IconButton
+        edge="end"
+        aria-label="Close"
+        onClick={onClose}
+      >
+        <CloseIcon />
+      </IconButton>
+    );
+  }
 
   return (
     <Dialog
@@ -33,14 +57,7 @@ export default function Modal({ title, toRoute, children }) {
         >          
           <span>{title}</span>
 
-          <RouterLink to={toRoute}>
-            <IconButton
-              edge="end"
-              aria-label="Close"
-            >
-              <CloseIcon />
-            </IconButton>
-          </RouterLink>
+          {closeButton}
         </Box>
       </DialogTitle>
       <DialogContent dividers>

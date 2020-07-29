@@ -38,17 +38,10 @@ const useStyles = makeStyles(theme => ({
 export default function OrderViewer({ orderId }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState(null);
-  const [customer, setCustomer] = React.useState(null);
 
   React.useEffect(() => {
     API.Orders.get(parseGLID(orderId)).then(order => setOrder(order));
   }, [orderId]);
-
-  React.useEffect(() => {
-    if (order) {
-      API.Customers.get(order.customerId).then(customer => setCustomer(customer));
-    }
-  }, [order]);
 
   function handleRefundAmountChange(amount) {
     API.Orders.update(parseGLID(orderId), {
@@ -69,12 +62,8 @@ export default function OrderViewer({ orderId }) {
           xs={12}
           md={4}
         >
-          {customer && (
-            <React.Fragment>
-              <CustomerInfoPanel customer={customer} />
-              <ShippingInfoPanel customer={customer} />
-            </React.Fragment>
-          )}
+          <CustomerInfoPanel order={order} />
+          <ShippingInfoPanel order={order} />
         </Grid>
 
         <Grid
@@ -83,7 +72,7 @@ export default function OrderViewer({ orderId }) {
           xs={12}
           md={5}
         >
-          <NotesInfoPanel notes={order.notes} />          
+          <NotesInfoPanel order={order} />          
           <BillingInfoPanel order={order} onRefundAmountChange={handleRefundAmountChange} />
         </Grid>
 

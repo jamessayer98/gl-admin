@@ -12,7 +12,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
       .then(orderData => setOrders(orderData));
     }
     else {
-      API.Orders.getAllWithCustomers()
+      API.Orders.getAll()
       .then(orderData => setOrders(orderData));
     }    
   }, [customerId]);
@@ -27,6 +27,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
   let columns = [
     { title: 'Ordered On', field: 'date', type: 'datetime', table: 'orders' },
     { title: 'Order ID', field: 'glid', table: 'orders', render: rowData => <GLID id={rowData.glid} /> },
+    { title: 'Customer ID', field: 'customer', table: 'customers', render: rowData => <GLID id={rowData.customerId} /> },
     { title: 'Customer', field: 'customer', table: 'customers' },
     { title: 'Email', field: 'email', table: 'customers' },
     { title: 'Board Count', field: 'boardCount', table: 'orders' },
@@ -37,6 +38,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
 
   return (
     <ListTable
+      title="Orders"
       options={readOnly ? { paging: false, search: false, tableLayout: "fixed" } : null}
       actions={readOnly ? null : actions}
       columns={hideCustomer ? columns.filter(f => f.table !== 'customers') : columns}
@@ -44,6 +46,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
         return {
           date: order.createdOn,
           glid: order.glid,
+          customerId: order.customer && order.customer.glid,
           customer: order.customer && order.customer.firstName + ' ' + order.customer.lastName,
           email: order.customer && order.customer.email,
           boardCount: order.details.boardCount,
@@ -52,7 +55,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
           status: order.status
         }
       })}
-      title="Orders"
+      onRowClick={(event, rowData) => history.push(`/orders/${makeGLID(rowData.glid)}`)}
     />
   );
 };
