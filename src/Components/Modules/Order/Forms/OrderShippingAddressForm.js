@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
+import { Box, Button, makeStyles } from '@material-ui/core';
 import {
   Save as SaveIcon
 } from '@material-ui/icons';
@@ -8,7 +8,6 @@ import * as yup from 'yup';
 
 import API from '../../../../Services/API';
 import { InputField, Switch } from '../../../UI/FormFields';
-import { PHONE_REGEX } from '../../../../Services/StaticData';
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
