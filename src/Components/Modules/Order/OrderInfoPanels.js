@@ -173,7 +173,8 @@ export function BillingInfoPanel({ order, onRefundAmountChange }) {
           valuePrefix="$"
           onSave={value => {
             let newAmounts = { ...order.amounts, refunded: value };
-            API.Orders.update(order.glid, { ...order, amounts: newAmounts }).then(() => alert('saved'));
+            //TODO: Notify user
+            API.Orders.update(order.glid, { ...order, amounts: newAmounts });
           }}
         />
       </Typography>

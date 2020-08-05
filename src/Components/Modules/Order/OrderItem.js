@@ -1,8 +1,11 @@
 import React from 'react';
-import { Grid, Typography, Table, TableRow, TableBody, TableCell, makeStyles, TableFooter, Divider, Button, Box, TextField, FormControlLabel, Checkbox } from '@material-ui/core';
-import { FindInPage as FindInPageIcon, GetApp as GetAppIcon, LocalShipping as LocalShippingIcon } from '@material-ui/icons';
+import { Grid, Typography, Table, TableRow, TableBody, TableCell, makeStyles, TableFooter, Divider, Button, Box, TextField, FormControlLabel, InputAdornment, IconButton, Switch } from '@material-ui/core';
+import { FindInPage as FindInPageIcon, GetApp as GetAppIcon, LocalShipping as LocalShippingIcon, Save as SaveIcon, FileCopy as FileCopyIcon } from '@material-ui/icons';
 import { makeGLID } from '../../UI/GLID';
 import Currency from '../../UI/Currency';
+import Modal from '../../UI/Modal';
+import GerberPreview from './GerberPreview';
+import API from '../../../Services/API';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -40,10 +43,10 @@ const useStyles = makeStyles(theme => ({
 export function OrderItemBasicInfoTable({ order, item, ...props }) {
   const classes = useStyles();
   const boardData = [
-    { label: 'Max board length', value: item.board.maxLength },
-    { label: 'Max board width', value: item.board.maxWidth },
-    { label: 'Max hole size', value: String(item.board.maxHoleSize) + 'mm' },
-    { label: 'Min hole size', value: String(item.board.minHoleSize) + 'mm' }
+    { label: 'Max board length', value: String(item.board.metrics.height) + ' mm' },
+    { label: 'Max board width', value: String(item.board.metrics.width) + ' mm' },
+    { label: 'Max hole size', value: String(item.board.metrics.maxHoleSize) + ' mm' },
+    { label: 'Min hole size', value: String(item.board.metrics.minHoleSize) + ' mm' }
   ];
 
   return (
@@ -135,6 +138,69 @@ function OrderItemLineItem({ lineItem }) {
   );
 }
 
+function OrderItemTrackingNumber({ order, item, onUpdated }) {
+  const [trackingNumber, setTrackingNumber] = React.useState(item.trackingNumber || ''); // Default to empty string
+  const [enabled, setEnabled] = React.useState(trackingNumber === ''); // Only enable when there is NOT a tracking number already present
+
+  let commonProps = {
+    variant: 'outlined',
+    label: 'Tracking Number',
+    value: trackingNumber,
+    fullWidth: true,
+    onChange: e => setTrackingNumber(e.target.value)
+  };
+
+  if (enabled) {
+    return (
+      <TextField
+        {...commonProps}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={e => {
+                let newOrderItems = order.items;
+                newOrderItems.map(_item => {
+                  if (item.ordinal === _item.ordinal) {
+                    item.trackingNumber = trackingNumber;
+                  }
+                  return item;
+                });
+                let newOrderValues = { ...order, items: newOrderItems };
+                API.Orders.update(order.glid, newOrderValues).then(() => {
+                  setEnabled(false);
+                  onUpdated(trackingNumber);
+                });
+              }}>
+                <SaveIcon />
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
+      />
+    );
+  } else {
+    return (
+      <TextField
+        {...commonProps}
+        disabled
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={e => {
+                e.target.select();
+                document.execCommand('copy');
+              }}>
+                <FileCopyIcon />
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
+      />
+    );
+
+  }
+}
+
 export function OrderItemLineItems({ item, ...props }) {
   const classes = useStyles();
   return (
@@ -178,6 +244,8 @@ export function OrderItemLineItems({ item, ...props }) {
 
 export default function OrderItem({ order, item }) {
   const classes = useStyles();
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [itemState, setItemState] = React.useState(item);
 
   return (
     <Grid
@@ -188,9 +256,9 @@ export default function OrderItem({ order, item }) {
         xs={12}
         md={9}
       >
-        <OrderItemBasicInfoTable className={classes.basicInfoTable} order={order} item={item} />
+        <OrderItemBasicInfoTable className={classes.basicInfoTable} order={order} item={itemState} />
         <Divider/>
-        <OrderItemLineItems item={item} />
+        <OrderItemLineItems item={itemState} />
       </Grid>
 
       <Grid
@@ -208,10 +276,20 @@ export default function OrderItem({ order, item }) {
               color="primary"
               size="large"
               startIcon={<FindInPageIcon />}
+              onClick={() => setPreviewOpen(true)}
             >
               Preview Gerber File
           </Button>
           </Typography>
+
+          {previewOpen && (
+            <Modal
+              title="Preview Gerber File"
+              onClose={() => setPreviewOpen(false)}
+            >
+              <GerberPreview board={itemState.board} />
+            </Modal>
+          )}
 
           <Typography>
             <Button
@@ -220,6 +298,7 @@ export default function OrderItem({ order, item }) {
               color="primary"
               size="large"
               startIcon={<GetAppIcon />}
+              href={itemState.board.originalUpload}
             >
               Download Gerber File
             </Button>
@@ -227,28 +306,81 @@ export default function OrderItem({ order, item }) {
 
           <Divider className={classes.dividerMiddle} variant="middle"/>
           
-          <Typography>
-            <TextField
-              variant="outlined"
-              label="Tracking Number"
-              fullWidth
+          {itemState.trackingAvailable && (
+            <Typography>
+              <OrderItemTrackingNumber order={order} item={itemState} onUpdated={trackingNumber => {
+                setItemState({
+                  ...itemState,
+                  trackingNumber: trackingNumber
+                });
+              }}/>
+            </Typography>
+          )}
+
+          <Typography paragraph>
+            <FormControlLabel
+              control={(
+                <Switch
+                  color="primary"
+                  checked={!itemState.trackingAvailable}
+                  disabled={itemState.trackingNumber !== ''}
+                  onChange={e => {
+                    let trackingAvailable = !e.target.checked;
+                    let newOrderItems = order.items;
+                    newOrderItems.map(_item => {
+                      if (itemState.ordinal === _item.ordinal) {
+                        _item.trackingAvailable = trackingAvailable;
+                      }
+                      return _item;
+                    });
+                    let newOrderValues = { ...order, items: newOrderItems };
+
+                    //TODO: Notify user
+                    API.Orders.update(order.glid, newOrderValues).then(() => {
+                      setItemState({
+                        ...itemState,
+                        trackingAvailable: trackingAvailable,
+                        trackingNumber: ''
+                      });
+                    });
+                  }}
+                />
+              )}
+              label="Tracking Not Available"
+              disabled={item.trackingNumber && item.trackingNumber !== ''}
             />
           </Typography>
 
-          <Typography paragraph>
-            <FormControlLabel control={<Checkbox />} label="Tracking Not Available" />
-          </Typography>
-
-          <Typography>
+          {!item.shipped && <Typography>
             <Button
               fullWidth
               variant="contained"
               color="secondary"
               startIcon={<LocalShippingIcon />}
+              onClick={() => {
+                let newOrderItems = order.items;
+                newOrderItems.map(_item => {
+                  if (itemState.ordinal === _item.ordinal) {
+                    _item.shipped = true;
+                  }
+                  return _item;
+                });
+                let newOrderValues = { ...order, items: newOrderItems };
+
+                //TODO: Notify user
+                API.Orders.update(order.glid, newOrderValues).then(() => {
+                  setItemState({
+                    ...itemState,
+                    shipped: true
+                  });
+                });
+              }}
             >
               Mark As Shipped
             </Button>
-          </Typography>
+          </Typography>}
+
+          {item.shipped && <Typography paragraph>Item shipped!</Typography>}
         </Box>
       </Grid>
     </Grid>
