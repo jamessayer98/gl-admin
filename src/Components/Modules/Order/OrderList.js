@@ -5,6 +5,7 @@ import GLID, { makeGLID, parseGLID } from '../../UI/GLID';
 
 export default function OrderList({ history, customerId, hideCustomer, readOnly }) {
   const [orders, setOrders] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     if (customerId) {
@@ -13,7 +14,10 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
     }
     else {
       API.Orders.getAll()
-      .then(orderData => setOrders(orderData));
+        .then(orderData => {
+          setOrders(orderData);
+          setLoading(false);
+        });
     }    
   }, [customerId]);
 
@@ -41,6 +45,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
       title="Orders"
       options={readOnly ? { paging: false, search: false, tableLayout: "fixed" } : null}
       actions={readOnly ? null : actions}
+      isLoading={loading}
       columns={hideCustomer ? columns.filter(f => f.table !== 'customers') : columns}
       data={orders.map((order, index) => {
         return {
