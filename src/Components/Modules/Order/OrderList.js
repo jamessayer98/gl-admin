@@ -8,11 +8,15 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
+    setLoading(true);
+
     if (customerId) {
       API.Orders.getOrdersByCustomer(parseGLID(customerId))
-      .then(orderData => setOrders(orderData));
-    }
-    else {
+        .then(orderData => {
+          setOrders(orderData);
+          setLoading(false);
+        });
+    } else {
       API.Orders.getAll()
         .then(orderData => {
           setOrders(orderData);

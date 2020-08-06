@@ -54,6 +54,7 @@ export default function CustomerList({ history }) {
         phone: customer.phone
       }))}
       title="Customers"
+      onRowClick={(event, rowData) => history.push(`/customers/${makeGLID(rowData.glid)}`)}
     />
   );
 };

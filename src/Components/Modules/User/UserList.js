@@ -60,8 +60,8 @@ export default function UserList({ history }) {
         glid: user.glid,
         type: user.role,
         email: user.email,
-        lastLogin: user.loggedInOn || '-',
-        ip: user.ip || '-'
+        lastLogin: user.lastAuth || <span>&mdash;</span>,
+        ip: user.ip || <span>&mdash;</span>
       }))}
       title="Users"
     />

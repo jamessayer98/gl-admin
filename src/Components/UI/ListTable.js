@@ -45,9 +45,14 @@ function ListTableDateTime({ date }) {
     year: 'numeric', month: 'numeric', day: 'numeric',
     hour: 'numeric', minute: 'numeric'
   };
-  return (
-    <span>{new Intl.DateTimeFormat('default', options).format(new Date(date))}</span>
-  );
+
+  if (typeof date == 'string') {
+    return (
+      <span>{new Intl.DateTimeFormat('default', options).format(new Date(date))}</span>
+    );
+  } else {
+    return date;
+  }
 };
 
 export default function ListTable({ icons, options, columns, localization, ...props }) {
