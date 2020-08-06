@@ -3,48 +3,56 @@ import Axios from './Axios';
 
 const _currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
+export const roles = {
+  superadmin: 0,
+  admin: 1,
+  manufacturer: 2
+};
+
 /**
  * Required for when a user loads app with a valid session.
  */
 if (_currentUserSubject.value) {
-    Axios.defaults.headers.common = { 'Authorization': `Bearer ${_currentUserSubject.value.token}` };
+  Axios.defaults.headers.common = { 'Authorization': `Bearer ${_currentUserSubject.value.token}` };
 }
 
 class Auth {
-    static get currentUser() {
-        return _currentUserSubject.asObservable();
-    }
+  static roles = roles;
 
-    static get currentUserValue() {
-        return _currentUserSubject.value;
-    }
+  static get currentUser() {
+    return _currentUserSubject.asObservable();
+  }
 
-    static login(username, password) {
-        return Axios
-            .post('/users/authenticate', { username: username, password: password })
-            .then(res => {
-                if (res == null) {
-                    return false;
-                }
+  static get currentUserValue() {
+    return _currentUserSubject.value;
+  }
 
-                const user = res.data;
-                Axios.defaults.headers.common = { 'Authorization': `Bearer ${user.token}` };
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                _currentUserSubject.next(user);
-                return user;
-            })
-    }
+  static login(username, password) {
+    return Axios
+      .post('/users/authenticate', { username: username, password: password })
+      .then(res => {
+        if (res == null) {
+          return false;
+        }
 
-    static logout() {
-        localStorage.removeItem('currentUser');
-        Axios.defaults.headers.common = {};
-        _currentUserSubject.next(null);
-    }
+        const user = res.data;
+        Axios.defaults.headers.common = { 'Authorization': `Bearer ${user.token}` };
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        _currentUserSubject.next(user);
+        return user;
+      })
+  }
 
-    // We had a promise made...
-    static heartbeat() {
-        return Axios.get('/');
-    }
+  static logout() {
+    localStorage.removeItem('currentUser');
+    Axios.defaults.headers.common = {};
+    _currentUserSubject.next(null);
+  }
+
+  // We had a promise made...
+  static heartbeat() {
+    return Axios.get('/');
+  }
 }
 
 export default Auth;
