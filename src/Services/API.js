@@ -78,6 +78,13 @@ class Orders extends CRUD {
       .then(this.handleResponse)
       .catch(this.handleError);
   }
+
+  static getOrdersByManufacturer(manufacturerId) {
+    return Axios
+      .get(`/${this.endpoint}/manufacturer/${manufacturerId}`)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
 }
 
 class Customers extends CRUD {

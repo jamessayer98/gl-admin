@@ -2,6 +2,7 @@ import React from 'react';
 import API from '../../../Services/API';
 import ListTable, { tableIcons } from '../../UI/ListTable';
 import GLID, { makeGLID, parseGLID } from '../../UI/GLID';
+import Auth, { roles } from '../../../Services/Auth';
 
 export default function OrderList({ history, customerId, hideCustomer, readOnly }) {
   const [orders, setOrders] = React.useState([]);
@@ -9,20 +10,20 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
 
   React.useEffect(() => {
     setLoading(true);
+    let getOrders;
 
     if (customerId) {
-      API.Orders.getOrdersByCustomer(parseGLID(customerId))
-        .then(orderData => {
-          setOrders(orderData);
-          setLoading(false);
-        });
+      getOrders = API.Orders.getOrdersByCustomer(parseGLID(customerId));
+    } if (Auth.currentUserRole === roles.manufacturer) {
+      getOrders = API.Orders.getOrdersByManufacturer(Auth.currentUserGLID);
     } else {
-      API.Orders.getAll()
-        .then(orderData => {
-          setOrders(orderData);
-          setLoading(false);
-        });
-    }    
+      getOrders = API.Orders.getAll();
+    }
+
+    getOrders.then(orderData => {
+      setOrders(orderData);
+      setLoading(false);
+    });
   }, [customerId]);
 
   let actions = [
