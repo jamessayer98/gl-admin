@@ -104,6 +104,8 @@ export default function MainMenu() {
             return item.content;
           }
         }
+
+        return '';
       })}
     </List>
   );
