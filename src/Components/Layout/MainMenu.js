@@ -90,14 +90,12 @@ function MainMenuItem({ endpoint, label, icon }) {
 }
 
 export default function MainMenu() {
-  let currentUser = Auth.currentUserValue;
-
   return (
     <List>
       {_menu.map(item => {
         let { access, ...itemParams } = item;
 
-        if (access == null || access.includes(currentUser.role)) {
+        if (access === null || access.includes(Auth.currentUserRole)) {
           if (item.endpoint) {
             return <MainMenuItem {...itemParams} />
           } else {
