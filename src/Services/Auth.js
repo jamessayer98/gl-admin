@@ -17,8 +17,6 @@ if (_currentUserSubject.value) {
 }
 
 class Auth {
-  static roles = roles;
-
   static get currentUser() {
     return _currentUserSubject.asObservable();
   }
@@ -52,6 +50,10 @@ class Auth {
   // We had a promise made...
   static heartbeat() {
     return Axios.get('/');
+  }
+
+  static get currentUserRole() {
+    return this.currentUserValue.user.role;
   }
 }
 
