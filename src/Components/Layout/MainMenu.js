@@ -16,12 +16,66 @@ import {
   Laptop as LaptopIcon,
   Settings as SettingsIcon
 } from '@material-ui/icons';
+import Auth, { roles } from '../../Services/Auth';
+
+// List of menu items
+// Set `access` to null if all users have access
+
+const _adminRoles = [roles.superadmin, roles.admin];
+
+const _menu = [
+  {
+    endpoint: 'dashboard',
+    label: 'Dashboard',
+    icon: <DashboardIcon />,
+    access: _adminRoles,
+  },
+  {
+    endpoint: 'orders',
+    label: 'Orders',
+    icon: <ShoppingBasketIcon />,
+    access: null,
+  },
+  {
+    endpoint: 'customers',
+    label: 'Customers',
+    icon: <FaceIcon />,
+    access: _adminRoles,
+  },
+  {
+    endpoint: 'coupons',
+    label: 'Coupons',
+    icon: <LocalOfferIcon />,
+    access: _adminRoles,
+  },
+  {
+    content: <Divider />,
+    access: _adminRoles
+  },
+  {
+    endpoint: 'users',
+    label: 'Users',
+    icon: <PeopleIcon />,
+    access: _adminRoles,
+  },
+  {
+    endpoint: 'product',
+    label: 'Product',
+    icon: <LaptopIcon />,
+    access: _adminRoles,
+  },
+  {
+    endpoint: 'settings',
+    label: 'Settings',
+    icon: <SettingsIcon />,
+    access: _adminRoles,
+  },
+];
 
 function MainMenuItem({ endpoint, label, icon }) {
   return (
     <ListItem
       button
-      key={endpoint}
       component={RouterLink}
       to={`/${endpoint}`}
     >
@@ -36,44 +90,21 @@ function MainMenuItem({ endpoint, label, icon }) {
 }
 
 export default function MainMenu() {
+  let currentUser = Auth.currentUserValue;
+
   return (
     <List>
-      <MainMenuItem
-        endpoint="dashboard"
-        label="Dashboard"
-        icon={<DashboardIcon />}
-      />
-      <MainMenuItem
-        endpoint="orders"
-        label="Orders"
-        icon={<ShoppingBasketIcon />}
-      />
-      <MainMenuItem
-        endpoint="customers"
-        label="Customers"
-        icon={<FaceIcon />}
-      />
-      <MainMenuItem
-        endpoint="coupons"
-        label="Coupons"
-        icon={<LocalOfferIcon />}
-      />
-      <Divider />
-      <MainMenuItem
-        endpoint="users"
-        label="Users"
-        icon={<PeopleIcon />}
-      />
-      <MainMenuItem
-        endpoint="product"
-        label="Product"
-        icon={<LaptopIcon />}
-      />
-      <MainMenuItem
-        endpoint="settings"
-        label="Settings"
-        icon={<SettingsIcon />}
-      />
+      {_menu.map(item => {
+        let { access, ...itemParams } = item;
+
+        if (access == null || access.includes(currentUser.role)) {
+          if (item.endpoint) {
+            return <MainMenuItem {...itemParams} />
+          } else {
+            return item.content;
+          }
+        }
+      })}
     </List>
   );
 };
