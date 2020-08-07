@@ -1,31 +1,48 @@
 import React from 'react';
 
-import DefaultLayout from '../../Layout/DefaultLayout';
 import { OrderList, OrderViewer } from './';
 import PrivateRoute from '../../PrivateRoute';
 import { Switch } from 'react-router-dom';
+import { Skeleton } from '@material-ui/lab';
+import GLID from '../../UI/GLID';
+import DefaultLayout from '../../Layout/DefaultLayout';
 
 function OrderListPage({ history }) {
   const [key] = React.useState(1);
-  return <OrderList key={key} history={history}/>;
+
+  return (
+    <DefaultLayout
+      title="Orders"
+    >
+      <OrderList key={key} history={history} />
+    </DefaultLayout>
+  );
 }
 
 function OrderViewPage({ match }) {
   const [key] = React.useState(1);
-  return <OrderViewer key={key} orderId={match.params.id} />;
-}
+  const [pageTitle, setPageTitle] = React.useState(<Skeleton variant="text" width={300}/>);
 
-export default function OrderPage({ match }) {
-  const [title] = React.useState('Orders');
+  const handleOrderLoaded = order => {
+    console.log('Order loaded!');
+    setPageTitle(<span>Order: <GLID id={order.glid} /></span>);
+  };
 
   return (
     <DefaultLayout
-      title={title}
+      title={pageTitle}
+      padContent={false}
     >
-      <Switch>
-        <PrivateRoute exact path={`${match.path}/`} component={OrderListPage} />
-        <PrivateRoute exact path={`${match.path}/:id`} component={OrderViewPage} />
-      </Switch>
+      <OrderViewer key={key} orderId={match.params.id} onOrderLoaded={handleOrderLoaded} />
     </DefaultLayout>
+  );
+}
+
+export default function OrderPage({ history, match }) {
+  return (
+    <Switch>
+      <PrivateRoute exact path={`${match.path}/`} component={OrderListPage} />
+      <PrivateRoute exact path={`${match.path}/:id`} component={OrderViewPage} />
+    </Switch>
   );
 };
