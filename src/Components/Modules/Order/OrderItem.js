@@ -307,14 +307,12 @@ export default function OrderItem({ order, item }) {
           <Divider className={classes.dividerMiddle} variant="middle"/>
           
           {itemState.trackingAvailable && (
-            <Typography>
-              <OrderItemTrackingNumber order={order} item={itemState} onUpdated={trackingNumber => {
-                setItemState({
-                  ...itemState,
-                  trackingNumber: trackingNumber
-                });
-              }}/>
-            </Typography>
+            <OrderItemTrackingNumber order={order} item={itemState} onUpdated={trackingNumber => {
+              setItemState({
+                ...itemState,
+                trackingNumber: trackingNumber
+              });
+            }}/>
           )}
 
           <Typography paragraph>

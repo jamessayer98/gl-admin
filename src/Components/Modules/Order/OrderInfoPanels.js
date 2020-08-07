@@ -166,18 +166,16 @@ export function BillingInfoPanel({ order, onRefundAmountChange }) {
         </Table>
       </TableContainer>
 
-      <Typography paragraph>  
-        <EditableText
-          label="Refund to date:"
-          value={Number(order.amounts.refunded).toFixed(2)}
-          valuePrefix="$"
-          onSave={value => {
-            let newAmounts = { ...order.amounts, refunded: value };
-            //TODO: Notify user
-            API.Orders.update(order.glid, { ...order, amounts: newAmounts });
-          }}
-        />
-      </Typography>
+      <EditableText
+        label="Refund to date:"
+        value={Number(order.amounts.refunded).toFixed(2)}
+        valuePrefix="$"
+        onSave={value => {
+          let newAmounts = { ...order.amounts, refunded: value };
+          //TODO: Notify user
+          API.Orders.update(order.glid, { ...order, amounts: newAmounts });
+        }}
+      />
     </InfoPanel>
   );
 }

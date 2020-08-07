@@ -52,7 +52,7 @@ export default function EditableText({ label, value, valuePrefix, onSave, ...pro
 
   return (
     <div className={classes.root}>
-      <span className={classes.label}>{label}</span>
+      <div className={classes.label}><span>{label}</span></div>
       {text()}
     </div>
   );

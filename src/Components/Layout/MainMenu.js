@@ -92,14 +92,14 @@ function MainMenuItem({ endpoint, label, icon }) {
 export default function MainMenu() {
   return (
     <List>
-      {_menu.map(item => {
+      {_menu.map((item, index) => {
         let { access, ...itemParams } = item;
 
         if (access === null || access.includes(Auth.currentUserRole)) {
           if (item.endpoint) {
-            return <MainMenuItem {...itemParams} />
+            return <MainMenuItem key={index} {...itemParams} />
           } else {
-            return item.content;
+            return <React.Fragment key={index}>item.content</React.Fragment>;
           }
         }
 
