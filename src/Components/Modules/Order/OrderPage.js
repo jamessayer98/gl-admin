@@ -24,7 +24,6 @@ function OrderViewPage({ match }) {
   const [pageTitle, setPageTitle] = React.useState(<Skeleton variant="text" width={300}/>);
 
   const handleOrderLoaded = order => {
-    console.log('Order loaded!');
     setPageTitle(<span>Order: <GLID id={order.glid} /></span>);
   };
 
