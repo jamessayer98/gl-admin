@@ -99,7 +99,7 @@ export default function MainMenu() {
           if (item.endpoint) {
             return <MainMenuItem key={index} {...itemParams} />
           } else {
-            return <React.Fragment key={index}>item.content</React.Fragment>;
+            return <React.Fragment key={index}>{item.content}</React.Fragment>;
           }
         }
 
