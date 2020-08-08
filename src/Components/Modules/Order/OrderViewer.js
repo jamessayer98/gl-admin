@@ -17,11 +17,15 @@ import {
   BillingInfoPanel,
   LogInfoPanel
 } from './OrderInfoPanels';
+import OrderViewerToolbar from './OrderViewerToolbar';
 
 const gridSpacing = 2;
 
 const useStyles = makeStyles(theme => ({
   root: {},
+  toolbar: {
+    marginBottom: theme.spacing(3)
+  },
   infoGrid: {
     marginBottom: theme.spacing(gridSpacing)
   },
@@ -35,12 +39,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function OrderViewer({ orderId }) {
+export default function OrderViewer({ orderId, onOrderLoaded }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState(null);
 
+  if (onOrderLoaded === undefined) {
+    onOrderLoaded = () => { };
+  }
+
   React.useEffect(() => {
-    API.Orders.get(parseGLID(orderId)).then(order => setOrder(order));
+    API.Orders.get(parseGLID(orderId)).then(orderData => {
+      setOrder(orderData);
+      onOrderLoaded(orderData);
+    });
   }, [orderId]);
 
   function handleRefundAmountChange(amount) {
@@ -51,10 +62,13 @@ export default function OrderViewer({ orderId }) {
   
   return order && (
     <div>
+      <OrderViewerToolbar className={classes.toolbar} order={order} />
+
       <Grid
         className={classes.infoGrid}
         container
         spacing={gridSpacing}
+        mx={3}
       >
         <Grid
           item

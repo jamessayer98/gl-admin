@@ -12,7 +12,7 @@ export default function PrivateRoute({ component: Component, isAdminRoute, ...re
         return <Redirect to={{ pathname: '/', state: { from: props.location } }} />
       }
 
-      if (isAdminRoute && currentUser.role === roles.manufacturer) {
+      if (isAdminRoute && Auth.currentUserRole === roles.manufacturer) {
         return <Redirect to={{ pathname: '/', state: { flash: 'Access denied' } }} />
       }
 

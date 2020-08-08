@@ -32,7 +32,7 @@ function OrderViewPage({ match }) {
       title={pageTitle}
       padContent={false}
     >
-      <OrderViewer key={key} orderId={match.params.id} onOrderLoaded={handleOrderLoaded} />
+      <OrderViewer orderId={match.params.id} onOrderLoaded={handleOrderLoaded} />
     </DefaultLayout>
   );
 }

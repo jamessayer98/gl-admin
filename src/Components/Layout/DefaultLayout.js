@@ -82,14 +82,20 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
+  },
+  contentPadded: {
     padding: theme.spacing(3),
   }
 }));
 
-export default function Default({ title, history, children }) {
+export default function Default({ title, history, children, padContent }) {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(true);
+
+  if (padContent === undefined) {
+    padContent = true;
+  }
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -160,11 +166,9 @@ export default function Default({ title, history, children }) {
         <MainMenu />
       </Drawer>
       <main
-        className={classes.content}
+        className={classes.content + ' ' + (padContent ? classes.contentPadded : '') }
       >
-        <div
-          className={classes.toolbar}
-        />
+        <div className={classes.toolbar} />
         {children}
       </main>
     </div>

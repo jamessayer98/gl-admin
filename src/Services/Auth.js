@@ -55,6 +55,10 @@ class Auth {
   static get currentUserRole() {
     return this.currentUserValue.user.role;
   }
+  
+  static get currentUserGLID() {
+    return this.currentUserValue.user.glid;
+  }
 }
 
 export default Auth;

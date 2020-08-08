@@ -11,12 +11,12 @@ class CRUD {
       if (err.response.status === 401) {
         Auth.logout();
       } else {
-        console.error(err.message + ': ' + err.request.responseURL);
+        //console.log('[GLAPI]' + err.message + ': ' + err.request.responseURL);
       }
     } else if (err.request) {
-        console.log(err.request);
+      console.log(err.request);
     } else {
-        console.log(err);
+      console.log(err);
     }
 
     return err;
@@ -60,6 +60,13 @@ const checkAuth = () => {
 
 class Users extends CRUD {
   static endpoint = 'users';
+
+  static getManufacturers() {
+    return Axios
+      .get(`/${this.endpoint}/manufacturers`)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
 }
 
 class Orders extends CRUD {
