@@ -7,8 +7,9 @@ import {
   makeStyles,
   Box,
 } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import API from '../../../Services/API';
-import { parseGLID } from '../../UI/GLID';
+import GLID, { parseGLID } from '../../UI/GLID';
 import OrderItem from './OrderItem';
 import {
   CustomerInfoPanel,
@@ -18,6 +19,7 @@ import {
   LogInfoPanel
 } from './OrderInfoPanels';
 import OrderViewerToolbar from './OrderViewerToolbar';
+import DefaultLayout from '../../Layout/DefaultLayout';
 
 const gridSpacing = 2;
 
@@ -39,81 +41,81 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function OrderViewer({ orderId, onOrderLoaded }) {
+export default function OrderViewer({ match, onOrderLoaded }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState(null);
-
-  if (onOrderLoaded === undefined) {
-    onOrderLoaded = () => { };
-  }
+  const [pageTitle, setPageTitle] = React.useState(<Skeleton variant="text" width={300} />);
 
   React.useEffect(() => {
-    API.Orders.get(parseGLID(orderId)).then(orderData => {
-      setOrder(orderData);
-      onOrderLoaded(orderData);
+    API.Orders.get(parseGLID(match.params.id)).then(orderData => {
+        setOrder(orderData);
+        setPageTitle(<span>Order: <GLID id={orderData.glid} /></span>);
     });
-  }, [orderId]);
+  }, [match]);
 
   function handleRefundAmountChange(amount) {
-    API.Orders.update(parseGLID(orderId), {
+    API.Orders.update(order.glid, {
       amounts: { ...order.amounts, refunded: amount }
-    }).then(order => setOrder(order));
+    }).then(orderData => setOrder(orderData));
   }
   
   return order && (
-    <div>
+    <DefaultLayout
+      title={pageTitle}
+      padContent={false}
+    >
       <OrderViewerToolbar className={classes.toolbar} order={order} />
-
-      <Grid
-        className={classes.infoGrid}
-        container
-        spacing={gridSpacing}
-        mx={3}
-      >
+      <Box px={3}>
         <Grid
-          item
-          className={classes.gridItem}
-          xs={12}
-          md={4}
+          className={classes.infoGrid}
+          container
+          spacing={gridSpacing}
         >
-          <CustomerInfoPanel order={order} />
-          <ShippingInfoPanel order={order} />
-        </Grid>
-
-        <Grid
-          item
-          className={classes.gridItem}
-          xs={12}
-          md={5}
-        >
-          <NotesInfoPanel order={order} />          
-          <BillingInfoPanel order={order} onRefundAmountChange={handleRefundAmountChange} />
-        </Grid>
-
-        <Grid
-          item
-          className={classes.gridItem}
-          xs={12}
-          md={3}
-        >
-          <LogInfoPanel order={order} />
-        </Grid>
-      </Grid>
-
-      <Box>
-        <Typography variant="h5" element="h2" paragraph>Items</Typography>
-
-        {order.items.map((item, index) => (
-          <Card
-            key={index}
-            className={classes.itemCard}
+          <Grid
+            item
+            className={classes.gridItem}
+            xs={12}
+            md={4}
           >
-            <CardContent>
-              <OrderItem order={order} item={item}/>
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
-    </div>
+            <CustomerInfoPanel order={order} />
+            <ShippingInfoPanel order={order} />
+          </Grid>
+
+          <Grid
+            item
+            className={classes.gridItem}
+            xs={12}
+            md={5}
+          >
+            <NotesInfoPanel order={order} />
+            <BillingInfoPanel order={order} onRefundAmountChange={handleRefundAmountChange} />
+          </Grid>
+
+          <Grid
+            item
+            className={classes.gridItem}
+            xs={12}
+            md={3}
+          >
+            <LogInfoPanel order={order} />
+          </Grid>
+        </Grid>
+
+        <Box>
+          <Typography variant="h5" element="h2" paragraph>Items</Typography>
+
+          {order.items.map((item, index) => (
+            <Card
+              key={index}
+              className={classes.itemCard}
+            >
+              <CardContent>
+                <OrderItem order={order} item={item} />
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      </Box>      
+    </DefaultLayout>
   );
 }
