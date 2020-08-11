@@ -92,6 +92,13 @@ class Orders extends CRUD {
       .then(this.handleResponse)
       .catch(this.handleError);
   }
+
+  static setStatus(orderId, status) {
+    return Axios
+      .post(`/${this.endpoint}/${orderId}/status/${status}`)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
 }
 
 class Customers extends CRUD {
