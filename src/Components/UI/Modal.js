@@ -3,7 +3,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
   Dialog, DialogTitle, DialogContent,
   IconButton, Box,
-  makeStyles
+  makeStyles,
+  DialogActions,
+  Button
 } from '@material-ui/core';
 import {
   Close as CloseIcon
@@ -63,6 +65,33 @@ export default function Modal({ title, onClose, toRoute, children }) {
       <DialogContent dividers>
         {children}
       </DialogContent>
+    </Dialog>
+  );
+};
+
+export function Alert({ title, open, onConfirm, children }) {
+  if (onConfirm === undefined) {
+    onConfirm = () => { };
+  }
+  
+  return (
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      open={open}
+    >
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent dividers>
+        {children}
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => onConfirm()}
+          color="primary"
+        >
+          OK
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
