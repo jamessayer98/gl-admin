@@ -8,7 +8,7 @@ import { OrderCustomerInfoForm, OrderShippingAddressForm, OrderNotesForm } from 
 import EditableText from '../../UI/EditableText';
 import API from '../../../Services/API';
 
-export function CustomerInfoPanel({ order }) {
+export function CustomerInfoPanel({ order, ...props }) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
 
@@ -16,6 +16,7 @@ export function CustomerInfoPanel({ order }) {
     <InfoPanel
       title="Customer Info"
       onEdit={() => setDialogOpen(true)}
+      {...props}
     >
       <Typography>
         {orderState.customer.firstName} {orderState.customer.lastName}
@@ -43,7 +44,7 @@ export function CustomerInfoPanel({ order }) {
   );
 }
 
-export function ShippingInfoPanel({ order }) {
+export function ShippingInfoPanel({ order, ...props }) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
 
@@ -51,6 +52,7 @@ export function ShippingInfoPanel({ order }) {
     <InfoPanel
       title="Shipping Address"
       onEdit={() => setDialogOpen(true)}
+      {...props}
     >
       <Address data={orderState.customer.address} />
 
@@ -70,7 +72,7 @@ export function ShippingInfoPanel({ order }) {
   );
 };
 
-export function NotesInfoPanel({ order }) {
+export function NotesInfoPanel({ order, ...props }) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
   
@@ -80,6 +82,7 @@ export function NotesInfoPanel({ order }) {
       onEdit={() => {
         setDialogOpen(true);
       }}
+      {...props}
     >
       {orderState.notes !== '' && (
         <Typography>
@@ -114,7 +117,7 @@ const useBillingInfoPanelStyles = makeStyles(theme => ({
   }
 }));
 
-export function BillingInfoPanel({ order, onRefundAmountChange }) {
+export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
   const classes = useBillingInfoPanelStyles();
 
   const rows = [
@@ -140,6 +143,7 @@ export function BillingInfoPanel({ order, onRefundAmountChange }) {
     <InfoPanel
       title="Billing"
       editable={false}
+      {...props}
     >
       <TableContainer
         component={Box}
@@ -180,11 +184,12 @@ export function BillingInfoPanel({ order, onRefundAmountChange }) {
   );
 }
 
-export function LogInfoPanel({ order }) {
+export function LogInfoPanel({ order, ...props }) {
   return (
     <InfoPanel
       title="Activity Log"
       editable={false}
+      {...props}
     >
       <Typography color="textSecondary">Not implemented yet</Typography>
     </ InfoPanel>

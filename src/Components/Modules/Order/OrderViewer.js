@@ -21,6 +21,7 @@ import {
 import OrderViewerToolbar from './OrderViewerToolbar';
 import DefaultLayout from '../../Layout/DefaultLayout';
 import PackingSlipButton from './PackingSlipButton';
+import Auth, { roles } from '../../../Services/Auth';
 
 const gridSpacing = 2;
 
@@ -44,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function OrderViewer({ match, onOrderLoaded }) {
   const classes = useStyles();
+  const isMfg = Auth.currentUserRole === roles.manufacturer;
   const [order, setOrder] = React.useState(null);
   const [pageTitle, setPageTitle] = React.useState(<Skeleton variant="text" width={300} />);
 
@@ -78,9 +80,9 @@ export default function OrderViewer({ match, onOrderLoaded }) {
             xs={12}
             md={4}
           >
-            <CustomerInfoPanel order={order} />
-            <ShippingInfoPanel order={order} />
-            <PackingSlipButton order={order} />
+            <CustomerInfoPanel order={order} editable={!isMfg}/>
+            <ShippingInfoPanel order={order} editable={!isMfg}/>
+            {isMfg && <PackingSlipButton order={order} />}
           </Grid>
 
           <Grid
@@ -89,8 +91,8 @@ export default function OrderViewer({ match, onOrderLoaded }) {
             xs={12}
             md={5}
           >
-            <NotesInfoPanel order={order} />
-            <BillingInfoPanel order={order} onRefundAmountChange={handleRefundAmountChange} />
+            {!isMfg && <NotesInfoPanel order={order} />}
+            {!isMfg && <BillingInfoPanel order={order} onRefundAmountChange={handleRefundAmountChange} />}
           </Grid>
 
           <Grid

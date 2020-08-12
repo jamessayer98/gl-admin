@@ -3,6 +3,7 @@ import { Toolbar, makeStyles, Box, AppBar, MenuItem, Select, Typography } from '
 import SendToManufacturerButton from './SendToManufacturerButton';
 import API from '../../../Services/API';
 import { Alert } from '../../UI/Modal';
+import Auth, { roles } from '../../../Services/Auth';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function OrderViewerToolbar({ order, ...props }) {
   const classes = useStyles();
+  const isMfg = Auth.currentUserRole === roles.manufacturer;
   const [orderStatus, setOrderStatus] = React.useState(order.status);
   const [statusAlertOpen, setStatusAlertOpen] = React.useState(false);
   const [statusError, setStatusError] = React.useState('');
@@ -41,19 +43,22 @@ export default function OrderViewerToolbar({ order, ...props }) {
       <AppBar position="relative" elevation={0} color="transparent" {...props}>
         <Toolbar >
           <Box className={classes.toolbarMainBox}>
-            <Typography variant="h6" component="span" className={classes.statusText}>Status</Typography>
-            <Select
-              value={orderStatus}
-              onChange={handleStatusChange}
-            >
-              <MenuItem value="pending">Pending Processing</MenuItem>
-              <MenuItem value="processing">Processing</MenuItem>
-              <MenuItem value="shipped">Shipped</MenuItem>
-              <MenuItem value="hold">On Hold</MenuItem>
-              <MenuItem value="canceled">Canceled</MenuItem>
-            </Select>
+            <Typography variant="h6" component="span" className={classes.statusText}>Status:</Typography>
+            {!isMfg && (
+              <Select
+                value={orderStatus}
+                onChange={handleStatusChange}
+              >
+                <MenuItem value="pending">Pending Processing</MenuItem>
+                <MenuItem value="processing">Processing</MenuItem>
+                <MenuItem value="shipped">Shipped</MenuItem>
+                <MenuItem value="hold">On Hold</MenuItem>
+                <MenuItem value="canceled">Canceled</MenuItem>
+              </Select>
+            )}
+            {isMfg && <Typography variant="h6" component="span">{orderStatus}</Typography>}
           </Box>
-          <SendToManufacturerButton order={order} />
+          {!isMfg && <SendToManufacturerButton order={order} />}
         </Toolbar>
       </AppBar>
       <Alert title="Status Change Error" open={statusAlertOpen} onConfirm={() => setStatusAlertOpen(false)}>
