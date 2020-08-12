@@ -5,7 +5,7 @@ import {
   Card,
   CardContent,
   makeStyles,
-  Box,
+  Box
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import API from '../../../Services/API';
@@ -20,6 +20,7 @@ import {
 } from './OrderInfoPanels';
 import OrderViewerToolbar from './OrderViewerToolbar';
 import DefaultLayout from '../../Layout/DefaultLayout';
+import PackingSlipButton from './PackingSlipButton';
 
 const gridSpacing = 2;
 
@@ -79,6 +80,7 @@ export default function OrderViewer({ match, onOrderLoaded }) {
           >
             <CustomerInfoPanel order={order} />
             <ShippingInfoPanel order={order} />
+            <PackingSlipButton order={order} />
           </Grid>
 
           <Grid
