@@ -6,6 +6,7 @@ import Currency from '../../UI/Currency';
 import Modal from '../../UI/Modal';
 import GerberPreview from './GerberPreview';
 import API from '../../../Services/API';
+import NumberFormat from 'react-number-format';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -207,9 +208,41 @@ export function OrderItemLineItems({ item, ...props }) {
     <Table
       size="small"
       className={classes.stripedTable}
+      {...props}
     >
       <TableBody>
-        {item.lineItems.map((lineItem, index) => <OrderItemLineItem key={index} lineItem={lineItem} />)}
+        <OrderItemLineItem key="area" lineItem={{
+          label: 'Est. Board Area',
+          value: <span><NumberFormat value={item.board.metrics.area} displayType="text" decimalScale={2} fixedDecimalScale={true} /> mm<sup>2</sup></span>,
+          secondaryLabel: 'Layers',
+          secondaryValue: item.board.layers.count,
+          type: 'Base Price',
+          total: item.total
+        }} />
+        <OrderItemLineItem key="copperWeight" lineItem={{
+          label: 'Copper Weight',
+          value: `${item.options.copperWeight} oz`,
+          secondaryLabel: 'Multiplier',
+          secondaryValue: '[TODO]',
+          type: 'Upsell',
+          total: '[TODO]'
+        }} />
+        <OrderItemLineItem key="surfaceFinish" lineItem={{
+          label: 'Surface Finish',
+          value: item.options.surfaceFinish,
+          secondaryLabel: 'Multiplier',
+          secondaryValue: '[TODO]',
+          type: 'Upsell',
+          total: '[TODO]'
+        }} />
+        <OrderItemLineItem key="tg" lineItem={{
+          label: 'Tg',
+          value: <span>{item.options.tg} &deg;C</span>,
+          secondaryLabel: 'Multiplier',
+          secondaryValue: '[TODO]',
+          type: 'Upsell',
+          total: '[TODO]'
+        }} />
       </TableBody>
       <TableFooter>
         <TableRow key="tax">
@@ -354,6 +387,7 @@ export default function OrderItem({ order, item }) {
               fullWidth
               variant="contained"
               color="secondary"
+              size="large"
               startIcon={<LocalShippingIcon />}
               onClick={() => {
                 let newOrderItems = order.items;
