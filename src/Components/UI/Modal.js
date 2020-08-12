@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Modal({ title, onClose, toRoute, children }) {
+export default function Modal({ title, onClose, toRoute, children, ...props }) {
   const classes = useStyles();
   let closeButton = null;
 
@@ -52,6 +52,7 @@ export default function Modal({ title, onClose, toRoute, children }) {
       disableBackdropClick
       disableEscapeKeyDown
       open={true}
+      {...props}
     >
       <DialogTitle>
         <Box
