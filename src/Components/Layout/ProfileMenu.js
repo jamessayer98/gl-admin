@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Avatar,
   IconButton,
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfileMenu() {
   const classes = useStyles();
+  const history = useHistory();
   const [user, setUser] = React.useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   const [menuId, setMenuId] = React.useState(undefined);
@@ -67,6 +69,7 @@ export default function ProfileMenu() {
 
   const handleLogout = () => {
     Auth.logout();
+    history.push('/');
     return;
   };
 
