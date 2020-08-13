@@ -1,13 +1,9 @@
 import React from 'react';
-import { Select, MenuItem, InputLabel, FormControl, makeStyles, FormHelperText } from '@material-ui/core';
+import { Select, MenuItem, InputLabel, FormControl, FormHelperText } from '@material-ui/core';
 import { getFieldError } from '../../../Helpers/FormHelpers'
-
-const useStyles = makeStyles((theme) => ({
-}));
 
 export default function DropDown({ field, form: { touched, errors }, ...props }) {
   const { label, dataSource, dataKey, dataValue, ...rest } = props;
-  const classes = useStyles();
   let items = null;
 
   const { wasTouched, errorMsg } = getFieldError(field.name, touched, errors)
