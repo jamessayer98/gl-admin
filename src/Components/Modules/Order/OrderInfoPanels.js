@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, makeStyles, TableContainer, Table, TableRow, TableCell, TableBody, Box } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
 import InfoPanel from '../../UI/InfoPanel';
 import Address from '../../UI/Address';
 import Currency from '../../UI/Currency';
@@ -9,6 +10,7 @@ import EditableText from '../../UI/EditableText';
 import API from '../../../Services/API';
 
 export function CustomerInfoPanel({ order, ...props }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
 
@@ -37,6 +39,7 @@ export function CustomerInfoPanel({ order, ...props }) {
           onComplete={(message, order) => {
             setOrderState(order);
             setDialogOpen(false);
+            enqueueSnackbar('Order customer information updated', { variant: 'success' });
           }}
         />
       </Modal>}
@@ -45,6 +48,7 @@ export function CustomerInfoPanel({ order, ...props }) {
 }
 
 export function ShippingInfoPanel({ order, ...props }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
 
@@ -65,6 +69,7 @@ export function ShippingInfoPanel({ order, ...props }) {
           onComplete={(message, order) => {
             setOrderState(order);
             setDialogOpen(false);
+            enqueueSnackbar('Order shipping address updated', { variant: 'success' });
           }}
         />
       </Modal>}
@@ -73,6 +78,7 @@ export function ShippingInfoPanel({ order, ...props }) {
 };
 
 export function NotesInfoPanel({ order, ...props }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
   
@@ -104,6 +110,7 @@ export function NotesInfoPanel({ order, ...props }) {
           onComplete={(message, order) => {
             setOrderState(order);
             setDialogOpen(false);
+            enqueueSnackbar('Order notes updated', { variant: 'success' });
           }}
         />
       </Modal>}
@@ -118,6 +125,7 @@ const useBillingInfoPanelStyles = makeStyles(theme => ({
 }));
 
 export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useBillingInfoPanelStyles();
 
   const rows = [
@@ -176,8 +184,8 @@ export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
         valuePrefix="$"
         onSave={value => {
           let newAmounts = { ...order.amounts, refunded: value };
-          //TODO: Notify user
           API.Orders.update(order.glid, { ...order, amounts: newAmounts });
+          enqueueSnackbar('Order refund amount updated', { variant: 'success' });
         }}
       />
     </InfoPanel>
