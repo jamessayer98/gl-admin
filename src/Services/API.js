@@ -105,9 +105,14 @@ class Customers extends CRUD {
   static endpoint = 'customers';
 }
 
+class Coupons extends CRUD {
+  static endpoint = 'coupons';
+}
+
 export default {
   checkAuth,
   Users,
   Orders,
-  Customers
+  Customers,
+  Coupons
 };

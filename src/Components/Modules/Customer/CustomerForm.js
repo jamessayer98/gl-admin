@@ -195,6 +195,8 @@ export default function CustomerForm({ customerId, onComplete }) {
                 component={DropDown}
                 name="address.state"
                 label="State"
+                margin="normal"
+                fullWidth
                 dataSource={US_STATES}
                 dataKey="name"
                 dataValue="abbrev"                
