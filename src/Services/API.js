@@ -22,9 +22,9 @@ class CRUD {
     return err;
   }
 
-  static create(user) {
+  static create(data) {
     return Axios
-      .post(`/${this.endpoint}`, user)
+      .post(`/${this.endpoint}`, data)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
@@ -43,9 +43,16 @@ class CRUD {
       .catch(this.handleError);
   }
 
-  static update(id, user) {
+  static update(id, data) {
     return Axios
-      .post(`/${this.endpoint}/${id}`, user)
+      .post(`/${this.endpoint}/${id}`, data)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
+
+  static delete(id) {
+    return Axios
+      .delete(`/${this.endpoint}/${id}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
