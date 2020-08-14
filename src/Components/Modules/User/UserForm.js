@@ -1,8 +1,10 @@
 import React from 'react';
 import {
-  Box, Button, Select, FormControl, InputLabel, MenuItem,
+  Box, Button,
   CircularProgress,
-  makeStyles
+  makeStyles,
+  Grid,
+  Typography
 } from '@material-ui/core';
 import {
   Save as SaveIcon
@@ -12,8 +14,9 @@ import * as yup from 'yup';
 
 import API from '../../../Services/API';
 
-import { InputField } from '../../UI/FormFields';
+import { InputField, DropDown, Switch } from '../../UI/FormFields';
 import { parseGLID } from '../../UI/GLID';
+import { roles } from '../../../Services/Auth';
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
@@ -31,7 +34,8 @@ const defaultUser = {
   username: '',
   name: '',
   email: '',
-  role: 2
+  role: 2,
+  enabled: true
 };
 
 const formSchema = {
@@ -47,6 +51,9 @@ const formSchema = {
   role: yup.number()
     .required('Role is required')
     .default(defaultUser.role),
+  enabled: yup.boolean()
+    .required('Enabled is required')
+    .default(defaultUser.enabled),
   password: yup.string()
     .default('')
     .required('Password is required'),
@@ -93,6 +100,7 @@ export default function UserForm({ userId, onComplete }) {
         name: user.name,
         email: user.email,
         role: user.role,
+        enabled: user.enabled,
         password: '',
         passwordConfirmation: ''
       }}
@@ -102,6 +110,8 @@ export default function UserForm({ userId, onComplete }) {
         const userId = parseGLID(user.glid);
 
         if (userId) {
+          delete values.password;
+          delete values.passwordConfirmation;
           promise = API.Users.update(userId, values);
         } else {
           promise = API.Users.create(values);
@@ -109,7 +119,7 @@ export default function UserForm({ userId, onComplete }) {
 
         promise.then(res => {
           setSubmitting(false);
-          onComplete('User ' + (userId === null ? 'Created' : 'Updated'));
+          onComplete('User ' + (userId === null ? 'created' : 'updated'));
         });
       }}
     >
@@ -156,21 +166,31 @@ export default function UserForm({ userId, onComplete }) {
               />
             </React.Fragment>
           )}
-          <FormControl
+          <formik.Field
+            component={DropDown}
+            name="role"
+            label="Role"
             margin="normal"
             fullWidth
-          >
-            <InputLabel>Role</InputLabel>
-            <formik.Field
-              as={Select}
-              name="role"
-              label="Role"
-            >
-              <MenuItem value={0} disabled>Super Admin</MenuItem>
-              <MenuItem value={1}>Admin</MenuItem>
-              <MenuItem value={2}>User</MenuItem>
-            </formik.Field>
-          </FormControl>
+            dataSource={[
+              { label: 'Super Admin', value: roles.superadmin, disabled: true },
+              { label: 'Admin', value: roles.admin },
+              { label: 'Manufacturer', value: roles.manufacturer }
+            ]}
+          />
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <Typography>Account Status: </Typography>
+            </Grid>
+            <Grid item>
+              <formik.Field
+                component={Switch}
+                name="enabled"
+                label="Enabled"
+              />                
+            </Grid>
+          </Grid>
+          <Typography paragraph variant="body2">A disabled account cannot be used to log in.</Typography>
           <Box className={classes.formActions}>
             <Button
               variant="contained"

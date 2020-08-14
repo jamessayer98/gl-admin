@@ -1,15 +1,18 @@
 import React from 'react';
+import { useSnackbar } from 'notistack';
 
 import DefaultLayout from '../../Layout/DefaultLayout';
 import Modal from '../../UI/Modal';
 import { UserList, UserForm } from './';
 
 export default function UserPage({ match, history }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [title] = React.useState('Users');
   const [listKey, setListKey] = React.useState(1);
 
   const handleUserDialogComplete = message => {
     setListKey(listKey + 1);
+    enqueueSnackbar(message, { variant: 'success' });
     history.push('/users');
   };
 

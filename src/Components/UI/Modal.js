@@ -96,3 +96,39 @@ export function Alert({ title, open, onConfirm, children }) {
     </Dialog>
   );
 };
+
+export function Confirm({ title, open, onConfirm, onCancel, children }) {
+  if (onConfirm === undefined) {
+    onConfirm = () => { };
+  }
+
+  if (onCancel === undefined) {
+    onConfirm = () => { };
+  }
+
+  return (
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      open={open}
+    >
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent dividers>
+        {children}
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => onCancel()}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={() => onConfirm()}
+          color="primary"
+        >
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}

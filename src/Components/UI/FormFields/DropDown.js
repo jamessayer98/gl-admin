@@ -15,7 +15,7 @@ export default function DropDown({ field, form: { touched, errors }, ...props })
       ));
     } else {
       items = dataSource.map((item, index) => (
-        <MenuItem key={index} value={item.value}>{item.label}</MenuItem>
+        <MenuItem key={index} value={item.value} disabled={item.disabled ? item.disabled : false}>{item.label}</MenuItem>
       ));
     }
   }
