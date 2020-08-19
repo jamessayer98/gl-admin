@@ -116,10 +116,15 @@ class Coupons extends CRUD {
   static endpoint = 'coupons';
 }
 
+class Manufacturers extends CRUD {
+  static endpoint = 'manufacturers';
+}
+
 export default {
   checkAuth,
   Users,
   Orders,
   Customers,
-  Coupons
+  Coupons,
+  Manufacturers
 };

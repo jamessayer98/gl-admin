@@ -11,10 +11,11 @@ import {
 } from '@material-ui/icons';
 import * as formik from 'formik';
 import * as yup from 'yup';
+import { useSnackbar } from 'notistack';
 
 import API from '../../../Services/API';
 
-import { InputField, DropDown, Switch } from '../../UI/FormFields';
+import { InputField, DropDown, Switch, DropDownCreator } from '../../UI/FormFields';
 import { parseGLID } from '../../UI/GLID';
 import { roles } from '../../../Services/Auth';
 
@@ -35,6 +36,7 @@ const defaultUser = {
   name: '',
   email: '',
   role: 2,
+  manufacturer: null,
   enabled: true
 };
 
@@ -64,7 +66,9 @@ const formSchema = {
 
 export default function UserForm({ userId, onComplete }) {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [user, setUser] = React.useState(null);
+  const [manufacturers, setManufacturers] = React.useState([]);
 
   React.useEffect(() => {
     if (userId) {
@@ -77,6 +81,10 @@ export default function UserForm({ userId, onComplete }) {
       }
     }
   }, [userId]);
+
+  React.useEffect(() => {
+    API.Manufacturers.getAll().then(mfgData => setManufacturers(mfgData));
+  }, []);
 
   if (user && user._id) {
     delete formSchema.password;
@@ -101,6 +109,7 @@ export default function UserForm({ userId, onComplete }) {
         email: user.email,
         role: user.role,
         enabled: user.enabled,
+        manufacturer: user.manufacturer,
         password: '',
         passwordConfirmation: ''
       }}
@@ -112,6 +121,9 @@ export default function UserForm({ userId, onComplete }) {
         if (userId) {
           delete values.password;
           delete values.passwordConfirmation;
+          if (values.manufacturer) {
+            values.manufacturer = values.manufacturer.glid
+          }
           promise = API.Users.update(userId, values);
         } else {
           promise = API.Users.create(values);
@@ -177,6 +189,31 @@ export default function UserForm({ userId, onComplete }) {
               { label: 'Admin', value: roles.admin },
               { label: 'Manufacturer', value: roles.manufacturer }
             ]}
+          />
+          <formik.Field
+            component={DropDownCreator}
+            name="manufacturer"
+            margin="normal"
+            options={manufacturers}
+            getOptionLabel={(option) => option.name}
+            getOptionSelected={(option, value) => option.glid === value.glid}
+            textFieldProps={{ label: 'Manufacturer', variant: 'outlined' }}
+            createOption={value => ({ glid: null, _name: value, name: `Create ${value}` })}
+            onSelect={(newValue) => {
+              return new Promise(resolve => {
+                if (newValue.glid === null) {
+                  return API.Manufacturers.create({ name: newValue._name }).then(res => {
+                    enqueueSnackbar('Manufacturer created', { variant: 'success' });
+                    let mfgs = manufacturers.slice();
+                    mfgs.push(res.data);
+                    setManufacturers(mfgs);
+                    resolve(res.data)
+                  });
+                } else {
+                  resolve(newValue);
+                }
+              })
+            }}
           />
           <Grid container spacing={1} alignItems="center">
             <Grid item>
