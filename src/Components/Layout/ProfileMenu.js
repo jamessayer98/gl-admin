@@ -16,8 +16,11 @@ import {
 import {
   Person as PersonIcon
 } from '@material-ui/icons';
+import { useSnackbar } from 'notistack';
 
 import Auth from '../../Services/Auth';
+import Modal from '../UI/Modal';
+import ProfileForm from './ProfileForm';
 
 const useStyles = makeStyles((theme) => ({
   popper: {
@@ -40,15 +43,15 @@ const useStyles = makeStyles((theme) => ({
 export default function ProfileMenu() {
   const classes = useStyles();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const [user, setUser] = React.useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
   const [menuId, setMenuId] = React.useState(undefined);
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [profileFormOpen, setProfileFormOpen] = React.useState(false);
 
   React.useEffect(() => {
-    Auth.currentUser.subscribe(data => {
-      setUser(data ? data.user : null);
-    });
+    Auth.currentUser.subscribe(data => setUser(data ? data.user : null));
   });
 
   const handleClick = (event) => {
@@ -111,8 +114,10 @@ export default function ProfileMenu() {
                     id="menu_list_grow"
                   >
                     <MenuItem
-                      onClick={handleClose}
-                      disabled
+                      onClick={() => {
+                        setProfileFormOpen(true);
+                        handleClose();
+                      }}
                     >
                       My Profile
                     </MenuItem>
@@ -135,6 +140,20 @@ export default function ProfileMenu() {
           </Popper>
         </React.Fragment>
       )}
+      <Modal
+        open={profileFormOpen}
+        title="Your Profile"
+        onClose={() => setProfileFormOpen(false)}
+      >
+        <ProfileForm 
+          user={user} 
+          onComplete={newUser => {
+            Auth.handleProfileUpdate(newUser);
+            setProfileFormOpen(false);
+            enqueueSnackbar('Profile Updated', { variant: 'success' });
+          }}
+        />
+      </Modal>
     </React.Fragment>
   );
 }

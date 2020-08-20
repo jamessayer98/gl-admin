@@ -25,6 +25,14 @@ class Auth {
     return _currentUserSubject.value;
   }
 
+  static get currentUserRole() {
+    return this.currentUserValue.user.role;
+  }
+  
+  static get currentUserGLID() {
+    return this.currentUserValue.user.glid;
+  }
+
   static login(username, password) {
     return Axios
       .post('/users/authenticate', { username: username, password: password })
@@ -52,12 +60,19 @@ class Auth {
     return Axios.get('/');
   }
 
-  static get currentUserRole() {
-    return this.currentUserValue.user.role;
-  }
-  
-  static get currentUserGLID() {
-    return this.currentUserValue.user.glid;
+  // Being overly paranoid about this, explicitely allow only name/email update
+  static handleProfileUpdate(newUserData) {
+    let data = this.currentUserValue;
+
+    if (newUserData.name) {
+      data.user.name = newUserData.name;
+    }
+
+    if (newUserData.email) {
+      data.user.email = newUserData.email;
+    }
+
+    _currentUserSubject.next(data);
   }
 }
 
