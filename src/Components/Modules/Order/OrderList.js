@@ -32,7 +32,8 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
       tooltip: 'View Order',
       onClick: (event, rowData) => history.push(`/orders/${makeGLID(rowData.glid)}`)
     }
-  ]
+  ];
+
   let columns = [
     { title: 'Ordered On', field: 'date', type: 'datetime', table: 'orders' },
     { title: 'Order ID', field: 'glid', table: 'orders', render: rowData => <GLID id={rowData.glid} /> },
@@ -43,9 +44,9 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
     { title: 'Est. Area', field: 'estArea', table: 'orders' },
     { title: 'Total', field: 'total', type: 'currency', table: 'orders' },
     { title: 'Status', field: 'status', table: 'orders' }
-  ]
+  ];
 
-  return (
+  return orders && (
     <ListTable
       title="Orders"
       options={readOnly ? { paging: false, search: false, tableLayout: "fixed" } : null}
