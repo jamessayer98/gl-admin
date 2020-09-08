@@ -54,16 +54,30 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
       isLoading={loading}
       columns={hideCustomer ? columns.filter(f => f.table !== 'customers') : columns}
       data={orders.map((order, index) => {
-        return {
-          date: order.createdOn,
-          glid: order.glid,
-          customerId: order.customer && order.customer.glid,
-          customer: order.customer && order.customer.firstName + ' ' + order.customer.lastName,
-          email: order.customer && order.customer.email,
-          boardCount: order.details.boardCount,
-          estArea: order.details.totalBoardArea,
-          total: order.amounts.total,
-          status: order.status
+        if (order.status !== 'in_progress') {
+          return {
+            date: order.createdOn,
+            glid: order.glid,
+            customerId: order.customer && order.customer.glid,
+            customer: order.customer && order.customer.firstName + ' ' + order.customer.lastName,
+            email: order.customer && order.customer.email,
+            boardCount: order.details.boardCount,
+            estArea: order.details.totalBoardArea,
+            total: order.amounts.total,
+            status: order.status
+          }
+        } else {
+          return {
+            date: order.createdOn,
+            glid: order.glid,
+            customerId: order.customer && order.customer.glid,
+            customer: order.customer && order.customer.firstName + ' ' + order.customer.lastName,
+            email: order.customer && order.customer.email,
+            boardCount: '',
+            estArea: '',
+            total: '',
+            status: 'In Progress'
+          }
         }
       })}
       onRowClick={(event, rowData) => history.push(`/orders/${makeGLID(rowData.glid)}`)}
