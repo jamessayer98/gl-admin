@@ -16,6 +16,7 @@ import { CustomerPage } from './Components/Modules/Customer';
 import { OrderPage } from './Components/Modules/Order';
 import { SettingsPage } from './Components/Modules/Settings';
 import { CouponPage } from './Components/Modules/Coupon/';
+import { ProductPage } from './Components/Modules/Product';
 
 import './Assets/style.css';
 
@@ -69,6 +70,10 @@ export default function App() {
           <PrivateRoute
             path="/orders"
             component={OrderPage}
+          />
+          <PrivateRoute
+            path="/product"
+            component={ProductPage}
           />
           <PrivateRoute
             path="/settings"

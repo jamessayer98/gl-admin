@@ -1,7 +1,7 @@
 import Auth from './Auth';
 import Axios from './Axios';
 
-class CRUD {
+class GLAPI_Interface {
   static handleResponse(res) {
     return res.data;
   }
@@ -21,6 +21,9 @@ class CRUD {
 
     return err;
   }
+}
+
+class CRUD extends GLAPI_Interface {
 
   static create(data) {
     return Axios
@@ -120,11 +123,28 @@ class Manufacturers extends CRUD {
   static endpoint = 'manufacturers';
 }
 
+class Settings extends GLAPI_Interface {
+  static get(name) {
+    return Axios
+      .get(`/settings/${name}`)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
+
+  static set(name, value) {
+    return Axios
+      .post(`/settings/${name}`, value)
+      .then(this.handleResponse)
+      .catch(this.handleError);
+  }
+}
+
 export default {
   checkAuth,
   Users,
   Orders,
   Customers,
   Coupons,
-  Manufacturers
+  Manufacturers,
+  Settings
 };
