@@ -24,6 +24,7 @@ import * as formik from 'formik';
 import * as yup from 'yup';
 import NumberFormat from 'react-number-format';
 import InputField from '../../UI/FormFields/InputField';
+import MoneyField from '../../UI/FormFields/MoneyField';
 
 import API from '../../../Services/API';
 
@@ -183,19 +184,16 @@ export default function PricingTable() {
       </TableCell>
       <TableCell>
         <formik.Field
-          component={InputField}
+          component={MoneyField}
           name={`categories[${categoryIndex}].price[${priceIndex}].multiplier`}
           placeholder="Multiplier"
           size="small"
           fullWidth
-          InputProps={{
-            startAdornment: <InputAdornment position="start">$</InputAdornment>
-          }}
         />
       </TableCell>
       <TableCell>
         <formik.Field
-          component={InputField}
+          component={MoneyField}
           name={`categories[${categoryIndex}].price[${priceIndex}].offset`}
           placeholder="Offset"
           size="small"
