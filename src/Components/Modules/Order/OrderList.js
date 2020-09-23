@@ -37,7 +37,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
   let columns = [
     { title: 'Ordered On', field: 'date', type: 'datetime', table: 'orders' },
     { title: 'Order ID', field: 'glid', table: 'orders', render: rowData => <GLID id={rowData.glid} /> },
-    { title: 'Customer ID', field: 'customer', table: 'customers', render: rowData => <GLID id={rowData.customerId} /> },
+    { title: 'Customer ID', field: 'customerId', table: 'customers' },
     { title: 'Customer', field: 'customer', table: 'customers' },
     { title: 'Email', field: 'email', table: 'customers' },
     { title: 'Board Count', field: 'boardCount', table: 'orders' },
@@ -54,31 +54,34 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
       isLoading={loading}
       columns={hideCustomer ? columns.filter(f => f.table !== 'customers') : columns}
       data={orders.map((order, index) => {
-        if (order.status !== 'in_progress') {
-          return {
-            date: order.createdOn,
-            glid: order.glid,
-            customerId: order.customer && order.customer.glid,
-            customer: order.customer && order.customer.firstName + ' ' + order.customer.lastName,
-            email: order.customer && order.customer.email,
-            boardCount: order.details.boardCount,
-            estArea: order.details.totalBoardArea,
-            total: order.amounts.total,
-            status: order.status
-          }
+        let data = {
+          date: order.createdOn,
+          glid: order.glid,
+          email: order.customer && order.customer.email,
+          boardCount: order.items.length,
+          estArea: 5,
+          status: order.status
+        };
+
+        if (order.amounts) {
+          data.total = order.amounts.total;
         } else {
-          return {
-            date: order.createdOn,
-            glid: order.glid,
-            customerId: order.customer && order.customer.glid,
-            customer: order.customer && order.customer.firstName + ' ' + order.customer.lastName,
-            email: order.customer && order.customer.email,
-            boardCount: '',
-            estArea: '',
-            total: '',
-            status: 'In Progress'
-          }
+          data.total = 0.00;
         }
+
+        if (order.customerId) {
+          data.customerId = <GLID id={order.customer.glid} />;
+        } else {
+          data.customerId = <span>&mdash;</span>;
+        }
+
+        if (order.customer) {          
+          data.customer = order.customer.firstName + ' ' + order.customer.lastName;
+        } else {
+          data.customer = 'Guest';
+        }
+
+        return data;
       })}
       onRowClick={(event, rowData) => history.push(`/orders/${makeGLID(rowData.glid)}`)}
     />

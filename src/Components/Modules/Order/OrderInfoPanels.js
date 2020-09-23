@@ -20,29 +20,38 @@ export function CustomerInfoPanel({ order, ...props }) {
       onEdit={() => setDialogOpen(true)}
       {...props}
     >
-      <Typography>
-        {orderState.customer.firstName} {orderState.customer.lastName}
-      </Typography>
-      <Typography>
-        {orderState.customer.email}
-      </Typography>
-      <Typography>
-        {orderState.customer.phone}
-      </Typography>
+      {order.customer && (
+        <>
+          <Typography>
+            {orderState.customer.firstName} {orderState.customer.lastName}
+          </Typography>
+          <Typography>
+            {orderState.customer.email}
+          </Typography>
+          <Typography>
+            {orderState.customer.phone}
+          </Typography>
 
-      {dialogOpen && <Modal
-        title="Edit Order Customer Info"
-        onClose={() => setDialogOpen(false)}
-      >
-        <OrderCustomerInfoForm
-          order={orderState}
-          onComplete={(message, order) => {
-            setOrderState(order);
-            setDialogOpen(false);
-            enqueueSnackbar('Order customer information updated', { variant: 'success' });
-          }}
-        />
-      </Modal>}
+          {dialogOpen && <Modal
+            title="Edit Order Customer Info"
+            onClose={() => setDialogOpen(false)}
+          >
+            <OrderCustomerInfoForm
+              order={orderState}
+              onComplete={(message, order) => {
+                setOrderState(order);
+                setDialogOpen(false);
+                enqueueSnackbar('Order customer information updated', { variant: 'success' });
+              }}
+            />
+          </Modal>}
+        </>
+      )}
+      {!order.customer && (
+        <Typography>
+          No information yet
+        </Typography>
+      )}
     </InfoPanel>
   );
 }
@@ -58,21 +67,30 @@ export function ShippingInfoPanel({ order, ...props }) {
       onEdit={() => setDialogOpen(true)}
       {...props}
     >
-      <Address data={orderState.customer.address} />
+      {order.customer && (
+        <>          
+          <Address data={orderState.customer.address} />
 
-      {dialogOpen && <Modal
-        title="Edit Order Customer Info"
-        onClose={() => setDialogOpen(false)}
-      >
-        <OrderShippingAddressForm
-          order={orderState}
-          onComplete={(message, order) => {
-            setOrderState(order);
-            setDialogOpen(false);
-            enqueueSnackbar('Order shipping address updated', { variant: 'success' });
-          }}
-        />
-      </Modal>}
+          {dialogOpen && <Modal
+            title="Edit Order Customer Info"
+            onClose={() => setDialogOpen(false)}
+          >
+            <OrderShippingAddressForm
+              order={orderState}
+              onComplete={(message, order) => {
+                setOrderState(order);
+                setDialogOpen(false);
+                enqueueSnackbar('Order shipping address updated', { variant: 'success' });
+              }}
+            />
+          </Modal>}
+        </>      
+      )}
+      {!order.customer && (
+        <Typography>
+          No information yet
+        </Typography>
+      )}
     </InfoPanel>
   );
 };
@@ -127,25 +145,28 @@ const useBillingInfoPanelStyles = makeStyles(theme => ({
 export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useBillingInfoPanelStyles();
+  let rows = [{ title: '', content: 'No totals yet'}];
 
-  const rows = [
-    {
-      title: 'Item Total',
-      content: <Currency value={order.amounts.itemTotalPrice} />
-    },
-    {
-      title: 'Coupon',
-      content: '--' // TODO Coupon Component
-    },
-    {
-      title: 'Tax',
-      content: <Currency value={order.amounts.tax} />
-    },
-    {
-      title: 'Order Total',
-      content: <Currency value={order.amounts.total} />
-    }
-  ];
+  if (order.amounts) {
+    rows = [
+      {
+        title: 'Item Total',
+        content: <Currency value={order.amounts.itemTotalPrice} />
+      },
+      {
+        title: 'Coupon',
+        content: '--' // TODO Coupon Component
+      },
+      {
+        title: 'Tax',
+        content: <Currency value={order.amounts.tax} />
+      },
+      {
+        title: 'Order Total',
+        content: <Currency value={order.amounts.total} />
+      }
+    ];  
+  }
 
   return (
     <InfoPanel

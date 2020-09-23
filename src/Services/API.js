@@ -82,13 +82,6 @@ class Users extends CRUD {
 class Orders extends CRUD {
   static endpoint = 'orders';
 
-  static getAllWithCustomers() {
-    return Axios
-      .get(`/${this.endpoint}?withCustomers=1`)
-      .then(this.handleResponse)
-      .catch(this.handleError);
-  }
-
   static getOrdersByCustomer(customerId) {
     return Axios
       .get(`/${this.endpoint}/customer/${customerId}`)

@@ -48,7 +48,9 @@ export default function OrderViewerToolbar({ order, ...props }) {
               <Select
                 value={orderStatus}
                 onChange={handleStatusChange}
+                disabled={orderStatus == 'in_progress'}
               >
+                <MenuItem value="in_progress">In Progress</MenuItem>
                 <MenuItem value="pending">Pending Processing</MenuItem>
                 <MenuItem value="processing">Processing</MenuItem>
                 <MenuItem value="shipped">Shipped</MenuItem>
