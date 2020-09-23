@@ -6,7 +6,6 @@ import {
   TableBody, 
   TableRow, 
   TableCell, 
-  TextField, 
   Paper,
   makeStyles,
   Typography,
@@ -17,12 +16,10 @@ import {
 } from '@material-ui/core';
 import {
   Save as SaveIcon,
-  Delete as DeleteIcon,
-  Add as AddIcon
+  Delete as DeleteIcon
 } from '@material-ui/icons';
 import * as formik from 'formik';
 import * as yup from 'yup';
-import NumberFormat from 'react-number-format';
 import InputField from '../../UI/FormFields/InputField';
 import MoneyField from '../../UI/FormFields/MoneyField';
 

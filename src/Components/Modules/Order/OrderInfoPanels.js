@@ -145,7 +145,7 @@ const useBillingInfoPanelStyles = makeStyles(theme => ({
 export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useBillingInfoPanelStyles();
-  let rows = [{ title: '', content: 'No totals yet'}];
+  let rows = [{ title: '', content: 'No totals yet' }];
 
   if (order.amounts) {
     rows = [
@@ -198,7 +198,6 @@ export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
           </TableBody>
         </Table>
       </TableContainer>
-
       <EditableText
         label="Refund to date:"
         value={Number(order.amounts.refunded).toFixed(2)}
