@@ -202,8 +202,17 @@ function OrderItemTrackingNumber({ order, item, onUpdated }) {
   }
 }
 
-export function OrderItemLineItems({ item, ...props }) {
+function OrderLineItemUpsell({ upsell }) {
+  if (upsell.type === 'percent') {
+    return <span>{Number(upsell.amount)}%</span>
+  } else if (upsell.type === 'flat') {
+    return <span>${Number(upsell.amount).toFixed(2)}</span>
+  }
+}
+
+export function OrderItemLineItems({ item, upsells, ...props }) {
   const classes = useStyles();
+
   return (
     <Table
       size="small"
@@ -215,33 +224,33 @@ export function OrderItemLineItems({ item, ...props }) {
           label: 'Est. Board Area',
           value: <span><NumberFormat value={item.board.metrics.area} displayType="text" decimalScale={2} fixedDecimalScale={true} /> mm<sup>2</sup></span>,
           secondaryLabel: 'Layers',
-          secondaryValue: item.board.layers.count,
+          secondaryValue: item.board.metrics.layers,
           type: 'Base Price',
-          total: item.total
+          total: item.amounts.base
         }} />
         <OrderItemLineItem key="copperWeight" lineItem={{
           label: 'Copper Weight',
           value: `${item.options.copperWeight} oz`,
           secondaryLabel: 'Multiplier',
-          secondaryValue: '[TODO]',
+          secondaryValue: <OrderLineItemUpsell upsell={upsells.find(u => u.option === 'copperWeight' && u.value === item.options.copperWeight)} />,
           type: 'Upsell',
-          total: '[TODO]'
+          total: item.amounts.options.copperWeight
         }} />
         <OrderItemLineItem key="surfaceFinish" lineItem={{
           label: 'Surface Finish',
           value: item.options.surfaceFinish,
           secondaryLabel: 'Multiplier',
-          secondaryValue: '[TODO]',
+          secondaryValue: <OrderLineItemUpsell upsell={upsells.find(u => u.option === 'surfaceFinish' && u.value === item.options.surfaceFinish)} />,
           type: 'Upsell',
-          total: '[TODO]'
+          total: item.amounts.options.surfaceFinish
         }} />
         <OrderItemLineItem key="tg" lineItem={{
           label: 'Tg',
           value: <span>{item.options.tg} &deg;C</span>,
           secondaryLabel: 'Multiplier',
-          secondaryValue: '[TODO]',
+          secondaryValue: <OrderLineItemUpsell upsell={upsells.find(u => u.option === 'tg' && u.value === item.options.tg)} />,
           type: 'Upsell',
-          total: '[TODO]'
+          total: item.amounts.options.tg
         }} />
       </TableBody>
       <TableFooter>
@@ -251,7 +260,7 @@ export function OrderItemLineItems({ item, ...props }) {
             Tax
           </TableCell>
           <TableCell align="right">
-            <Currency value={item.tax} />
+            <Currency value={item.amounts.tax} />
           </TableCell>
         </TableRow>
         <TableRow key="total">
@@ -267,7 +276,7 @@ export function OrderItemLineItems({ item, ...props }) {
             scope="row"
             align="right"
           >
-            <Currency value={item.total} />
+            <Currency value={item.amounts.total} />
           </TableCell>
         </TableRow>
       </TableFooter>
@@ -275,7 +284,7 @@ export function OrderItemLineItems({ item, ...props }) {
   );
 };
 
-export default function OrderItem({ order, item }) {
+export default function OrderItem({ order, item, upsells }) {
   const classes = useStyles();
   const [previewOpen, setPreviewOpen] = React.useState(false);
   const [itemState, setItemState] = React.useState(item);
@@ -291,7 +300,7 @@ export default function OrderItem({ order, item }) {
       >
         <OrderItemBasicInfoTable className={classes.basicInfoTable} order={order} item={itemState} />
         <Divider/>
-        <OrderItemLineItems item={itemState} />
+        <OrderItemLineItems item={itemState} upsells={upsells} />
       </Grid>
 
       <Grid

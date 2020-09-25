@@ -4,7 +4,7 @@ import { Skeleton } from '@material-ui/lab';
 import { ArrowDropDown as ArrowDropDownIcon, Close as CloseIcon } from '@material-ui/icons';
 import API from '../../../Services/API';
 
-export default function SendToManufacturerButton({ order, ...props }) {
+export default function SendToManufacturerButton({ order, onStatusChange, ...props }) {
   const [open, setOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
   const [manufacturer, setManufacturer] = React.useState(null);
@@ -59,15 +59,18 @@ export default function SendToManufacturerButton({ order, ...props }) {
 
   // Update button disabled state
   React.useEffect(() => {
-    setButtonDisabled(!orderState || orderState.manufacturerId !== null);
+    setButtonDisabled(!orderState || orderState.manufacturerId);
   }, [orderState]);
 
   // Assign order to manufacturer
   const handleClick = (event) => {
     if (selectedManufacturer) {
       API.Orders
-        .update(orderState.glid, { manufacturerId: selectedManufacturer.glid })
-        .then(orderData => setOrderState(orderData));
+        .update(orderState.glid, { status: 'processing', manufacturerId: selectedManufacturer.glid })
+        .then(orderData => {
+          onStatusChange('processing');
+          setOrderState(orderData)
+        });
     } else {
       setOpen(true);
     }
@@ -96,8 +99,11 @@ export default function SendToManufacturerButton({ order, ...props }) {
   // Unset manufacturer
   const handleClear = (event) => {
     API.Orders
-      .update(orderState.glid, { manufacturerId: null })
-      .then(orderData => setOrderState(orderData));
+      .update(orderState.glid, { status: 'pending', manufacturerId: null })
+      .then(orderData => {
+        onStatusChange('pending');
+        setOrderState(orderData)
+      });
   };
 
   return (

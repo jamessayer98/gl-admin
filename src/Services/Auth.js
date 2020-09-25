@@ -46,7 +46,7 @@ class Auth {
         localStorage.setItem('currentUser', JSON.stringify(user));
         _currentUserSubject.next(user);
         return user;
-      })
+      });
   }
 
   static logout() {

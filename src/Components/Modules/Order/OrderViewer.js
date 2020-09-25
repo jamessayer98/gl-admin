@@ -43,16 +43,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function OrderViewer({ match, onOrderLoaded }) {
+export default function OrderViewer({ match }) {
   const classes = useStyles();
   const isMfg = Auth.currentUserRole === roles.manufacturer;
   const [order, setOrder] = React.useState(null);
   const [pageTitle, setPageTitle] = React.useState(<Skeleton variant="text" width={300} />);
+  const [upsells, setUpsells] = React.useState(null);
 
   React.useEffect(() => {
     API.Orders.get(parseGLID(match.params.id)).then(orderData => {
         setOrder(orderData);
         setPageTitle(<span>Order: <GLID id={orderData.glid} /></span>);
+    });
+
+    API.Settings.get('upsells').then(upsells => {
+      setUpsells(upsells);
     });
   }, [match]);
 
@@ -114,7 +119,7 @@ export default function OrderViewer({ match, onOrderLoaded }) {
               className={classes.itemCard}
             >
               <CardContent>
-                <OrderItem order={order} item={item} />
+                <OrderItem order={order} item={item} upsells={upsells}/>
               </CardContent>
             </Card>
           ))}

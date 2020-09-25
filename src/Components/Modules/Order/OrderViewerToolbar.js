@@ -60,7 +60,7 @@ export default function OrderViewerToolbar({ order, ...props }) {
             )}
             {isMfg && <Typography variant="h6" component="span">{orderStatus}</Typography>}
           </Box>
-          {!isMfg && <SendToManufacturerButton order={order} />}
+          {!isMfg && <SendToManufacturerButton order={order} onStatusChange={status => setOrderStatus(status)}/>}
         </Toolbar>
       </AppBar>
       <Alert title="Status Change Error" open={statusAlertOpen} onConfirm={() => setStatusAlertOpen(false)}>
