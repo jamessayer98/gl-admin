@@ -15,7 +15,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
     if (customerId) {
       getOrders = API.Orders.getOrdersByCustomer(parseGLID(customerId));
     } if (Auth.currentUserRole === roles.manufacturer) {
-      getOrders = API.Orders.getOrdersByManufacturer(Auth.currentUserGLID);
+      getOrders = API.Orders.getOrdersByManufacturer(Auth.currentUserValue.user.manufacturer);
     } else {
       getOrders = API.Orders.getAll();
     }
@@ -70,7 +70,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
         }
 
         if (order.customerId) {
-          data.customerId = <GLID id={order.customer.glid} />;
+          data.customerId = <GLID id={order.customerId} />;
         } else {
           data.customerId = <span>&mdash;</span>;
         }

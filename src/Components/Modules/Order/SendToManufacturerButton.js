@@ -20,7 +20,7 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
     setSelectedManufacturer(null); // If order data has changed, the selection is no longer relevant
 
     if (orderState && orderState.manufacturerId) {
-      API.Users.get(orderState.manufacturerId).then(manufacturer => setManufacturer(manufacturer));
+      API.Manufacturers.get(orderState.manufacturerId).then(manufacturer => setManufacturer(manufacturer));
     } else {
       setManufacturer(null);
     }
@@ -30,7 +30,7 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
   React.useEffect(() => {
     //BUG: does not reload manufactures every use, remove second clause and set a dirty timer?
     if (open && manufacturers.length === 0) {
-      API.Users.getManufacturers().then(mfgs => {
+      API.Manufacturers.getAll().then(mfgs => {
         setManufacturers(mfgs || []);
       });
     }
