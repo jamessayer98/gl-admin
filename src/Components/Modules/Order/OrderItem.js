@@ -203,17 +203,21 @@ function OrderItemTrackingNumber({ order, item, onUpdated }) {
 }
 
 function OrderLineItemUpsell({ upsell }) {
-  if (upsell.type === 'percent') {
-    return <span>{Number(upsell.amount)}%</span>
-  } else if (upsell.type === 'flat') {
-    return <span>${Number(upsell.amount).toFixed(2)}</span>
+  if (upsell) {
+    if (upsell.type === 'percent') {
+      return <span>{Number(upsell.amount)}%</span>
+    } else if (upsell.type === 'flat') {
+      return <span>${Number(upsell.amount).toFixed(2)}</span>
+    }
   }
+
+  return <span>&mdash;</span>;
 }
 
 export function OrderItemLineItems({ item, upsells, ...props }) {
   const classes = useStyles();
 
-  return (
+  return upsells && (
     <Table
       size="small"
       className={classes.stripedTable}
