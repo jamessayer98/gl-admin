@@ -44,6 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export function OrderItemBasicInfoTable({ order, item, ...props }) {
   const classes = useStyles();
+  
   const boardData = [
     { label: 'Max board length', value: String(item.board.metrics.height) + ' mm' },
     { label: 'Max board width', value: String(item.board.metrics.width) + ' mm' },
