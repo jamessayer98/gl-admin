@@ -7,6 +7,7 @@ import Modal from '../../UI/Modal';
 import GerberPreview from './GerberPreview';
 import API from '../../../Services/API';
 import NumberFormat from 'react-number-format';
+import Auth, { roles } from '../../../Services/Auth';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -49,6 +50,10 @@ export function OrderItemBasicInfoTable({ order, item, ...props }) {
     { label: 'Max hole size', value: String(item.board.metrics.maxHoleSize) + ' mm' },
     { label: 'Min hole size', value: String(item.board.metrics.minHoleSize) + ' mm' }
   ];
+
+  if (Auth.currentUserRole === roles.manufacturer) {
+    boardData.push({ label: 'Layers', value: item.board.metrics.layers });
+  }
 
   return (
     <div {...props}>
@@ -133,8 +138,8 @@ function OrderItemLineItem({ lineItem }) {
       <TableCell>{lineItem.value}</TableCell>
       <TableCell>{lineItem.secondaryLabel || ''}</TableCell>
       <TableCell>{lineItem.secondaryValue || ''}</TableCell>
-      <TableCell>{lineItem.type}</TableCell>
-      <TableCell align="right"><Currency value={lineItem.total}/></TableCell>
+      <TableCell>{lineItem.type || ''}</TableCell>
+      <TableCell align="right">{ lineItem && <Currency value={lineItem.total}/>}</TableCell>
     </TableRow>
   );
 }
@@ -198,7 +203,6 @@ function OrderItemTrackingNumber({ order, item, onUpdated }) {
         }}
       />
     );
-
   }
 }
 
@@ -217,13 +221,17 @@ function OrderLineItemUpsell({ upsell }) {
 export function OrderItemLineItems({ item, upsells, ...props }) {
   const classes = useStyles();
 
-  return upsells && (
-    <Table
-      size="small"
-      className={classes.stripedTable}
-      {...props}
-    >
-      <TableBody>
+  const lineItems = () => {
+    if (Auth.currentUserRole === roles.manufacturer) {
+      return lineItemsMfg();
+    } else {
+      return lineItemsAdmin();
+    }
+  }
+
+  const lineItemsAdmin = () => {
+    return (      
+      <>
         <OrderItemLineItem key="area" lineItem={{
           label: 'Est. Board Area',
           value: <span><NumberFormat value={item.board.metrics.area} displayType="text" decimalScale={2} fixedDecimalScale={true} /> mm<sup>2</sup></span>,
@@ -256,34 +264,71 @@ export function OrderItemLineItems({ item, upsells, ...props }) {
           type: 'Upsell',
           total: item.amounts.options.tg
         }} />
+      </>
+    );
+  };
+
+  const lineItemsMfg = () => {
+    return (  
+      <>
+        <OrderItemLineItem key="area" lineItem={{
+          label: 'Est. Board Area',
+          value: <span><NumberFormat value={item.board.metrics.area} displayType="text" decimalScale={2} fixedDecimalScale={true} /> mm<sup>2</sup></span>
+        }} />
+        <OrderItemLineItem key="copperWeight" lineItem={{
+          label: 'Copper Weight',
+          value: `${item.options.copperWeight} oz`,
+        }} />
+        <OrderItemLineItem key="surfaceFinish" lineItem={{
+          label: 'Surface Finish',
+          value: item.options.surfaceFinish,
+        }} />
+        <OrderItemLineItem key="tg" lineItem={{
+          label: 'Tg',
+          value: <span>{item.options.tg} &deg;C</span>,
+        }} />
+      </>
+    );
+  }
+
+  return upsells && (
+    <Table
+      size="small"
+      className={classes.stripedTable}
+      {...props}
+    >
+      <TableBody>
+        {lineItems()}
       </TableBody>
-      <TableFooter>
-        <TableRow key="tax">
-          <TableCell colSpan={4}></TableCell>
-          <TableCell>
-            Tax
-          </TableCell>
-          <TableCell align="right">
-            <Currency value={item.amounts.tax} />
-          </TableCell>
-        </TableRow>
-        <TableRow key="total">
-          <TableCell colSpan={4}></TableCell>
-          <TableCell
-            component="th"
-            scope="row"
-          >
-            Total
-          </TableCell>
-          <TableCell
-            component="th"
-            scope="row"
-            align="right"
-          >
-            <Currency value={item.amounts.total} />
-          </TableCell>
-        </TableRow>
-      </TableFooter>
+      {Auth.currentUserRole !== roles.manufacturer && (
+        <TableFooter>
+          <TableRow key="tax">
+            <TableCell colSpan={4}></TableCell>
+            <TableCell> 
+              Tax
+            </TableCell>
+            <TableCell align="right">
+              <Currency value={item.amounts.tax} />
+            </TableCell>
+          </TableRow>
+          <TableRow key="total">
+            <TableCell colSpan={4}></TableCell>
+            <TableCell
+              component="th"
+              scope="row"
+            >
+              Total
+            </TableCell>
+            <TableCell
+              component="th"
+              scope="row"
+              align="right"
+            >
+              <Currency value={item.amounts.total} />
+            </TableCell>
+          </TableRow>
+        </TableFooter>      
+      )}
     </Table>
   );
 };
