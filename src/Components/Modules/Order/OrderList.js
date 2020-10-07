@@ -22,7 +22,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
     }
 
     getOrders.then(orderData => {
-      setOrders(orderData);
+      setOrders(orderData.filter(o => o.status !== 'in_progress'));
       setLoading(false);
     });
   }, [customerId]);
