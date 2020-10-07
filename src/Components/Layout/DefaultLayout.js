@@ -19,8 +19,9 @@ import {
 
 import ProfileMenu from './ProfileMenu';
 import MainMenu from './MainMenu';
+import logo from '../../Assets/logo.png'
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,6 +80,16 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
+  },
+  logo: {
+    padding: theme.spacing(0, 1),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '& > img': {
+      maxWidth: '100%',
+      height: 'auto'
+    }
   },
   content: {
     flexGrow: 1,
@@ -156,6 +167,9 @@ export default function Default({ title, history, children, padContent }) {
         <div
           className={classes.toolbar}
         >
+          <div className={classes.logo}>
+            <img alt="GerberLabs Logo" src={logo} />
+          </div>
           <IconButton
             onClick={handleDrawerClose}
           >
