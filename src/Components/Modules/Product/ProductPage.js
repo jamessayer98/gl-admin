@@ -1,9 +1,9 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
 import DefaultLayout from '../../Layout/DefaultLayout';
 
 import PricingTable from './PricingTable';
 import Tabs, { Tab } from '../../UI/Tabs';
+import Upsells from './Upsells';
 
 
 export default function ProductPage() {
@@ -29,7 +29,7 @@ export default function ProductPage() {
           id="upsells"
           label="Upsells"
         >
-          <Typography>upsells</Typography>
+          <Upsells />
         </Tab>
       </Tabs>
     </DefaultLayout>

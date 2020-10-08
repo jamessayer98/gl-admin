@@ -37,7 +37,9 @@ export function Tab({ id, label, index, value, children, ...props }) {
 
 export default function Tabs({ id, children, muiTabsProps, ...props }) {
   // const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(parseInt(localStorage.getItem(`tab_${id}`)) || 0);
+
+  console.log(value);
 
   return (
     <div>
@@ -48,7 +50,10 @@ export default function Tabs({ id, children, muiTabsProps, ...props }) {
       >
         <MuiTabs
           value={value}
-          onChange={(event, newValue) => setValue(newValue)}
+          onChange={(event, newValue) => {
+            localStorage.setItem(`tab_${id}`, newValue)
+            setValue(newValue);
+          }}
           {...muiTabsProps}
         >
           {children.map((child, index) => (
