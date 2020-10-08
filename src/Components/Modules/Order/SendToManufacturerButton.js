@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Button, ButtonGroup, Popper, Grow, Paper, ClickAwayListener, MenuList, MenuItem } from '@material-ui/core';
+import { Box, Button, ButtonGroup, Popper, Grow, Paper, ClickAwayListener, MenuList, MenuItem, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { ArrowDropDown as ArrowDropDownIcon, Close as CloseIcon } from '@material-ui/icons';
 import API from '../../../Services/API';
+import { Confirm } from '../../UI/Modal';
 
 export default function SendToManufacturerButton({ order, onStatusChange, ...props }) {
   const [open, setOpen] = React.useState(false);
@@ -12,6 +13,7 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
   const [selectedManufacturer, setSelectedManufacturer] = React.useState(null);
   const [buttonLabel, setButtonLabel] = React.useState(<Skeleton variant="text" width={200} />);
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
+  const [confirmAssignOpen, setConfirmAssignOpen] = React.useState(false);
 
   const anchorRef = React.useRef(null);
 
@@ -59,22 +61,30 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
 
   // Update button disabled state
   React.useEffect(() => {
-    setButtonDisabled(!orderState || orderState.manufacturerId);
+    setButtonDisabled(!orderState || (orderState.manufacturerId !== null && orderState.manufacturerId !== undefined));
   }, [orderState]);
 
-  // Assign order to manufacturer
+  // Handle clicking of this button
   const handleClick = (event) => {
     if (selectedManufacturer) {
-      API.Orders
-        .update(orderState.glid, { status: 'processing', manufacturerId: selectedManufacturer.glid })
-        .then(orderData => {
-          onStatusChange('processing');
-          setOrderState(orderData)
-        });
+      // Mfg selected, confirm then do the assignment
+      setConfirmAssignOpen(true);
     } else {
+      // Mfg not selected, open the dropdown
       setOpen(true);
     }
   }
+
+  const handleAssignConfirm = () => {
+    setConfirmAssignOpen(false);
+
+    API.Orders
+      .update(orderState.glid, { status: 'processing', manufacturerId: selectedManufacturer.glid })
+      .then(orderData => {
+        onStatusChange('processing');
+        setOrderState(orderData)
+      });
+  };
 
   // Toggle popper
   const handleToggle = () => {
@@ -164,6 +174,16 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
           </Grow>
         )}
       </Popper>
+      <Confirm
+        title="Confirm Manufacturer Assignment"
+        open={confirmAssignOpen}
+        onConfirm={handleAssignConfirm}
+        onCancel={() => {
+          setConfirmAssignOpen(false);
+        }}
+      >
+        {selectedManufacturer && <Typography>Are you sure you want to assign this order to {selectedManufacturer.name}?</Typography>}
+      </Confirm>
     </Box>
   );
 }

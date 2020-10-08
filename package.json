@@ -15,7 +15,7 @@
     "formik-material-ui": "^3.0.0-alpha.0",
     "formik-material-ui-lab": "0.0.5",
     "history": "^5.0.0",
-    "material-table": "^1.67.1",
+    "material-table": "^1.69.1",
     "notistack": "^0.9.17",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

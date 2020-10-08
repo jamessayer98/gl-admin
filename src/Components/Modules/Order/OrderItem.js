@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Typography, Table, TableRow, TableBody, TableCell, makeStyles, TableFooter, Divider, Button, Box, TextField, FormControlLabel, InputAdornment, IconButton, Switch } from '@material-ui/core';
-import { FindInPage as FindInPageIcon, GetApp as GetAppIcon, LocalShipping as LocalShippingIcon, Save as SaveIcon, FileCopy as FileCopyIcon } from '@material-ui/icons';
+import { FindInPage as FindInPageIcon, GetApp as GetAppIcon, LocalShipping as LocalShippingIcon, Save as SaveIcon, FileCopy as FileCopyIcon, Edit as EditIcon } from '@material-ui/icons';
 import { makeGLID } from '../../UI/GLID';
 import Currency from '../../UI/Currency';
 import Modal from '../../UI/Modal';
@@ -146,14 +146,16 @@ function OrderItemLineItem({ lineItem }) {
 }
 
 function OrderItemTrackingNumber({ order, item, onUpdated }) {
-  const [trackingNumber, setTrackingNumber] = React.useState(item.trackingNumber || ''); // Default to empty string
+  const [trackingNumber, setTrackingNumber] = React.useState(item.tracking || ''); // Default to empty string
   const [enabled, setEnabled] = React.useState(trackingNumber === ''); // Only enable when there is NOT a tracking number already present
+  const ref = React.useRef();
 
   let commonProps = {
     variant: 'outlined',
     label: 'Tracking Number',
     value: trackingNumber,
     fullWidth: true,
+    inputRef: ref,
     onChange: e => setTrackingNumber(e.target.value)
   };
 
@@ -165,10 +167,10 @@ function OrderItemTrackingNumber({ order, item, onUpdated }) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={e => {
-                let newOrderItems = order.items;
+                let newOrderItems = [...order.items];
                 newOrderItems.map(_item => {
                   if (item.ordinal === _item.ordinal) {
-                    item.trackingNumber = trackingNumber;
+                    item.tracking = trackingNumber;
                   }
                   return item;
                 });
@@ -193,12 +195,22 @@ function OrderItemTrackingNumber({ order, item, onUpdated }) {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton onClick={e => {
-                e.target.select();
-                document.execCommand('copy');
-              }}>
-                <FileCopyIcon />
-              </IconButton>
+              <div>
+                <IconButton onClick={e => {
+                  ref.current.disabled = false;
+                  ref.current.select();
+                  document.execCommand('copy');
+                  document.getSelection().empty();
+                  ref.current.disabled = true;
+                }}>
+                  <FileCopyIcon />
+                </IconButton>
+                <IconButton onClick={e => {
+                  setEnabled(true);
+                }}>
+                  <EditIcon />
+                </IconButton>
+              </div>
             </InputAdornment>
           )
         }}
@@ -411,7 +423,7 @@ export default function OrderItem({ order, item, upsells }) {
             <FormControlLabel
               control={(
                 <Switch
-                  color="primary"
+                  color="secondary"
                   checked={!itemState.trackingAvailable}
                   disabled={itemState.trackingNumber !== ''}
                   onChange={e => {
@@ -430,21 +442,22 @@ export default function OrderItem({ order, item, upsells }) {
                       setItemState({
                         ...itemState,
                         trackingAvailable: trackingAvailable,
-                        trackingNumber: ''
+                        tracking: ''
                       });
                     });
                   }}
                 />
               )}
               label="Tracking Not Available"
-              disabled={item.trackingNumber && item.trackingNumber !== ''}
+              disabled={itemState.tracking && itemState.tracking !== ''}
             />
           </Typography>
 
-          {!item.shipped && <Typography>
+          <Typography>
             <Button
               fullWidth
-              variant="contained"
+              variant={item.shipped ? 'outlined' : 'contained'}
+              disabled={item.shipped}
               color="secondary"
               size="large"
               startIcon={<LocalShippingIcon />}
@@ -467,11 +480,10 @@ export default function OrderItem({ order, item, upsells }) {
                 });
               }}
             >
-              Mark As Shipped
+              {!item.shipped && <span>Mark As Shipped</span>}
+              {item.shipped && <span>Item shipped</span>}
             </Button>
-          </Typography>}
-
-          {item.shipped && <Typography paragraph>Item shipped!</Typography>}
+          </Typography>
         </Box>
       </Grid>
     </Grid>
