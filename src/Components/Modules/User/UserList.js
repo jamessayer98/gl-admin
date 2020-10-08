@@ -17,7 +17,7 @@ export default function UserList({ history }) {
   const [selectedRowData, setSelectedRowData] = React.useState(null);
 
   const loadData = () => {
-    API.Users.getAll().then(users => setUsers(users))
+    API.Users.getAll().then(users => setUsers(users));
   }
 
   React.useEffect(() => {
@@ -79,7 +79,7 @@ export default function UserList({ history }) {
           name: user.name,
           glid: user.glid,
           type: user.role,
-          manufacturer: user.role === roles.manufacturer && user.manufacturer ? user.manufacturer.name : <span>&mdash;</span>,
+          manufacturer: user.manufacturer ? user.manufacturer.name : <span>&mdash;</span>,
           email: user.email,
           enabled: user.enabled,
           lastLogin: user.lastAuth || <span>&mdash;</span>,

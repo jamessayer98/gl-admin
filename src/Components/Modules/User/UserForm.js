@@ -121,9 +121,6 @@ export default function UserForm({ userId, onComplete }) {
         if (userId) {
           delete values.password;
           delete values.passwordConfirmation;
-          if (values.manufacturer) {
-            values.manufacturer = values.manufacturer.glid
-          }
           promise = API.Users.update(userId, values);
         } else {
           promise = API.Users.create(values);
