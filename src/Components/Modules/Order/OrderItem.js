@@ -94,6 +94,17 @@ export function OrderItemBasicInfoTable({ order, item, ...props }) {
                   {item.name}
                 </TableCell>
               </TableRow>
+              <TableRow key="item_quantity">
+                <TableCell
+                  component="th"
+                  scope="row"
+                >
+                  Quantity
+                </TableCell>
+                <TableCell>
+                  {item.quantity}
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>        
         </Grid>
@@ -402,7 +413,7 @@ export default function OrderItem({ order, item, upsells }) {
               color="primary"
               size="large"
               startIcon={<GetAppIcon />}
-              href={itemState.board.originalUpload}
+              href={itemState.board.originalUploadUrl}
             >
               Download Gerber File
             </Button>

@@ -39,7 +39,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
 
   if (Auth.currentUserRole !== roles.manufacturer) {
     columns = [
-      { title: 'Ordered On', field: 'date', type: 'datetime', table: 'orders' },
+      { title: 'Ordered On', field: 'date', type: 'datetime', table: 'orders', defaultSort: 'desc' },
       { title: 'Order ID', field: 'glid', table: 'orders', render: rowData => <GLID id={rowData.glid} /> },
       { title: 'Customer ID', field: 'customerId', table: 'customers' },
       { title: 'Customer', field: 'customer', table: 'customers' },
@@ -103,8 +103,8 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
           // { title: 'Items Shipped', field: 'itemsShipped', table: 'orders' },
           // { title: 'Items Unshipped', field: 'itemsUnshipped', table: 'orders' },
           data.address = <AddressLine data={order.customer.address} />
-          data.itemsShipped = 0;
-          data.itemsUnshipped = order.items.length;
+          data.itemsShipped = order.items.filter(item => item.shipped).length;
+          data.itemsUnshipped = order.items.length - data.itemsShipped;
         }
 
         return data;
