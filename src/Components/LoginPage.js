@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import bgImage from '../Assets/bg.jpg';
 
-import Auth from '../Services/Auth';
+import Auth, { roles } from '../Services/Auth';
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -56,9 +56,13 @@ export default function LoginPage({ history, location }) {
 
   function handleSubmit({ username, password }, { setStatus, setSubmitting }) {
     setStatus();
-    Auth.login(username, password).then(user => {
-      const { from } = location.state || { from: { pathname: "/dashboard" } };
-      history.push(from);
+    Auth.login(username, password).then(data => {
+      if (data.user.role === roles.manufacturer) {
+        history.push('/orders');
+      } else {
+        const { from } = location.state || { from: { pathname: "/dashboard" } };
+        history.push(from);
+      }
     }).catch(err => {
       setSubmitting(false);
       if (err.response) {

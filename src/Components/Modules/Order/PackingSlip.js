@@ -178,7 +178,7 @@ export default function PackingSlip({ order }) {
       </Typography>
 
       <Typography variant="body2">
-        Contact us at creators@gerberlabs.com
+        Contact us at admin@gerberlabs.com
       </Typography>
     </Box>
   );
