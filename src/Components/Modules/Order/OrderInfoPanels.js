@@ -155,7 +155,7 @@ export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
       },
       {
         title: 'Coupon',
-        content: '--' // TODO Coupon Component
+        content: <Currency value={order.amounts.coupon} />
       },
       {
         title: 'Tax',
