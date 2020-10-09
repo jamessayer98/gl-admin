@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, makeStyles, TableContainer, Table, TableRow, TableCell, TableBody, Box } from '@material-ui/core';
+import { Typography, makeStyles, TableContainer, Table, TableRow, TableCell, TableBody, Box, List, ListItem, ListItemText } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import InfoPanel from '../../UI/InfoPanel';
 import Address from '../../UI/Address';
@@ -212,14 +212,40 @@ export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
   );
 }
 
+const useStylesLog = makeStyles(theme => ({
+  root: {
+    maxHeight: 380,
+    overflowY: 'scroll'
+  },
+  listItem: {
+    borderLeftWidth: 2,
+    borderLeftStyle: 'solid',
+    borderLeftColor: theme.palette.primary.main,
+    marginBottom: theme.spacing(1),
+    backgroundColor: theme.palette.grey[100]
+  }
+}));
+
 export function LogInfoPanel({ order, ...props }) {
+  const classes = useStylesLog();
+
   return (
     <InfoPanel
+      className={classes.root}
       title="Activity Log"
       editable={false}
       {...props}
     >
-      <Typography color="textSecondary">Not implemented yet</Typography>
+      <List dense>
+        {order.log.map((logItem, logItemIndex) => (
+          <ListItem key={logItemIndex} className={classes.listItem}>
+            <ListItemText
+              primary={logItem.message}
+              secondary={new Date(logItem.date).toLocaleString()}
+            />
+          </ListItem>
+        ))}      
+      </List>
     </ InfoPanel>
   );
 };
