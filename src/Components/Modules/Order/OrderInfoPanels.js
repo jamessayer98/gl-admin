@@ -8,6 +8,7 @@ import Modal from '../../UI/Modal';
 import { OrderCustomerInfoForm, OrderShippingAddressForm, OrderNotesForm } from './Forms';
 import EditableText from '../../UI/EditableText';
 import API from '../../../Services/API';
+import Auth, { roles } from '../../../Services/Auth';
 
 export function CustomerInfoPanel({ order, ...props }) {
   const { enqueueSnackbar } = useSnackbar();
@@ -228,6 +229,14 @@ const useStylesLog = makeStyles(theme => ({
 
 export function LogInfoPanel({ order, ...props }) {
   const classes = useStylesLog();
+  let log = order.log.filter(l => {
+    if (Auth.currentUserRole === roles.manufacturer && l.adminOnly) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+  
 
   return (
     <InfoPanel
@@ -237,7 +246,7 @@ export function LogInfoPanel({ order, ...props }) {
       {...props}
     >
       <List dense>
-        {order.log.map((logItem, logItemIndex) => (
+        {log.map((logItem, logItemIndex) => (
           <ListItem key={logItemIndex} className={classes.listItem}>
             <ListItemText
               primary={logItem.message}
