@@ -10,7 +10,7 @@ import EditableText from '../../UI/EditableText';
 import API from '../../../Services/API';
 import Auth, { roles } from '../../../Services/Auth';
 
-export function CustomerInfoPanel({ order, ...props }) {
+export function CustomerInfoPanel({ order, onOrderUpdated, ...props }) {
   const { enqueueSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
@@ -26,9 +26,11 @@ export function CustomerInfoPanel({ order, ...props }) {
           <Typography>
             {orderState.customer.firstName} {orderState.customer.lastName}
           </Typography>
-          <Typography>
-            {orderState.customer.email}
-          </Typography>
+          {Auth.currentUserRole !== roles.manufacturer && (
+            <Typography>
+              {orderState.customer.email}
+            </Typography>
+          )}
           <Typography>
             {orderState.customer.phone}
           </Typography>
@@ -43,6 +45,7 @@ export function CustomerInfoPanel({ order, ...props }) {
                 setOrderState(order);
                 setDialogOpen(false);
                 enqueueSnackbar('Order customer information updated', { variant: 'success' });
+                onOrderUpdated();
               }}
             />
           </Modal>}
@@ -57,7 +60,7 @@ export function CustomerInfoPanel({ order, ...props }) {
   );
 }
 
-export function ShippingInfoPanel({ order, ...props }) {
+export function ShippingInfoPanel({ order, onOrderUpdated, ...props }) {
   const { enqueueSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
@@ -82,6 +85,7 @@ export function ShippingInfoPanel({ order, ...props }) {
                 setOrderState(order);
                 setDialogOpen(false);
                 enqueueSnackbar('Order shipping address updated', { variant: 'success' });
+                onOrderUpdated();
               }}
             />
           </Modal>}
@@ -96,7 +100,7 @@ export function ShippingInfoPanel({ order, ...props }) {
   );
 };
 
-export function NotesInfoPanel({ order, ...props }) {
+export function NotesInfoPanel({ order, onOrderUpdated, ...props }) {
   const { enqueueSnackbar } = useSnackbar();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
@@ -130,6 +134,7 @@ export function NotesInfoPanel({ order, ...props }) {
             setOrderState(order);
             setDialogOpen(false);
             enqueueSnackbar('Order notes updated', { variant: 'success' });
+            onOrderUpdated();
           }}
         />
       </Modal>}
@@ -143,7 +148,7 @@ const useBillingInfoPanelStyles = makeStyles(theme => ({
   }
 }));
 
-export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
+export function BillingInfoPanel({ order, onRefundAmountChange, onOrderUpdated, ...props }) {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useBillingInfoPanelStyles();
   let rows = [{ title: '', content: 'No totals yet' }];
@@ -207,6 +212,7 @@ export function BillingInfoPanel({ order, onRefundAmountChange, ...props }) {
           let newAmounts = { ...order.amounts, refunded: value };
           API.Orders.update(order.glid, { ...order, amounts: newAmounts });
           enqueueSnackbar('Order refund amount updated', { variant: 'success' });
+          onOrderUpdated();
         }}
       />
     </InfoPanel>
@@ -246,10 +252,10 @@ export function LogInfoPanel({ order, ...props }) {
       {...props}
     >
       <List dense>
-        {log.map((logItem, logItemIndex) => (
+        {log.reverse().map((logItem, logItemIndex) => (
           <ListItem key={logItemIndex} className={classes.listItem}>
             <ListItemText
-              primary={logItem.message}
+              primary={<span dangerouslySetInnerHTML={{ __html: logItem.message }}></span>}
               secondary={new Date(logItem.date).toLocaleString()}
             />
           </ListItem>

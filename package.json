@@ -23,6 +23,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "rxjs": "^6.5.5",
+    "title-case": "^3.0.2",
     "yup": "^0.29.1"
   },
   "scripts": {

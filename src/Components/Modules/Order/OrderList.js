@@ -1,4 +1,5 @@
 import React from 'react';
+import { titleCase } from 'title-case';
 import API from '../../../Services/API';
 import ListTable, { tableIcons } from '../../UI/ListTable';
 import GLID, { makeGLID, parseGLID } from '../../UI/GLID';
@@ -51,7 +52,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
     ];
   } else {
     columns = [
-      { title: 'Ordered On', field: 'date', type: 'datetime', table: 'orders' },
+      { title: 'Received', field: 'date', type: 'datetime', table: 'orders' },
       { title: 'Order ID', field: 'glid', table: 'orders', render: rowData => <GLID id={rowData.glid} /> },
       { title: 'Customer', field: 'customer', table: 'customers' },
       { title: 'Address', field: 'address', table: 'customers' },
@@ -74,7 +75,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
           date: order.createdOn,
           glid: order.glid,
           boardCount: order.items.length,
-          status: order.status
+          status: titleCase(String(order.status).replace('_', ' '))
         };
 
         if (order.customer) {          
@@ -102,6 +103,7 @@ export default function OrderList({ history, customerId, hideCustomer, readOnly 
           // { title: 'Address', field: 'address', table: 'customers' },
           // { title: 'Items Shipped', field: 'itemsShipped', table: 'orders' },
           // { title: 'Items Unshipped', field: 'itemsUnshipped', table: 'orders' },
+          data.date = order.sentToManufacturerOn;
           data.address = <AddressLine data={order.customer.address} />
           data.itemsShipped = order.items.filter(item => item.shipped).length;
           data.itemsUnshipped = order.items.length - data.itemsShipped;

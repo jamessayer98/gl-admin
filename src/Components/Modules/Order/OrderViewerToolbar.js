@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function OrderViewerToolbar({ order, ...props }) {
+export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
   const classes = useStyles();
   const isMfg = Auth.currentUserRole === roles.manufacturer;
   const [orderStatus, setOrderStatus] = React.useState(order.status);
@@ -29,6 +29,10 @@ export default function OrderViewerToolbar({ order, ...props }) {
   const [statusConfirmOpen, setStatusConfirmOpen] = React.useState(false);
   const [statusError, setStatusError] = React.useState({ title: '', message: '' });
   const [statusConfirmMessage, setStatusConfirmMessage] = React.useState({ title: '', message: '' });
+
+  React.useEffect(() => {
+    setOrderStatus(order.status);
+  }, [order]);
 
   const handleStatusChange = (event) => {
     const newStatus = event.target.value;
@@ -106,6 +110,7 @@ export default function OrderViewerToolbar({ order, ...props }) {
         setStatusError(null);
         setStatusConfirmOpen(false);
         setOrderStatus(newOrderStatus);
+        onOrderChange();
       }
     });
   };
@@ -132,7 +137,10 @@ export default function OrderViewerToolbar({ order, ...props }) {
             )}
             {isMfg && <Typography variant="h6" component="span">{orderStatus}</Typography>}
           </Box>
-          {!isMfg && <SendToManufacturerButton order={order} onStatusChange={status => setOrderStatus(status)}/>}
+          {!isMfg && <SendToManufacturerButton order={order} onStatusChange={status => {
+            setOrderStatus(status);            
+            onOrderChange();
+          }}/>}
         </Toolbar>
       </AppBar>
       {statusError && (

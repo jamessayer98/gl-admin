@@ -66,13 +66,20 @@ export default function OrderViewer({ match }) {
       amounts: { ...order.amounts, refunded: amount }
     }).then(orderData => setOrder(orderData));
   }
+
+  const handleOrderChange = () => {
+    API.Orders.get(order.glid).then(orderData => {
+      setOrder(orderData);
+    });
+  }
   
   return order && (
     <DefaultLayout
       title={pageTitle}
       padContent={false}
     >
-      <OrderViewerToolbar className={classes.toolbar} order={order} />
+      <OrderViewerToolbar className={classes.toolbar} order={order} onOrderChange={handleOrderChange}/>
+
       <Box px={3}>
         <Grid
           className={classes.infoGrid}
@@ -85,8 +92,8 @@ export default function OrderViewer({ match }) {
             xs={12}
             md={4}
           >
-            <CustomerInfoPanel order={order} editable={!isMfg}/>
-            <ShippingInfoPanel order={order} editable={!isMfg}/>
+            <CustomerInfoPanel order={order} editable={!isMfg} onOrderChange={handleOrderChange}/>
+            <ShippingInfoPanel order={order} editable={!isMfg} onOrderChange={handleOrderChange}/>
             {isMfg && <PackingSlipButton order={order} />}
           </Grid>
 
@@ -97,7 +104,7 @@ export default function OrderViewer({ match }) {
             md={5}
           >
             {!isMfg && <NotesInfoPanel order={order} />}
-            {!isMfg && <BillingInfoPanel order={order} onRefundAmountChange={handleRefundAmountChange} />}
+            {!isMfg && <BillingInfoPanel order={order} onOrderChange={handleOrderChange} onRefundAmountChange={handleRefundAmountChange} />}
           </Grid>
 
           <Grid
@@ -119,7 +126,7 @@ export default function OrderViewer({ match }) {
               className={classes.itemCard}
             >
               <CardContent>
-                <OrderItem order={order} item={item} upsells={upsells}/>
+                <OrderItem order={order} item={item} upsells={upsells} onOrderChange={handleOrderChange}/>
               </CardContent>
             </Card>
           ))}

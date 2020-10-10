@@ -357,10 +357,14 @@ export function OrderItemLineItems({ item, upsells, ...props }) {
   );
 };
 
-export default function OrderItem({ order, item, upsells }) {
+export default function OrderItem({ order, item, upsells, onOrderChange }) {
   const classes = useStyles();
   const [previewOpen, setPreviewOpen] = React.useState(false);
   const [itemState, setItemState] = React.useState(item);
+
+  if (onOrderChange === undefined) {
+    onOrderChange = () => {};
+  }
 
   return (
     <Grid
@@ -427,6 +431,7 @@ export default function OrderItem({ order, item, upsells }) {
                 ...itemState,
                 trackingNumber: trackingNumber
               });
+              onOrderChange();
             }}/>
           )}
 
@@ -455,12 +460,42 @@ export default function OrderItem({ order, item, upsells }) {
                         trackingAvailable: trackingAvailable,
                         tracking: ''
                       });
+                      onOrderChange();
                     });
                   }}
                 />
               )}
               label="Tracking Not Available"
               disabled={itemState.tracking && itemState.tracking !== ''}
+            />
+          </Typography>
+
+          <Typography paragraph>
+            <TextField
+              fullWidth
+              variant="outlined"
+              disabled={itemState.shipped}
+              label="Weight (in grams)"
+              value={item.shippingWeight}
+              onChange={(e) => {
+                setItemState({
+                  ...itemState,
+                  shippingWeight: e.target.value
+                })
+              }}
+              onBlur={() => {
+                let newOrderItems = [...order.items];
+                newOrderItems.map(_item => {
+                  if (itemState.ordinal === _item.ordinal) {
+                    _item.shippingWeight = itemState.shippingWeight;
+                  }
+                  return _item;
+                });
+                let newOrderValues = { ...order, items: newOrderItems };
+                API.Orders.update(order.glid, newOrderValues).then(() => {
+                  onOrderChange();
+                });
+              }}
             />
           </Typography>
 
@@ -488,6 +523,7 @@ export default function OrderItem({ order, item, upsells }) {
                     ...itemState,
                     shipped: true
                   });
+                  onOrderChange();
                 });
               }}
             >
