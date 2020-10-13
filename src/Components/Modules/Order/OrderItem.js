@@ -476,12 +476,12 @@ export default function OrderItem({ order, item, upsells, onOrderChange }) {
               variant="outlined"
               disabled={itemState.shipped}
               label="Weight (in grams)"
-              value={item.shippingWeight}
+              value={itemState.shippingWeight}
               onChange={(e) => {
                 setItemState({
                   ...itemState,
                   shippingWeight: e.target.value
-                })
+                });
               }}
               onBlur={() => {
                 let newOrderItems = [...order.items];
