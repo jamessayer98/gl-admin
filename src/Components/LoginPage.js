@@ -71,6 +71,8 @@ export default function LoginPage({ history, location }) {
         } else {
           setStatus('Error ' + err.response.status + ': ' + err.response.data);
         }
+      } else if (err.isAxiosError) {
+        setStatus('Error: ' + err.message);
       } else if (err.request) {
         setStatus('Error: ' + err.request);
       } else {
