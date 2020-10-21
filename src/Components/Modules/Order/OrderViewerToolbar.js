@@ -90,7 +90,7 @@ export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
       case 'hold':
         setStatusConfirmMessage({ title: 'Put on Hold?', message: 'Are you sure you want to put this order on hold?' });
         break;
-      case 'canceled':
+      case 'cancelled':
         setStatusConfirmMessage({ title: 'Mark as Canceled?', message: 'Are you sure you want to mark this order as canceled?' });
         break;
       default:
@@ -132,7 +132,7 @@ export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
                 <MenuItem value="processing">Processing</MenuItem>
                 <MenuItem value="shipped">Shipped</MenuItem>
                 <MenuItem value="hold">On Hold</MenuItem>
-                <MenuItem value="canceled">Canceled</MenuItem>
+                <MenuItem value="cancelled">Canceled</MenuItem>
               </Select>
             )}
             {isMfg && <Typography variant="h6" component="span">{orderStatus}</Typography>}
