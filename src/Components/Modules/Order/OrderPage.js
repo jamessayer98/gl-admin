@@ -12,6 +12,7 @@ function OrderListPage({ history }) {
   return (
     <DefaultLayout
       title="Orders"
+      pageTitle="Orders"
     >
       <OrderList key={key} history={history} />
     </DefaultLayout>

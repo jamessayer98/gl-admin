@@ -11,7 +11,7 @@ import API from '../../../Services/API';
 
 import { InputField, DropDown, ButtonGroup } from '../../UI/FormFields';
 import { US_STATES, ACCOUNT_STATUS, PHONE_REGEX } from '../../../Services/StaticData';
-import { parseGLID } from '../../UI/GLID';
+import { makeGLID, parseGLID } from '../../UI/GLID';
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
@@ -78,7 +78,10 @@ export default function CustomerForm({ customerId, onComplete }) {
       } else {
         API.Customers
           .get(parseGLID(customerId))
-          .then(customer => setCustomer(customer));
+          .then(customer => {          
+            setCustomer(customer);
+            window.title = 'GLMP - Customer ' + makeGLID(customerId);
+          });
       }
     }
   }, [customerId]);

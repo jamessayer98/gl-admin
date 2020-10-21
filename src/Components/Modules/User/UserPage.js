@@ -19,6 +19,7 @@ export default function UserPage({ match, history }) {
   return (
     <DefaultLayout
       title={title}
+      pageTitle="Users"
     >
       <UserList key={listKey} history={history} />
 

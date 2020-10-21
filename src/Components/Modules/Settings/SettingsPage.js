@@ -39,6 +39,7 @@ export default function SettingsPage() {
   return (
     <DefaultLayout
       title={title}
+      pageTitle="Settings"
     >
       <Paper className={classes.paper}>
         <Typography paragraph variant="h5">Admin Emails</Typography>

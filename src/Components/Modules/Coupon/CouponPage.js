@@ -16,6 +16,7 @@ export default function CouponPage({ match, history }) {
   return (
     <DefaultLayout
       title={title}
+      pageTitle="Coupons"
     >
       <CouponList key={listKey} history={history} />
 

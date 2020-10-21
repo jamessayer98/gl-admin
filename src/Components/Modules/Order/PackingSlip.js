@@ -69,8 +69,10 @@ export default function PackingSlip({ order }) {
             <PackingSlipCustomerAddress address={order.customer.address}/>
           </Grid>
           <Grid item xs={6}>
-            <Typography align="right" variant="h5">Gerber Labs</Typography>
-            <Typography align="right" variant="subtitle1">gerberlabs.com</Typography>
+            
+            <Typography align="right">
+              <img src="http://staging.gerberlabs.com/wp-content/themes/gl-2020/assets/images/logo-tagline-small.png" alt="GerberLabs"/>
+            </Typography>
           </Grid>
         </Grid>
       </Box>

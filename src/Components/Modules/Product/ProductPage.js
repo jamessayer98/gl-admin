@@ -12,6 +12,7 @@ export default function ProductPage() {
   return (
     <DefaultLayout
       title={title}
+      pageTitle="Product"
     >
       <Tabs
         id="product-config"

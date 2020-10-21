@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import API from '../../../Services/API';
-import GLID, { parseGLID } from '../../UI/GLID';
+import GLID, { makeGLID, parseGLID } from '../../UI/GLID';
 import OrderItem from './OrderItem';
 import {
   CustomerInfoPanel,
@@ -76,6 +76,7 @@ export default function OrderViewer({ match }) {
   return order && (
     <DefaultLayout
       title={pageTitle}
+      pageTitle={`Order ${order ? makeGLID(order.glid) : ''}`}
       padContent={false}
     >
       <OrderViewerToolbar className={classes.toolbar} order={order} onOrderChange={handleOrderChange}/>

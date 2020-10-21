@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Default({ title, history, children, padContent }) {
+export default function Default({ title, pageTitle, history, children, padContent }) {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(true);
@@ -115,6 +115,12 @@ export default function Default({ title, history, children, padContent }) {
   const handleDrawerClose = () => {
     setDrawerOpen(false);
   };
+
+  if (pageTitle) {
+    document.title = 'GLMP - ' + pageTitle;  
+  } else {
+    document.title = 'GLMP';
+  }
 
   return (
     <div

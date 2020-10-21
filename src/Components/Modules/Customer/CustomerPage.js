@@ -17,6 +17,7 @@ export default function CustomerPage({ match, history }) {
   return (
     <DefaultLayout
       title={title}
+      pageTitle="Customers"
     >
       <CustomerList key={listKey} history={history} />
 
