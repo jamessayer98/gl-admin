@@ -132,7 +132,7 @@ export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
                 <MenuItem value="processing">Processing</MenuItem>
                 <MenuItem value="shipped">Shipped</MenuItem>
                 <MenuItem value="hold">On Hold</MenuItem>
-                <MenuItem value="cancelled">Canceled</MenuItem>
+                <MenuItem value="cancelled">Cancelled</MenuItem>
               </Select>
             )}
             {isMfg && <Typography variant="h6" component="span">{orderStatus}</Typography>}
