@@ -1,9 +1,9 @@
 import React from 'react';
 import { Grid, Typography, Table, TableRow, TableBody, TableCell, makeStyles, TableFooter, Divider, Button, Box, TextField, FormControlLabel, InputAdornment, IconButton, Switch } from '@material-ui/core';
-import { FindInPage as FindInPageIcon, GetApp as GetAppIcon, LocalShipping as LocalShippingIcon, Save as SaveIcon, FileCopy as FileCopyIcon, Edit as EditIcon } from '@material-ui/icons';
+import { FindInPage as FindInPageIcon, GetApp as GetAppIcon, LocalShipping as LocalShippingIcon, FileCopy as FileCopyIcon } from '@material-ui/icons';
 import { makeGLID } from '../../UI/GLID';
 import Currency from '../../UI/Currency';
-import Modal from '../../UI/Modal';
+import Modal, { Confirm } from '../../UI/Modal';
 import GerberPreview from './GerberPreview';
 import API from '../../../Services/API';
 import NumberFormat from 'react-number-format';
@@ -156,52 +156,59 @@ function OrderItemLineItem({ lineItem }) {
   );
 }
 
-function OrderItemTrackingNumber({ order, item, onUpdated }) {
+function OrderItemTrackingNumberModal({ item, onChange, onCancel, ...props }) {
   const [trackingNumber, setTrackingNumber] = React.useState(item.tracking || ''); // Default to empty string
-  const [enabled, setEnabled] = React.useState(trackingNumber === ''); // Only enable when there is NOT a tracking number already present
-  const ref = React.useRef();
 
-  let commonProps = {
-    variant: 'outlined',
-    label: 'Tracking Number',
-    value: trackingNumber,
-    fullWidth: true,
-    inputRef: ref,
-    onChange: e => setTrackingNumber(e.target.value)
-  };
-
-  if (enabled) {
-    return (
+  return (
+    <Confirm
+      title="Set Tracking Number"
+      onConfirm={() =>  onChange(trackingNumber)}
+      onCancel={() => onCancel(false)}
+      {...props}
+    >
+      <Typography variant="body1" paragraph>Enter the tracking number below:</Typography>
+      {!item.shipped && <Typography variant="body2" paragraph>Note: this will mark this item as shipped.</Typography>}
       <TextField
-        {...commonProps}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={e => {
-                let newOrderItems = [...order.items];
-                newOrderItems.map(_item => {
-                  if (item.ordinal === _item.ordinal) {
-                    item.tracking = trackingNumber;
-                  }
-                  return item;
-                });
-                let newOrderValues = { ...order, items: newOrderItems };
-                API.Orders.update(order.glid, newOrderValues).then(() => {
-                  setEnabled(false);
-                  onUpdated(trackingNumber);
-                });
-              }}>
-                <SaveIcon />
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
+        variant="outlined"
+        label="Tracking Number"
+        value={trackingNumber}
+        fullWidth
+        onChange={event => setTrackingNumber(event.target.value)}        
       />
-    );
-  } else {
-    return (
-      <TextField
-        {...commonProps}
+    </Confirm>
+  );
+}
+
+function OrderItemTrackingNumber({ order, item, onUpdated }) {
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const ref = React.useRef();
+  const hasTrackingNumber = item.tracking && item.tracking !== '';
+
+  const handleChange = (trackingNumber) => {
+    let newOrderItems = [...order.items];
+    newOrderItems.map(_item => {
+      if (item.ordinal === _item.ordinal) {
+        item.tracking = trackingNumber;
+      }
+      return item;
+    });
+    let newOrderValues = { ...order, items: newOrderItems };
+    API.Orders.update(order.glid, newOrderValues).then(() => {
+      setModalOpen(false);
+      onUpdated(trackingNumber);
+    });
+  }
+
+  return (
+    <>
+      {hasTrackingNumber && (
+        <TextField
+        variant="outlined"
+        margin="normal"
+        label="Tracking Number"
+        value={item.tracking}
+        fullWidth
+        inputRef={ref}
         disabled
         InputProps={{
           endAdornment: (
@@ -216,18 +223,31 @@ function OrderItemTrackingNumber({ order, item, onUpdated }) {
                 }}>
                   <FileCopyIcon />
                 </IconButton>
-                <IconButton onClick={e => {
-                  setEnabled(true);
-                }}>
-                  <EditIcon />
-                </IconButton>
               </div>
             </InputAdornment>
           )
         }}
       />
-    );
-  }
+      )}
+      <Button
+        fullWidth
+        variant={hasTrackingNumber ? 'outlined' : 'contained'}
+        color="secondary"
+        size={hasTrackingNumber ? 'small' : 'large'}
+        startIcon={<LocalShippingIcon />}
+        onClick={() => setModalOpen(true)}
+      >
+        {hasTrackingNumber && <span>Change Tracking Number</span>}
+        {!hasTrackingNumber && <span>Set Tracking Number</span>}
+      </Button>
+      <OrderItemTrackingNumberModal 
+        open={modalOpen} 
+        item={item} 
+        onChange={handleChange}
+        onCancel={() => setModalOpen(false)}
+      />
+    </>
+  );
 }
 
 function OrderLineItemUpsell({ upsell }) {
