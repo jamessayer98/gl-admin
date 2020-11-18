@@ -1,5 +1,5 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React from "react";
+import { useHistory } from "react-router-dom";
 import {
   Avatar,
   IconButton,
@@ -11,33 +11,31 @@ import {
   MenuItem,
   ClickAwayListener,
   Divider,
-  makeStyles
-} from '@material-ui/core';
-import {
-  Person as PersonIcon
-} from '@material-ui/icons';
-import { useSnackbar } from 'notistack';
+  makeStyles,
+} from "@material-ui/core";
+import { Person as PersonIcon } from "@material-ui/icons";
+import { useSnackbar } from "notistack";
 
-import Auth from '../../Services/Auth';
-import Modal from '../UI/Modal';
-import ProfileForm from './ProfileForm';
+import Auth from "../../Services/Auth";
+import Modal from "../UI/Modal";
+import ProfileForm from "./ProfileForm";
 
 const useStyles = makeStyles((theme) => ({
   popper: {
     zIndex: theme.zIndex.drawer + 1,
     marginTop: theme.spacing(1),
-    minWidth: 200
+    minWidth: 200,
   },
   username: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     padding: theme.spacing(1),
-    '& .MuiSvgIcon-root': {
-      marginbottom: theme.spacing(1)
-    }
-  }
+    "& .MuiSvgIcon-root": {
+      marginbottom: theme.spacing(1),
+    },
+  },
 }));
 
 export default function ProfileMenu() {
@@ -51,28 +49,28 @@ export default function ProfileMenu() {
   const [profileFormOpen, setProfileFormOpen] = React.useState(false);
 
   React.useEffect(() => {
-    Auth.currentUser.subscribe(data => setUser(data ? data.user : null));
+    Auth.currentUser.subscribe((data) => setUser(data ? data.user : null));
   });
 
   const handleClick = (event) => {
     const anchorEl = menuAnchorEl ? null : event.currentTarget;
     const open = Boolean(anchorEl);
-    const id = open ? 'profile_menu' : undefined;
+    const id = open ? "profile_menu" : undefined;
 
-    setMenuAnchorEl(anchorEl)
+    setMenuAnchorEl(anchorEl);
     setMenuOpen(open);
     setMenuId(id);
   };
 
   const handleClose = () => {
-    setMenuAnchorEl(null)
+    setMenuAnchorEl(null);
     setMenuOpen(false);
     setMenuId(undefined);
   };
 
   const handleLogout = () => {
     Auth.logout();
-    history.push('/');
+    history.push("/");
     return;
   };
 
@@ -80,9 +78,7 @@ export default function ProfileMenu() {
     <React.Fragment>
       {user && (
         <React.Fragment>
-          <IconButton
-            onClick={handleClick}
-          >
+          <IconButton onClick={handleClick}>
             <Avatar>
               <PersonIcon />
             </Avatar>
@@ -94,25 +90,14 @@ export default function ProfileMenu() {
             anchorEl={menuAnchorEl}
           >
             <Paper>
-              <ClickAwayListener
-                onClickAway={handleClose}
-              >
+              <ClickAwayListener onClickAway={handleClose}>
                 <React.Fragment>
-                  <Box
-                    className={classes.username}
-                  >
-                    <PersonIcon
-                      fontSize="large"
-                    />
-                    <Typography>
-                      {user.username}
-                    </Typography>
+                  <Box className={classes.username}>
+                    <PersonIcon fontSize="large" />
+                    <Typography>{user.username}</Typography>
                   </Box>
                   <Divider />
-                  <MenuList
-                    autoFocusItem={menuOpen}
-                    id="menu_list_grow"
-                  >
+                  <MenuList autoFocusItem={menuOpen} id="menu_list_grow">
                     <MenuItem
                       onClick={() => {
                         setProfileFormOpen(true);
@@ -121,18 +106,11 @@ export default function ProfileMenu() {
                     >
                       My Profile
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleClose}
-                      disabled
-                    >
+                    <MenuItem onClick={handleClose} disabled>
                       Preferences
                     </MenuItem>
                     <Divider />
-                    <MenuItem
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </MenuList>
                 </React.Fragment>
               </ClickAwayListener>
@@ -145,12 +123,12 @@ export default function ProfileMenu() {
         title="Your Profile"
         onClose={() => setProfileFormOpen(false)}
       >
-        <ProfileForm 
-          user={user} 
-          onComplete={newUser => {
+        <ProfileForm
+          user={user}
+          onComplete={(newUser) => {
             Auth.handleProfileUpdate(newUser);
             setProfileFormOpen(false);
-            enqueueSnackbar('Profile Updated', { variant: 'success' });
+            enqueueSnackbar("Profile Updated", { variant: "success" });
           }}
         />
       </Modal>

@@ -1,49 +1,48 @@
-import React from 'react';
-import {
-  Box, Button, CircularProgress,
-  makeStyles
-} from '@material-ui/core';
-import { Save as SaveIcon } from '@material-ui/icons';
-import * as formik from 'formik';
-import * as yup from 'yup';
+import React from "react";
+import { Box, Button, CircularProgress, makeStyles } from "@material-ui/core";
+import { Save as SaveIcon } from "@material-ui/icons";
+import * as formik from "formik";
+import * as yup from "yup";
 
-import API from '../../Services/API';
-import { InputField } from '../UI/FormFields';
+import API from "../../Services/API";
+import { InputField } from "../UI/FormFields";
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(7),
-    display: 'flex',
-    justifyContent: 'flex-start',
+    display: "flex",
+    justifyContent: "flex-start",
   },
   loader: {
-    display: 'flex',
-    justifyContent: 'center'
+    display: "flex",
+    justifyContent: "center",
   },
   buttons: {
-    width: '100%'
-  }
+    width: "100%",
+  },
 }));
 
 const defaultUserProfile = {
-  name: '',
-  email: ''
+  name: "",
+  email: "",
 };
 
 const formSchema = {
-  name: yup.string()
-    .required('Nname is required')
+  name: yup
+    .string()
+    .required("Nname is required")
     .default(defaultUserProfile.name),
-  email: yup.string()
+  email: yup
+    .string()
     .email()
-    .required('A valid email address is required')
+    .required("A valid email address is required")
     .default(defaultUserProfile.email),
-  password: yup.string()
-    .default(''),
-  passwordConfirmation: yup.string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
-    .default('')
+  password: yup.string().default(""),
+  passwordConfirmation: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .default(""),
 };
 
 export default function ProfileForm({ user, onComplete }) {
@@ -62,27 +61,31 @@ export default function ProfileForm({ user, onComplete }) {
       initialValues={{
         name: user.name,
         email: user.email,
-        password: '',
-        passwordConfirmation: ''     
+        password: "",
+        passwordConfirmation: "",
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         let fd = {};
-        Object.keys(values).forEach(key => {
-          if (values[key] && values[key] !== '' && key !== 'passwordConfirmation') {
+        Object.keys(values).forEach((key) => {
+          if (
+            values[key] &&
+            values[key] !== "" &&
+            key !== "passwordConfirmation"
+          ) {
             fd[key] = values[key];
           }
         });
 
-        API.Users.update(user.glid, fd).then(res => {
+        API.Users.update(user.glid, fd).then((res) => {
           setSubmitting(false);
           onComplete(fd);
         });
       }}
     >
       {({ errors, isSubmitting }) => (
-        <formik.Form autoComplete="off">         
-         <formik.Field
+        <formik.Form autoComplete="off">
+          <formik.Field
             component={InputField}
             name="name"
             label="Name"

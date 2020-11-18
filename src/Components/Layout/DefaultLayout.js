@@ -1,5 +1,5 @@
-import React from 'react';
-import clsx from 'clsx';
+import React from "react";
+import clsx from "clsx";
 import {
   CssBaseline,
   AppBar,
@@ -9,27 +9,27 @@ import {
   Drawer,
   Divider,
   makeStyles,
-  useTheme
-} from '@material-ui/core';
+  useTheme,
+} from "@material-ui/core";
 import {
   Menu as MenuIcon,
   ChevronRight as ChevronRightIcon,
-  ChevronLeft as ChevronLeftIcon
-} from '@material-ui/icons';
+  ChevronLeft as ChevronLeftIcon,
+} from "@material-ui/icons";
 
-import ProfileMenu from './ProfileMenu';
-import MainMenu from './MainMenu';
-import logo from '../../Assets/logo.png'
+import ProfileMenu from "./ProfileMenu";
+import MainMenu from "./MainMenu";
+import logo from "../../Assets/logo.png";
 
 const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -37,69 +37,75 @@ const useStyles = makeStyles((theme) => ({
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   hide: {
-    display: 'none',
+    display: "none",
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
   },
   drawerOpen: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
   drawerClose: {
-    transition: theme.transitions.create('width', {
+    transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    overflowX: 'hidden',
+    overflowX: "hidden",
     width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: theme.spacing(9) + 1,
     },
   },
   toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
   },
   logo: {
     padding: theme.spacing(0, 1),
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    '& > img': {
-      maxWidth: '100%',
-      height: 'auto'
-    }
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    "& > img": {
+      maxWidth: "100%",
+      height: "auto",
+    },
   },
   content: {
     flexGrow: 1,
   },
   contentPadded: {
     padding: theme.spacing(3),
-  }
+  },
 }));
 
-export default function Default({ title, pageTitle, history, children, padContent }) {
+export default function Default({
+  title,
+  pageTitle,
+  history,
+  children,
+  padContent,
+}) {
   const classes = useStyles();
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(true);
@@ -117,15 +123,13 @@ export default function Default({ title, pageTitle, history, children, padConten
   };
 
   if (pageTitle) {
-    document.title = 'GLMP - ' + pageTitle;  
+    document.title = "GLMP - " + pageTitle;
   } else {
-    document.title = 'GLMP';
+    document.title = "GLMP";
   }
 
   return (
-    <div
-      className={classes.root}
-    >
+    <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -146,10 +150,7 @@ export default function Default({ title, pageTitle, history, children, padConten
             <MenuIcon />
           </IconButton>
 
-          <Typography
-            variant="h6"
-            className={classes.title}
-          >
+          <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
 
@@ -170,23 +171,25 @@ export default function Default({ title, pageTitle, history, children, padConten
           }),
         }}
       >
-        <div
-          className={classes.toolbar}
-        >
+        <div className={classes.toolbar}>
           <div className={classes.logo}>
             <img alt="GerberLabs Logo" src={logo} />
           </div>
-          <IconButton
-            onClick={handleDrawerClose}
-          >
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "rtl" ? (
+              <ChevronRightIcon />
+            ) : (
+              <ChevronLeftIcon />
+            )}
           </IconButton>
         </div>
         <Divider />
         <MainMenu />
       </Drawer>
       <main
-        className={classes.content + ' ' + (padContent ? classes.contentPadded : '') }
+        className={
+          classes.content + " " + (padContent ? classes.contentPadded : "")
+        }
       >
         <div className={classes.toolbar} />
         {children}

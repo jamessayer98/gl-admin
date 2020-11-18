@@ -1,16 +1,28 @@
-import React from 'react';
-import { Typography, Grid, Table, TableHead, TableBody, TableRow, TableCell, Box, makeStyles } from '@material-ui/core';
-import PrintLayout from '../../Layout/PrintLayout';
-import API from '../../../Services/API';
-import { parseGLID, makeGLID } from '../../UI/GLID';
-import NumberFormat from 'react-number-format';
-import Currency from '../../UI/Currency';
+import React from "react";
+import {
+  Typography,
+  Grid,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Box,
+  makeStyles,
+} from "@material-ui/core";
+import PrintLayout from "../../Layout/PrintLayout";
+import API from "../../../Services/API";
+import { parseGLID, makeGLID } from "../../UI/GLID";
+import NumberFormat from "react-number-format";
+import Currency from "../../UI/Currency";
 
 export function PackingSlipPrintPage({ match }) {
   const [order, setOrder] = React.useState(null);
 
   React.useEffect(() => {
-    API.Orders.get(parseGLID(match.params.id)).then(orderData => setOrder(orderData));
+    API.Orders.get(parseGLID(match.params.id)).then((orderData) =>
+      setOrder(orderData)
+    );
   }, [match]);
 
   React.useEffect(() => {
@@ -19,12 +31,14 @@ export function PackingSlipPrintPage({ match }) {
     }
   }, [order]);
 
-  return order && (
-    <PrintLayout>
-      <PackingSlip order={order} />
-    </PrintLayout>
+  return (
+    order && (
+      <PrintLayout>
+        <PackingSlip order={order} />
+      </PrintLayout>
+    )
   );
-};
+}
 
 function PackingSlipCustomerAddress({ address }) {
   return (
@@ -40,20 +54,20 @@ function PackingSlipCustomerAddress({ address }) {
   );
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   itemTable: {
-    '& th, & td': {
+    "& th, & td": {
       fontSize: 12,
-      lineHeight: '14px',
-      whiteSpace: 'nowrap'
+      lineHeight: "14px",
+      whiteSpace: "nowrap",
     },
-    '& thead th': {
-      fontWeight: 'bold'
+    "& thead th": {
+      fontWeight: "bold",
     },
-    '& td h5': {
+    "& td h5": {
       fontSize: 16,
-      fontWeight: 'bold'
-    }
+      fontWeight: "bold",
+    },
   },
 }));
 
@@ -65,80 +79,70 @@ export default function PackingSlip({ order }) {
       <Box mb={3}>
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <Typography variant="h5">{order.customer.firstName} {order.customer.lastName}</Typography>
-            <PackingSlipCustomerAddress address={order.customer.address}/>
+            <Typography variant="h5">
+              {order.customer.firstName} {order.customer.lastName}
+            </Typography>
+            <PackingSlipCustomerAddress address={order.customer.address} />
           </Grid>
           <Grid item xs={6}>
-            
             <Typography align="right">
-              <img src="http://staging.gerberlabs.com/wp-content/themes/gl-2020/assets/images/logo-tagline-small.png" alt="GerberLabs"/>
+              <img
+                src="http://staging.gerberlabs.com/wp-content/themes/gl-2020/assets/images/logo-tagline-small.png"
+                alt="GerberLabs"
+              />
             </Typography>
           </Grid>
         </Grid>
       </Box>
 
       <Typography variant="h5">Order Details</Typography>
-      <Typography paragraph>Please note: your shipment may come in multiple packages. This document details your entire order not the contents of this box.</Typography>
+      <Typography paragraph>
+        Please note: your shipment may come in multiple packages. This document
+        details your entire order not the contents of this box.
+      </Typography>
 
       <Table className={classes.itemTable}>
         <TableHead>
           <TableRow>
-            <TableCell>
-              &nbsp;
-            </TableCell>
-            <TableCell>
-              Est. Area Per Board
-            </TableCell>
-            <TableCell>
-              Layers
-            </TableCell>
-            <TableCell>
-              Copper Weight
-            </TableCell>
-            <TableCell>
-              Surface Finish
-            </TableCell>
-            <TableCell>
-              Tg (&deg;C)
-            </TableCell>
-            <TableCell>
-              # Boards
-            </TableCell>
-            <TableCell>
-              Total
-            </TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>Est. Area Per Board</TableCell>
+            <TableCell>Layers</TableCell>
+            <TableCell>Copper Weight</TableCell>
+            <TableCell>Surface Finish</TableCell>
+            <TableCell>Tg (&deg;C)</TableCell>
+            <TableCell># Boards</TableCell>
+            <TableCell>Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {order.items.map((item, index) => (
             <TableRow key={`item_${index}`}>
               <TableCell>
-                <Typography variant="h6">{makeGLID(order.glid) + '-' + String(item.ordinal).padStart(3, '0')}</Typography>
+                <Typography variant="h6">
+                  {makeGLID(order.glid) +
+                    "-" +
+                    String(item.ordinal).padStart(3, "0")}
+                </Typography>
                 {item.name}
               </TableCell>
               <TableCell>
-                <NumberFormat value={item.board.metrics.area} displayType="text" decimalScale={2}/> mm<sup>2</sup>
+                <NumberFormat
+                  value={item.board.metrics.area}
+                  displayType="text"
+                  decimalScale={2}
+                />{" "}
+                mm<sup>2</sup>
               </TableCell>
+              <TableCell>{item.board.layers.length}</TableCell>
+              <TableCell>{item.options.copperWeight} oz</TableCell>
+              <TableCell>{item.options.surfaceFinish}</TableCell>
+              <TableCell>{item.options.tg} &deg;C</TableCell>
+              <TableCell>{item.quantity}</TableCell>
               <TableCell>
-                {item.board.layers.length}
-              </TableCell>
-              <TableCell>
-                {item.options.copperWeight} oz
-              </TableCell>
-              <TableCell>
-                {item.options.surfaceFinish}
-              </TableCell>
-              <TableCell>
-                {item.options.tg} &deg;C
-              </TableCell>
-              <TableCell>
-                {item.quantity}
-              </TableCell>
-              <TableCell>
-                <Currency value={item.total}/>
+                <Currency value={item.total} />
               </TableCell>
             </TableRow>
-          ))}          
+          ))}
         </TableBody>
       </Table>
 
@@ -158,9 +162,7 @@ export default function PackingSlip({ order }) {
                 <TableCell component="th" scope="row">
                   Shipping
                 </TableCell>
-                <TableCell>
-                  FREE
-                </TableCell>
+                <TableCell>FREE</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row">
@@ -175,13 +177,11 @@ export default function PackingSlip({ order }) {
         </Grid>
       </Grid>
 
-      <Typography variant="subtitle1">
-        Questions or concerns?
-      </Typography>
+      <Typography variant="subtitle1">Questions or concerns?</Typography>
 
       <Typography variant="body2">
         Contact us at admin@gerberlabs.com
       </Typography>
     </Box>
   );
-};
+}

@@ -1,69 +1,80 @@
-import React from 'react';
+import React from "react";
 import {
-  Box, Button, CircularProgress,
+  Box,
+  Button,
+  CircularProgress,
   Grid,
-  makeStyles
-} from '@material-ui/core';
-import * as formik from 'formik';
-import * as yup from 'yup';
+  makeStyles,
+} from "@material-ui/core";
+import * as formik from "formik";
+import * as yup from "yup";
 
-import API from '../../../Services/API';
+import API from "../../../Services/API";
 
-import { InputField, DropDown, ButtonGroup } from '../../UI/FormFields';
-import { US_STATES, ACCOUNT_STATUS, PHONE_REGEX } from '../../../Services/StaticData';
-import { makeGLID, parseGLID } from '../../UI/GLID';
+import { InputField, DropDown, ButtonGroup } from "../../UI/FormFields";
+import {
+  US_STATES,
+  ACCOUNT_STATUS,
+  PHONE_REGEX,
+} from "../../../Services/StaticData";
+import { makeGLID, parseGLID } from "../../UI/GLID";
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(7),
-    display: 'flex',
-    justifyContent: 'flex-start',
+    display: "flex",
+    justifyContent: "flex-start",
   },
   loader: {
-    display: 'flex',
-    justifyContent: 'center'
+    display: "flex",
+    justifyContent: "center",
   },
   buttons: {
-    width: '100%'
-  }
+    width: "100%",
+  },
 }));
 
 const defaultCustomer = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  phone: '',
-  accountStatus: 'Active',
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  accountStatus: "Active",
   signedUpOn: Date.now,
   address: {
-    street: '',
-    secondary: '',
-    city: '',
-    state: '',
-    zip: ''
-  }
+    street: "",
+    secondary: "",
+    city: "",
+    state: "",
+    zip: "",
+  },
 };
 
 const formSchema = {
-  firstName: yup.string()
-    .required('First name is required')
+  firstName: yup
+    .string()
+    .required("First name is required")
     .default(defaultCustomer.name),
-  lastName: yup.string()
-    .required('Last name is required')
+  lastName: yup
+    .string()
+    .required("Last name is required")
     .default(defaultCustomer.name),
-  email: yup.string().email()
-    .required('A valid email address is required')
+  email: yup
+    .string()
+    .email()
+    .required("A valid email address is required")
     .default(defaultCustomer.email),
-  phone: yup.string()
-    .required('A valid phone number is required')
-    .matches(PHONE_REGEX, 'Phone number is not valid')
+  phone: yup
+    .string()
+    .required("A valid phone number is required")
+    .matches(PHONE_REGEX, "Phone number is not valid")
     .default(defaultCustomer.phone),
   address: yup.object().shape({
-      street: yup.string().required('Shipping address 1 is required'),
-      city: yup.string().required('City is required'),
-      state: yup.string().required('US state is required'),
-      zip: yup.string().required('Zip is required')
+    street: yup.string().required("Shipping address 1 is required"),
+    city: yup.string().required("City is required"),
+    state: yup.string().required("US state is required"),
+    zip: yup.string().required("Zip is required"),
   }),
 };
 
@@ -73,15 +84,13 @@ export default function CustomerForm({ customerId, onComplete }) {
 
   React.useEffect(() => {
     if (customerId) {
-      if (customerId === 'new') {
+      if (customerId === "new") {
         setCustomer(defaultCustomer);
       } else {
-        API.Customers
-          .get(parseGLID(customerId))
-          .then(customer => {          
-            setCustomer(customer);
-            window.title = 'GLMP - Customer ' + makeGLID(customerId);
-          });
+        API.Customers.get(parseGLID(customerId)).then((customer) => {
+          setCustomer(customer);
+          window.title = "GLMP - Customer " + makeGLID(customerId);
+        });
       }
     }
   }, [customerId]);
@@ -100,15 +109,15 @@ export default function CustomerForm({ customerId, onComplete }) {
         firstName: customer.firstName,
         lastName: customer.lastName,
         email: customer.email,
-        phone: customer.phone,        
+        phone: customer.phone,
         accountStatus: customer.accountStatus,
         address: {
           street: customer.address.street,
           secondary: customer.address.secondary,
           city: customer.address.city,
           state: customer.address.state,
-          zip: customer.address.zip
-        }        
+          zip: customer.address.zip,
+        },
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -121,9 +130,11 @@ export default function CustomerForm({ customerId, onComplete }) {
           promise = API.Customers.create(values);
         }
 
-        promise.then(res => {
+        promise.then((res) => {
           setSubmitting(false);
-          onComplete('Customer ' + (customerId === null ? 'Created' : 'Updated'));
+          onComplete(
+            "Customer " + (customerId === null ? "Created" : "Updated")
+          );
         });
       }}
     >
@@ -147,7 +158,7 @@ export default function CustomerForm({ customerId, onComplete }) {
                 margin="normal"
                 fullWidth
               />
-            </Grid> 
+            </Grid>
             <Grid item sm={6}>
               <formik.Field
                 component={InputField}
@@ -156,7 +167,7 @@ export default function CustomerForm({ customerId, onComplete }) {
                 margin="normal"
                 fullWidth
               />
-            </Grid> 
+            </Grid>
             <Grid item sm={6}>
               <formik.Field
                 component={InputField}
@@ -202,9 +213,9 @@ export default function CustomerForm({ customerId, onComplete }) {
                 fullWidth
                 dataSource={US_STATES}
                 dataKey="name"
-                dataValue="abbrev"                
+                dataValue="abbrev"
               />
-            </Grid> 
+            </Grid>
             <Grid item sm={6}>
               <formik.Field
                 component={ButtonGroup}
@@ -222,8 +233,8 @@ export default function CustomerForm({ customerId, onComplete }) {
                 margin="normal"
                 fullWidth
               />
-            </Grid>          
-          </Grid>                
+            </Grid>
+          </Grid>
           <Grid container className={classes.formActions} spacing={2}>
             <Grid item sm>
               <Button
@@ -247,7 +258,7 @@ export default function CustomerForm({ customerId, onComplete }) {
               >
                 Delete
               </Button>
-            </Grid>         
+            </Grid>
           </Grid>
         </formik.Form>
       )}

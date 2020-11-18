@@ -1,12 +1,12 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Divider
-} from '@material-ui/core';
+  Divider,
+} from "@material-ui/core";
 import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
@@ -14,9 +14,9 @@ import {
   Face as FaceIcon,
   LocalOffer as LocalOfferIcon,
   Laptop as LaptopIcon,
-  Settings as SettingsIcon
-} from '@material-ui/icons';
-import Auth, { roles } from '../../Services/Auth';
+  Settings as SettingsIcon,
+} from "@material-ui/icons";
+import Auth, { roles } from "../../Services/Auth";
 
 // List of menu items
 // Set `access` to null if all users have access
@@ -25,48 +25,48 @@ const _adminRoles = [roles.superadmin, roles.admin];
 
 const _menu = [
   {
-    endpoint: 'dashboard',
-    label: 'Dashboard',
+    endpoint: "dashboard",
+    label: "Dashboard",
     icon: <DashboardIcon />,
     access: _adminRoles,
   },
   {
-    endpoint: 'orders',
-    label: 'Orders',
+    endpoint: "orders",
+    label: "Orders",
     icon: <ShoppingBasketIcon />,
     access: null,
   },
   {
-    endpoint: 'customers',
-    label: 'Customers',
+    endpoint: "customers",
+    label: "Customers",
     icon: <FaceIcon />,
     access: _adminRoles,
   },
   {
-    endpoint: 'coupons',
-    label: 'Coupons',
+    endpoint: "coupons",
+    label: "Coupons",
     icon: <LocalOfferIcon />,
     access: _adminRoles,
   },
   {
     content: <Divider />,
-    access: _adminRoles
+    access: _adminRoles,
   },
   {
-    endpoint: 'users',
-    label: 'Users',
+    endpoint: "users",
+    label: "Users",
     icon: <PeopleIcon />,
     access: _adminRoles,
   },
   {
-    endpoint: 'product',
-    label: 'Product',
+    endpoint: "product",
+    label: "Product",
     icon: <LaptopIcon />,
     access: _adminRoles,
   },
   {
-    endpoint: 'settings',
-    label: 'Settings',
+    endpoint: "settings",
+    label: "Settings",
     icon: <SettingsIcon />,
     access: _adminRoles,
   },
@@ -74,19 +74,11 @@ const _menu = [
 
 function MainMenuItem({ endpoint, label, icon }) {
   return (
-    <ListItem
-      button
-      component={RouterLink}
-      to={`/${endpoint}`}
-    >
-      <ListItemIcon>
-        {icon}
-      </ListItemIcon>
-      <ListItemText
-        primary={label}
-      />
+    <ListItem button component={RouterLink} to={`/${endpoint}`}>
+      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={label} />
     </ListItem>
-  )
+  );
 }
 
 export default function MainMenu() {
@@ -97,14 +89,14 @@ export default function MainMenu() {
 
         if (access === null || access.includes(Auth.currentUserRole)) {
           if (item.endpoint) {
-            return <MainMenuItem key={index} {...itemParams} />
+            return <MainMenuItem key={index} {...itemParams} />;
           } else {
             return <React.Fragment key={index}>{item.content}</React.Fragment>;
           }
         }
 
-        return '';
+        return "";
       })}
     </List>
   );
-};
+}

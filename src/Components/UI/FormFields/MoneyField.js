@@ -1,12 +1,16 @@
-import React from 'react';
-import { TextField as MuiTextField, InputAdornment } from '@material-ui/core';
-import { getFieldError } from '../../../Helpers/FormHelpers';
+import React from "react";
+import { TextField as MuiTextField, InputAdornment } from "@material-ui/core";
+import { getFieldError } from "../../../Helpers/FormHelpers";
 
 // let timeoutId = null;
 
-export default function MoneyField({ field, form: { touched, errors }, ...props }) {
+export default function MoneyField({
+  field,
+  form: { touched, errors },
+  ...props
+}) {
   const ref = React.useRef();
-  const {wasTouched, errorMsg} = getFieldError(field.name, touched, errors);
+  const { wasTouched, errorMsg } = getFieldError(field.name, touched, errors);
 
   // const _onChange = field.onChange;
 
@@ -32,8 +36,10 @@ export default function MoneyField({ field, form: { touched, errors }, ...props 
     props.InputProps = {};
   }
 
-  props.InputProps.startAdornment = <InputAdornment position="start">$</InputAdornment>;
-  
+  props.InputProps.startAdornment = (
+    <InputAdornment position="start">$</InputAdornment>
+  );
+
   return (
     <MuiTextField
       error={wasTouched && errorMsg && true}
@@ -42,4 +48,4 @@ export default function MoneyField({ field, form: { touched, errors }, ...props 
       {...props}
     />
   );
-};
+}
