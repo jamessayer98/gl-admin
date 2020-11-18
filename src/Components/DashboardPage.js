@@ -1,54 +1,9 @@
 import React from "react";
-import {
-  Typography,
-  Grid,
-  Paper,
-  makeStyles,
-  Box,
-  Button,
-} from "@material-ui/core";
-
+import DashboardChart from "./Charts/DashboardChart";
 import DefaultLayout from "./Layout/DefaultLayout";
+import { Grid, Box, Button } from "@material-ui/core";
 // import { useSnackbar } from 'notistack';
 // import { Alert, Confirm } from './UI/Modal';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(3),
-  },
-  graph: {
-    height: 250,
-    width: "100%",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.grey[300],
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: theme.spacing(3),
-    "& > p": {
-      color: theme.palette.common.white,
-      fontSize: 18,
-      textAlign: "center",
-    },
-  },
-}));
-
-function DashboardChart({ title }) {
-  const classes = useStyles();
-  return (
-    <Paper className={classes.paper} elevation={3}>
-      <Typography gutterBottom variant="h6">
-        {title}
-      </Typography>
-
-      <Box variant="rect" className={classes.graph}>
-        <Typography>
-          This chart will display when sufficient data is available
-        </Typography>
-      </Box>
-    </Paper>
-  );
-}
 
 export default function DashboardPage({ history }) {
   // const { enqueueSnackbar } = useSnackbar();
