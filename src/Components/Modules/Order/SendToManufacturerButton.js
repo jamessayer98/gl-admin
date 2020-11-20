@@ -1,17 +1,37 @@
-import React from 'react';
-import { Box, Button, ButtonGroup, Popper, Grow, Paper, ClickAwayListener, MenuList, MenuItem, Typography } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import { ArrowDropDown as ArrowDropDownIcon, Close as CloseIcon } from '@material-ui/icons';
-import API from '../../../Services/API';
-import { Confirm } from '../../UI/Modal';
+import React from "react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Popper,
+  Grow,
+  Paper,
+  ClickAwayListener,
+  MenuList,
+  MenuItem,
+  Typography,
+} from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
+import {
+  ArrowDropDown as ArrowDropDownIcon,
+  Close as CloseIcon,
+} from "@material-ui/icons";
+import API from "../../../Services/API";
+import { Confirm } from "../../UI/Modal";
 
-export default function SendToManufacturerButton({ order, onStatusChange, ...props }) {
+export default function SendToManufacturerButton({
+  order,
+  onStatusChange,
+  ...props
+}) {
   const [open, setOpen] = React.useState(false);
   const [orderState, setOrderState] = React.useState(order);
   const [manufacturer, setManufacturer] = React.useState(null);
   const [manufacturers, setManufacturers] = React.useState([]);
   const [selectedManufacturer, setSelectedManufacturer] = React.useState(null);
-  const [buttonLabel, setButtonLabel] = React.useState(<Skeleton variant="text" width={200} />);
+  const [buttonLabel, setButtonLabel] = React.useState(
+    <Skeleton variant="text" width={200} />
+  );
   const [buttonDisabled, setButtonDisabled] = React.useState(true);
   const [confirmAssignOpen, setConfirmAssignOpen] = React.useState(false);
 
@@ -22,7 +42,9 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
     setSelectedManufacturer(null); // If order data has changed, the selection is no longer relevant
 
     if (orderState && orderState.manufacturerId) {
-      API.Manufacturers.get(orderState.manufacturerId).then(manufacturer => setManufacturer(manufacturer));
+      API.Manufacturers.get(orderState.manufacturerId).then((manufacturer) =>
+        setManufacturer(manufacturer)
+      );
     } else {
       setManufacturer(null);
     }
@@ -32,7 +54,7 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
   React.useEffect(() => {
     //BUG: does not reload manufactures every use, remove second clause and set a dirty timer?
     if (open && manufacturers.length === 0) {
-      API.Manufacturers.getAll().then(mfgs => {
+      API.Manufacturers.getAll().then((mfgs) => {
         setManufacturers(mfgs || []);
       });
     }
@@ -48,7 +70,11 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
       if (manufacturer) {
         setButtonLabel(<span>Assigned to: {manufacturer.name}</span>);
       } else {
-        setButtonLabel(<span><Skeleton variant="text" width={200} /></span>);
+        setButtonLabel(
+          <span>
+            <Skeleton variant="text" width={200} />
+          </span>
+        );
       }
     } else {
       if (selectedManufacturer) {
@@ -61,7 +87,11 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
 
   // Update button disabled state
   React.useEffect(() => {
-    setButtonDisabled(!orderState || (orderState.manufacturerId !== null && orderState.manufacturerId !== undefined));
+    setButtonDisabled(
+      !orderState ||
+        (orderState.manufacturerId !== null &&
+          orderState.manufacturerId !== undefined)
+    );
   }, [orderState]);
 
   // Handle clicking of this button
@@ -73,17 +103,18 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
       // Mfg not selected, open the dropdown
       setOpen(true);
     }
-  }
+  };
 
   const handleAssignConfirm = () => {
     setConfirmAssignOpen(false);
 
-    API.Orders
-      .update(orderState.glid, { status: 'processing', manufacturerId: selectedManufacturer.glid })
-      .then(orderData => {
-        onStatusChange('processing');
-        setOrderState(orderData)
-      });
+    API.Orders.update(orderState.glid, {
+      status: "processing",
+      manufacturerId: selectedManufacturer.glid,
+    }).then((orderData) => {
+      onStatusChange("processing");
+      setOrderState(orderData);
+    });
   };
 
   // Toggle popper
@@ -101,36 +132,39 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
   };
 
   // Select item
-  const handleMenuItemClick = (event, index) => { 
+  const handleMenuItemClick = (event, index) => {
     setSelectedManufacturer(manufacturers[index]);
     setOpen(false);
   };
 
   // Unset manufacturer
   const handleClear = (event) => {
-    API.Orders
-      .update(orderState.glid, { status: 'pending', manufacturerId: null })
-      .then(orderData => {
-        onStatusChange('pending');
-        setOrderState(orderData)
-      });
+    API.Orders.update(orderState.glid, {
+      status: "pending",
+      manufacturerId: null,
+    }).then((orderData) => {
+      onStatusChange("pending");
+      setOrderState(orderData);
+    });
   };
 
   return (
     <Box {...props}>
-      <ButtonGroup variant="contained" color="secondary" ref={anchorRef} aria-label="assign order">
-        <Button
-          onClick={handleClick}
-          disabled={buttonDisabled}
-        >
+      <ButtonGroup
+        variant="contained"
+        color="secondary"
+        ref={anchorRef}
+        aria-label="assign order"
+      >
+        <Button onClick={handleClick} disabled={buttonDisabled}>
           {buttonLabel}
         </Button>
         {!buttonDisabled && (
           <Button
             color="secondary"
             size="small"
-            aria-controls={open ? 'split-button-menu' : undefined}
-            aria-expanded={open ? 'true' : undefined}
+            aria-controls={open ? "split-button-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
             aria-label="assign order to manufacturer"
             aria-haspopup="menu"
             onClick={handleToggle}
@@ -149,25 +183,33 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
           </Button>
         )}
       </ButtonGroup>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+      <Popper
+        open={open}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+      >
         {({ TransitionProps, placement }) => (
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+              transformOrigin:
+                placement === "bottom" ? "center top" : "center bottom",
             }}
           >
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList id="split-button-menu">
-                  {manufacturers && manufacturers.map((mfg, index) => (
-                    <MenuItem
-                      key={mfg.glid}
-                      onClick={(event) => handleMenuItemClick(event, index)}
-                    >
-                      {mfg.name}
-                    </MenuItem>
-                  ))}
+                  {manufacturers &&
+                    manufacturers.map((mfg, index) => (
+                      <MenuItem
+                        key={mfg.glid}
+                        onClick={(event) => handleMenuItemClick(event, index)}
+                      >
+                        {mfg.name}
+                      </MenuItem>
+                    ))}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -182,7 +224,12 @@ export default function SendToManufacturerButton({ order, onStatusChange, ...pro
           setConfirmAssignOpen(false);
         }}
       >
-        {selectedManufacturer && <Typography>Are you sure you want to assign this order to {selectedManufacturer.name}?</Typography>}
+        {selectedManufacturer && (
+          <Typography>
+            Are you sure you want to assign this order to{" "}
+            {selectedManufacturer.name}?
+          </Typography>
+        )}
       </Confirm>
     </Box>
   );

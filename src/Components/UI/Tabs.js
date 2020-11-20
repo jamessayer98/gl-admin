@@ -1,23 +1,23 @@
-import React from 'react';
+import React from "react";
 
-import { 
-  AppBar, 
+import {
+  AppBar,
   Paper,
-  Tab as MuiTab, 
+  Tab as MuiTab,
   Tabs as MuiTabs,
-  makeStyles
-} from '@material-ui/core';
+  makeStyles,
+} from "@material-ui/core";
 
-const useTabStyles = makeStyles(theme => ({
+const useTabStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(2)
-  }
-}))
+    padding: theme.spacing(2),
+  },
+}));
 
 export function Tab({ id, label, index, value, children, ...props }) {
   const classes = useTabStyles();
 
-  return (    
+  return (
     <Paper
       elevation={0}
       className={classes.root}
@@ -28,7 +28,7 @@ export function Tab({ id, label, index, value, children, ...props }) {
     >
       {children}
     </Paper>
-  )
+  );
 }
 
 // const useStyles = makeStyles(theme => ({
@@ -37,21 +37,19 @@ export function Tab({ id, label, index, value, children, ...props }) {
 
 export default function Tabs({ id, children, muiTabsProps, ...props }) {
   // const classes = useStyles();
-  const [value, setValue] = React.useState(parseInt(localStorage.getItem(`tab_${id}`)) || 0);
+  const [value, setValue] = React.useState(
+    parseInt(localStorage.getItem(`tab_${id}`)) || 0
+  );
 
   console.log(value);
 
   return (
     <div>
-      <AppBar
-        position="static"
-        elevation={0}
-        {...props}
-      >
+      <AppBar position="static" elevation={0} {...props}>
         <MuiTabs
           value={value}
           onChange={(event, newValue) => {
-            localStorage.setItem(`tab_${id}`, newValue)
+            localStorage.setItem(`tab_${id}`, newValue);
             setValue(newValue);
           }}
           {...muiTabsProps}
@@ -66,7 +64,9 @@ export default function Tabs({ id, children, muiTabsProps, ...props }) {
           ))}
         </MuiTabs>
       </AppBar>
-      {children.map((child, index) => React.cloneElement(child, { index: index, value: value }))}
+      {children.map((child, index) =>
+        React.cloneElement(child, { index: index, value: value })
+      )}
     </div>
   );
 }

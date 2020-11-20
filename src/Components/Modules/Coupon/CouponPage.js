@@ -1,28 +1,25 @@
-import React from 'react';
+import React from "react";
 
-import DefaultLayout from '../../Layout/DefaultLayout';
-import Modal from '../../UI/Modal';
-import { CouponList, CouponForm } from '.';
+import DefaultLayout from "../../Layout/DefaultLayout";
+import Modal from "../../UI/Modal";
+import { CouponList, CouponForm } from ".";
 
 export default function CouponPage({ match, history }) {
-  const [title] = React.useState('Coupons');
+  const [title] = React.useState("Coupons");
   const [listKey, setListKey] = React.useState(1);
 
-  const handleCouponDialogComplete = message => {
+  const handleCouponDialogComplete = (message) => {
     setListKey(listKey + 1);
-    history.push('/coupons');
+    history.push("/coupons");
   };
 
   return (
-    <DefaultLayout
-      title={title}
-      pageTitle="Coupons"
-    >
+    <DefaultLayout title={title} pageTitle="Coupons">
       <CouponList key={listKey} history={history} />
 
       {match.params.id && (
         <Modal
-          title={`${match.params.id === 'new' ? "New" : ""} Coupon`}
+          title={`${match.params.id === "new" ? "New" : ""} Coupon`}
           toRoute="/coupons"
         >
           <CouponForm
@@ -33,4 +30,4 @@ export default function CouponPage({ match, history }) {
       )}
     </DefaultLayout>
   );
-};
+}

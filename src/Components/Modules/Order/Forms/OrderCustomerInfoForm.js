@@ -1,34 +1,30 @@
-import React from 'react';
-import { Box, Button, makeStyles } from '@material-ui/core';
-import {
-  Save as SaveIcon
-} from '@material-ui/icons';
-import * as formik from 'formik';
-import * as yup from 'yup';
+import React from "react";
+import { Box, Button, makeStyles } from "@material-ui/core";
+import { Save as SaveIcon } from "@material-ui/icons";
+import * as formik from "formik";
+import * as yup from "yup";
 
-import API from '../../../../Services/API';
-import { InputField, Switch } from '../../../UI/FormFields';
-import { PHONE_REGEX } from '../../../../Services/StaticData';
+import API from "../../../../Services/API";
+import { InputField, Switch } from "../../../UI/FormFields";
+import { PHONE_REGEX } from "../../../../Services/StaticData";
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
     marginTop: theme.spacing(3),
-    display: 'flex',
-    justifyContent: 'flex-end',
-  }
+    display: "flex",
+    justifyContent: "flex-end",
+  },
 }));
 
 const validationSchema = yup.object().shape({
-  firstName: yup.string()
-    .required('First name is required'),
-  lastName: yup.string()
-    .required('Last name is required'),
-  email: yup.string().email()
-    .required('A valid email address is required'),
-  phone: yup.string()
-    .required('A valid phone number is required')
-    .matches(PHONE_REGEX, 'Phone number is not valid'),
-  applyToAccount: yup.boolean()
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
+  email: yup.string().email().required("A valid email address is required"),
+  phone: yup
+    .string()
+    .required("A valid phone number is required")
+    .matches(PHONE_REGEX, "Phone number is not valid"),
+  applyToAccount: yup.boolean(),
 });
 
 export default function OrderCustomerInfoForm({ order, onComplete }) {
@@ -41,7 +37,7 @@ export default function OrderCustomerInfoForm({ order, onComplete }) {
         lastName: order.customer.lastName,
         email: order.customer.email,
         phone: order.customer.phone,
-        applyToAccount: false
+        applyToAccount: false,
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -51,23 +47,25 @@ export default function OrderCustomerInfoForm({ order, onComplete }) {
 
         let newCustomerValues = {
           ...order.customer,
-          ...values
+          ...values,
         };
 
         let newOrderValues = {
           ...order,
-          customer: newCustomerValues
+          customer: newCustomerValues,
         };
 
         promises.push(API.Orders.update(order.glid, newOrderValues));
-        
+
         if (updateAccount) {
-          promises.push(API.Customers.update(order.customer.glid, newCustomerValues));
+          promises.push(
+            API.Customers.update(order.customer.glid, newCustomerValues)
+          );
         }
 
         Promise.all(promises).then(() => {
           setSubmitting(false);
-          onComplete('Order Customer Info Updated', newOrderValues);
+          onComplete("Order Customer Info Updated", newOrderValues);
         });
       }}
     >
@@ -104,9 +102,15 @@ export default function OrderCustomerInfoForm({ order, onComplete }) {
           <formik.Field
             component={Switch}
             name="applyToAccount"
-            label={<span>Also apply these changes to the Customer Account<br/>NOTE: This will NOT automatically be applied to other orders.</span>}
+            label={
+              <span>
+                Also apply these changes to the Customer Account
+                <br />
+                NOTE: This will NOT automatically be applied to other orders.
+              </span>
+            }
             margin="normal"
-            inputProps={{ color: 'primary' }}
+            inputProps={{ color: "primary" }}
           />
           <Box className={classes.formActions}>
             <Button

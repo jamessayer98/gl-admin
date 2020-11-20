@@ -1,5 +1,5 @@
-import Auth from './Auth';
-import Axios from './Axios';
+import Auth from "./Auth";
+import Axios from "./Axios";
 
 class GLAPI_Interface {
   static handleResponse(res) {
@@ -24,109 +24,96 @@ class GLAPI_Interface {
 }
 
 class CRUD extends GLAPI_Interface {
-
   static create(data) {
-    return Axios
-      .post(`/${this.endpoint}`, data)
+    return Axios.post(`/${this.endpoint}`, data)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 
   static get(id) {
-    return Axios
-      .get(`/${this.endpoint}/${id}`)
+    return Axios.get(`/${this.endpoint}/${id}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 
   static getAll() {
-    return Axios
-      .get(`/${this.endpoint}`)
+    return Axios.get(`/${this.endpoint}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 
   static update(id, data) {
-    return Axios
-      .post(`/${this.endpoint}/${id}`, data)
+    return Axios.post(`/${this.endpoint}/${id}`, data)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 
   static delete(id) {
-    return Axios
-      .delete(`/${this.endpoint}/${id}`)
+    return Axios.delete(`/${this.endpoint}/${id}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 }
 
 const checkAuth = () => {
-  return Axios
-    .get('/')
+  return Axios.get("/")
     .then(() => true)
     .catch(CRUD.handeError);
 };
 
 class Users extends CRUD {
-  static endpoint = 'users';
+  static endpoint = "users";
 
   static getManufacturers() {
-    return Axios
-      .get(`/${this.endpoint}/manufacturers`)
+    return Axios.get(`/${this.endpoint}/manufacturers`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 }
 
 class Orders extends CRUD {
-  static endpoint = 'orders';
+  static endpoint = "orders";
 
   static getOrdersByCustomer(customerId) {
-    return Axios
-      .get(`/${this.endpoint}/customer/${customerId}`)
+    return Axios.get(`/${this.endpoint}/customer/${customerId}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 
   static getOrdersByManufacturer(manufacturerId) {
-    return Axios
-      .get(`/${this.endpoint}/manufacturer/${manufacturerId}`)
+    return Axios.get(`/${this.endpoint}/manufacturer/${manufacturerId}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 
   static setStatus(orderId, status) {
-    return Axios
-      .post(`/${this.endpoint}/${orderId}/status/${status}`)
+    return Axios.post(`/${this.endpoint}/${orderId}/status/${status}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 }
 
 class Customers extends CRUD {
-  static endpoint = 'customers';
+  static endpoint = "customers";
 }
 
 class Coupons extends CRUD {
-  static endpoint = 'coupons';
+  static endpoint = "coupons";
 }
 
 class Manufacturers extends CRUD {
-  static endpoint = 'manufacturers';
+  static endpoint = "manufacturers";
 }
 
 class Settings extends GLAPI_Interface {
   static get(name) {
-    return Axios
-      .get(`/settings/${name}`)
+    return Axios.get(`/settings/${name}`)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
 
   static set(name, value) {
-    return Axios
-      .post(`/settings/${name}`, value)
+    return Axios.post(`/settings/${name}`, value)
       .then(this.handleResponse)
       .catch(this.handleError);
   }
@@ -139,5 +126,5 @@ export default {
   Customers,
   Coupons,
   Manufacturers,
-  Settings
+  Settings,
 };

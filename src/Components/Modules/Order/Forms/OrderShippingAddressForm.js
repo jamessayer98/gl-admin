@@ -1,29 +1,27 @@
-import React from 'react';
-import { Box, Button, makeStyles } from '@material-ui/core';
-import {
-  Save as SaveIcon
-} from '@material-ui/icons';
-import * as formik from 'formik';
-import * as yup from 'yup';
+import React from "react";
+import { Box, Button, makeStyles } from "@material-ui/core";
+import { Save as SaveIcon } from "@material-ui/icons";
+import * as formik from "formik";
+import * as yup from "yup";
 
-import API from '../../../../Services/API';
-import { InputField, Switch } from '../../../UI/FormFields';
+import API from "../../../../Services/API";
+import { InputField, Switch } from "../../../UI/FormFields";
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
     marginTop: theme.spacing(3),
-    display: 'flex',
-    justifyContent: 'flex-end',
-  }
+    display: "flex",
+    justifyContent: "flex-end",
+  },
 }));
 
 const validationSchema = yup.object().shape({
-  street: yup.string().required('Shipping address 1 is required'),
+  street: yup.string().required("Shipping address 1 is required"),
   secondary: yup.string(),
-  city: yup.string().required('City is required'),
-  state: yup.string().required('US state is required'),
-  zip: yup.string().required('Zip is required'),
-  applyToAccount: yup.boolean()
+  city: yup.string().required("City is required"),
+  state: yup.string().required("US state is required"),
+  zip: yup.string().required("Zip is required"),
+  applyToAccount: yup.boolean(),
 });
 
 export default function OrderShippingAddressForm({ order, onComplete }) {
@@ -42,24 +40,26 @@ export default function OrderShippingAddressForm({ order, onComplete }) {
           ...order.customer,
           address: {
             ...order.customer.address,
-            ...values
-          }
+            ...values,
+          },
         };
 
         let newOrderValues = {
           ...order,
-          customer: newCustomerValues
+          customer: newCustomerValues,
         };
 
         promises.push(API.Orders.update(order.glid, newOrderValues));
 
         if (updateAccount) {
-          promises.push(API.Customers.update(order.customer.glid, newCustomerValues));
+          promises.push(
+            API.Customers.update(order.customer.glid, newCustomerValues)
+          );
         }
 
         Promise.all(promises).then(() => {
           setSubmitting(false);
-          onComplete('Order Customer Info Updated', newOrderValues);
+          onComplete("Order Customer Info Updated", newOrderValues);
         });
       }}
     >
@@ -103,9 +103,15 @@ export default function OrderShippingAddressForm({ order, onComplete }) {
           <formik.Field
             component={Switch}
             name="applyToAccount"
-            label={<span>Also apply these changes to the Customer Account<br />NOTE: This will NOT automatically be applied to other orders.</span>}
+            label={
+              <span>
+                Also apply these changes to the Customer Account
+                <br />
+                NOTE: This will NOT automatically be applied to other orders.
+              </span>
+            }
             margin="normal"
-            inputProps={{ color: 'primary' }}
+            inputProps={{ color: "primary" }}
           />
           <Box className={classes.formActions}>
             <Button

@@ -1,60 +1,51 @@
-import React from 'react';
-import {
-  Box,
-  CircularProgress,
-  makeStyles,
-  Button
-} from '@material-ui/core';
-import * as formik from 'formik';
-import * as yup from 'yup';
+import React from "react";
+import { Box, CircularProgress, makeStyles, Button } from "@material-ui/core";
+import * as formik from "formik";
+import * as yup from "yup";
 
-import API from '../../../Services/API';
+import API from "../../../Services/API";
 
-import { InputField, DropDown } from '../../UI/FormFields';
-import { parseGLID } from '../../UI/GLID';
+import { InputField, DropDown } from "../../UI/FormFields";
+import { parseGLID } from "../../UI/GLID";
 
 const useStyles = makeStyles((theme) => ({
   formActions: {
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(7),
-    display: 'flex',
-    justifyContent: 'flex-start',
+    display: "flex",
+    justifyContent: "flex-start",
   },
   loader: {
-    display: 'flex',
-    justifyContent: 'center'
+    display: "flex",
+    justifyContent: "center",
   },
   buttons: {
-    width: '100%'
-  }
+    width: "100%",
+  },
 }));
 
 const defaultCoupon = {
-  name: '',
-  code: '',
+  name: "",
+  code: "",
   type: null,
   value: 0,
   uses: 0,
-  status: 'enabled'
+  status: "enabled",
 };
 
 const formSchema = {
-  name: yup.string()
-    .required('Name is required')
+  name: yup.string().required("Name is required").default(defaultCoupon.name),
+  code: yup.string().required("Code is required").default(defaultCoupon.name),
+  type: yup.string().required("Type is required").default(defaultCoupon.name),
+  value: yup
+    .number()
+    .positive("Value must be a positive number")
+    .required("Value is required")
     .default(defaultCoupon.name),
-  code: yup.string()
-    .required('Code is required')
-    .default(defaultCoupon.name),
-  type: yup.string()
-    .required('Type is required')
-    .default(defaultCoupon.name),
-  value: yup.number()
-    .positive('Value must be a positive number')
-    .required('Value is required')
-    .default(defaultCoupon.name),
-  status: yup.string()
-    .required('Status is required')
-    .default(defaultCoupon.status)
+  status: yup
+    .string()
+    .required("Status is required")
+    .default(defaultCoupon.status),
 };
 
 export default function CouponForm({ couponId, onComplete }) {
@@ -63,12 +54,12 @@ export default function CouponForm({ couponId, onComplete }) {
 
   React.useEffect(() => {
     if (couponId) {
-      if (couponId === 'new') {
+      if (couponId === "new") {
         setCoupon(defaultCoupon);
       } else {
-        API.Coupons
-          .get(parseGLID(couponId))
-          .then(coupon => setCoupon(coupon));
+        API.Coupons.get(parseGLID(couponId)).then((coupon) =>
+          setCoupon(coupon)
+        );
       }
     }
   }, [couponId]);
@@ -89,7 +80,7 @@ export default function CouponForm({ couponId, onComplete }) {
         type: coupon.type,
         value: coupon.value,
         uses: coupon.uses,
-        status: coupon.status
+        status: coupon.status,
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -102,9 +93,9 @@ export default function CouponForm({ couponId, onComplete }) {
           promise = API.Coupons.create(values);
         }
 
-        promise.then(res => {
+        promise.then((res) => {
           setSubmitting(false);
-          onComplete('Coupon ' + (couponId === null ? 'Created' : 'Updated'));
+          onComplete("Coupon " + (couponId === null ? "Created" : "Updated"));
         });
       }}
     >
@@ -130,7 +121,10 @@ export default function CouponForm({ couponId, onComplete }) {
             label="Type"
             margin="normal"
             fullWidth
-            dataSource={[{ label: 'Percent', value: 'percent' }, { label: 'Flat Rate', value: 'flat' }]}
+            dataSource={[
+              { label: "Percent", value: "percent" },
+              { label: "Flat Rate", value: "flat" },
+            ]}
           />
           <formik.Field
             component={InputField}
@@ -145,7 +139,10 @@ export default function CouponForm({ couponId, onComplete }) {
             label="Status"
             margin="normal"
             fullWidth
-            dataSource={[{ label: 'Enabled', value: 'enabled' }, { label: 'Disabled', value: 'disabled' }]}
+            dataSource={[
+              { label: "Enabled", value: "enabled" },
+              { label: "Disabled", value: "disabled" },
+            ]}
           />
           <Box>
             <Button

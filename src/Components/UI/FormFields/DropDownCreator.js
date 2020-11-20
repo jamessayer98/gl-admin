@@ -1,16 +1,27 @@
-import React from 'react';
-import { TextField } from '@material-ui/core';
-import { Autocomplete, createFilterOptions } from '@material-ui/lab';
-import { getFieldError } from '../../../Helpers/FormHelpers'
-import { fieldToTextField } from 'formik-material-ui';
+import React from "react";
+import { TextField } from "@material-ui/core";
+import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+import { getFieldError } from "../../../Helpers/FormHelpers";
+import { fieldToTextField } from "formik-material-ui";
 
 const filter = createFilterOptions();
 
-export default function DropDownCreator({ textFieldProps, createOption, onSelect, ...props }) {
-  const { form: { setTouched, setFieldValue, ...form } } = props;
+export default function DropDownCreator({
+  textFieldProps,
+  createOption,
+  onSelect,
+  ...props
+}) {
+  const {
+    form: { setTouched, setFieldValue, ...form },
+  } = props;
   const { error, helperText, ...field } = fieldToTextField(props);
   const { name } = field;
-  const { wasTouched, errorMsg } = getFieldError(name, form.touched, form.errors);
+  const { wasTouched, errorMsg } = getFieldError(
+    name,
+    form.touched,
+    form.errors
+  );
 
   return (
     <Autocomplete
@@ -19,12 +30,12 @@ export default function DropDownCreator({ textFieldProps, createOption, onSelect
       error={wasTouched && errorMsg && true}
       helperText={wasTouched && errorMsg}
       onChange={(_, value) => {
-        onSelect(value).then(newValue => setFieldValue(name, newValue));
+        onSelect(value).then((newValue) => setFieldValue(name, newValue));
       }}
       filterOptions={(options, params) => {
         const filtered = filter(options, params);
 
-        if (params.inputValue !== '') {
+        if (params.inputValue !== "") {
           // If we have an exact match, don't add the "Create" option
           for (let i = 0; i < filtered.length; i++) {
             if (filtered[i].label === params.inputValue) {
@@ -39,8 +50,13 @@ export default function DropDownCreator({ textFieldProps, createOption, onSelect
         return filtered;
       }}
       onBlur={() => setTouched({ [name]: true })}
-      renderInput={props => (
-        <TextField {...props} {...textFieldProps} helperText={helperText} error={error} />
+      renderInput={(props) => (
+        <TextField
+          {...props}
+          {...textFieldProps}
+          helperText={helperText}
+          error={error}
+        />
       )}
     />
   );
