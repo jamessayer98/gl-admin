@@ -109,7 +109,7 @@ export default function UserForm({ userId, onComplete }) {
         email: user.email,
         role: user.role,
         enabled: user.enabled,
-        manufacturer: user.manufacturer,
+        manufacturer: user.manufacturer ? user.manufacturer : null,
         password: '',
         passwordConfirmation: ''
       }}
@@ -204,10 +204,10 @@ export default function UserForm({ userId, onComplete }) {
                     let mfgs = manufacturers.slice();
                     mfgs.push(res.data);
                     setManufacturers(mfgs);
-                    resolve(res.data)
+                    resolve(res.data.glid)
                   });
                 } else {
-                  resolve(newValue);
+                  resolve(newValue.glid);
                 }
               })
             }}
