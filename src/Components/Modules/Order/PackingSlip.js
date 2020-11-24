@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 16,
       fontWeight: "bold",
     },
+    marginBottom: "50px",
   },
 }));
 
@@ -111,7 +112,6 @@ export default function PackingSlip({ order }) {
             <TableCell>Surface Finish</TableCell>
             <TableCell>Tg (&deg;C)</TableCell>
             <TableCell># Boards</TableCell>
-            <TableCell>Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -138,44 +138,10 @@ export default function PackingSlip({ order }) {
               <TableCell>{item.options.surfaceFinish}</TableCell>
               <TableCell>{item.options.tg} &deg;C</TableCell>
               <TableCell>{item.quantity}</TableCell>
-              <TableCell>
-                <Currency value={item.total} />
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-
-      <Grid container justify="flex-end">
-        <Grid item xs={4}>
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Tax
-                </TableCell>
-                <TableCell>
-                  <Currency value={order.amounts.tax} />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Shipping
-                </TableCell>
-                <TableCell>FREE</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Total
-                </TableCell>
-                <TableCell>
-                  <Currency value={order.amounts.total} />
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Grid>
-      </Grid>
 
       <Typography variant="subtitle1">Questions or concerns?</Typography>
 
