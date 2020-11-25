@@ -133,7 +133,7 @@ export default function PackingSlip({ order }) {
                 />{" "}
                 mm<sup>2</sup>
               </TableCell>
-              <TableCell>{item.board.layers.length}</TableCell>
+              <TableCell>{item.board.metrics.layers}</TableCell>
               <TableCell>{item.options.copperWeight} oz</TableCell>
               <TableCell>{item.options.surfaceFinish}</TableCell>
               <TableCell>{item.options.tg} &deg;C</TableCell>
