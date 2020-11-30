@@ -67,11 +67,7 @@ export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
       const itemsWithoutTrackingInfo = [];
       const itemsNotShipped = [];
 
-      console.log("order <=> ", order);
-
       order.items.forEach((item) => {
-        console.log("--=>", item);
-
         if (
           item.trackingAvailable &&
           (item.tracking === null || item.tracking === "")
@@ -83,8 +79,6 @@ export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
           itemsNotShipped.push(item);
         }
       });
-
-      console.log(itemsWithoutTrackingInfo);
 
       // We actually do want to respond first with the missing info message here, do not combine.
       // Its almost certainly the case that if the info is missing, then the item isn't shipped
