@@ -86,10 +86,6 @@ export function OrderItemBasicInfoTable({ order, item, ...props }) {
     },
   ];
 
-  React.useEffect(() => {
-    console.log("order == ", item);
-  }, [order]);
-
   if (Auth.currentUserRole === roles.manufacturer) {
     boardData.push({ label: "Layers", value: item.board.metrics.layers });
   }
