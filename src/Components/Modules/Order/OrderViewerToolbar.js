@@ -70,7 +70,7 @@ export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
       order.items.forEach((item) => {
         if (
           item.trackingAvailable &&
-          (!item.tracking || item.tracking === "")
+          (item.tracking === null || item.tracking === "")
         ) {
           itemsWithoutTrackingInfo.push(item);
         }
@@ -83,6 +83,7 @@ export default function OrderViewerToolbar({ order, onOrderChange, ...props }) {
       // We actually do want to respond first with the missing info message here, do not combine.
       // Its almost certainly the case that if the info is missing, then the item isn't shipped
       // (and they'll just flag it as shipped when they update)
+
       if (itemsWithoutTrackingInfo.length > 0) {
         setAlertOpen(true);
         setStatusError({
