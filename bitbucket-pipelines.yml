@@ -23,12 +23,12 @@ pipelines:
               variables:
                 COMMAND: 'upload'
                 APPLICATION_NAME: 'portal.staging.gerberlabs.com'
-                DEPLOYMENT_GROUP: 'DG1'
-                S3_BUCKET: 'gl-staging-deployment'
+                DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
+                S3_BUCKET: 'portal.staging.gerberlabs.com'
                 ZIP_FILE: 'gl-management-portal.zip'
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'deploy'
                 APPLICATION_NAME: 'portal.staging.gerberlabs.com'
-                DEPLOYMENT_GROUP: 'DG1'
-                S3_BUCKET: 'gl-staging-deployment'
+                DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
+                S3_BUCKET: 'portal.staging.gerberlabs.com'
