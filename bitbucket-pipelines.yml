@@ -17,18 +17,19 @@ pipelines:
             - npm install
             - echo "REACT_APP_API_URL=http://api.staging.gerberlabs.com:3000" > .env
             - npm run build
+            - cp -r scripts/* build/
             - cp appspec.yml build/appspec.yml
             - zip -rq gl-management-portal.zip *
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
-                COMMAND: 'upload'
-                APPLICATION_NAME: 'portal.staging.gerberlabs.com'
-                DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
-                S3_BUCKET: 'portal.staging.gerberlabs.com'
-                ZIP_FILE: 'gl-management-portal.zip'
+                COMMAND: "upload"
+                APPLICATION_NAME: "portal.staging.gerberlabs.com"
+                DEPLOYMENT_GROUP: "portal.staging.gerberlabs.com"
+                S3_BUCKET: "portal.staging.gerberlabs.com"
+                ZIP_FILE: "gl-management-portal.zip"
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
-                COMMAND: 'deploy'
-                APPLICATION_NAME: 'portal.staging.gerberlabs.com'
-                DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
-                S3_BUCKET: 'portal.staging.gerberlabs.com'
+                COMMAND: "deploy"
+                APPLICATION_NAME: "portal.staging.gerberlabs.com"
+                DEPLOYMENT_GROUP: "portal.staging.gerberlabs.com"
+                S3_BUCKET: "portal.staging.gerberlabs.com"
