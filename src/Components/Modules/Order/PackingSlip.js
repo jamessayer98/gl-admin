@@ -14,7 +14,7 @@ import PrintLayout from "../../Layout/PrintLayout";
 import API from "../../../Services/API";
 import { parseGLID, makeGLID } from "../../UI/GLID";
 import NumberFormat from "react-number-format";
-import Currency from "../../UI/Currency";
+// import Currency from "../../UI/Currency";
 
 export function PackingSlipPrintPage({ match }) {
   const [order, setOrder] = React.useState(null);
