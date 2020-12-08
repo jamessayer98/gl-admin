@@ -3,3 +3,8 @@ os: linux
 files:
   - source: /build
     destination: /home/ubuntu/app/
+hooks:
+  BeforeInstall:
+    - location: scripts/codedeploy/beforeinstall.sh
+      timeout: 300
+      runas: ubuntu
