@@ -22,14 +22,40 @@ pipelines:
             - zip -rq gl-management-portal.zip *
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
-                COMMAND: "upload"
-                APPLICATION_NAME: "portal.staging.gerberlabs.com"
-                DEPLOYMENT_GROUP: "portal.staging.gerberlabs.com"
-                S3_BUCKET: "portal.staging.gerberlabs.com"
-                ZIP_FILE: "gl-management-portal.zip"
+                COMMAND: 'upload'
+                APPLICATION_NAME: 'portal.staging.gerberlabs.com'
+                DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
+                S3_BUCKET: 'portal.staging.gerberlabs.com'
+                ZIP_FILE: 'gl-management-portal.zip'
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
-                COMMAND: "deploy"
-                APPLICATION_NAME: "portal.staging.gerberlabs.com"
-                DEPLOYMENT_GROUP: "portal.staging.gerberlabs.com"
-                S3_BUCKET: "portal.staging.gerberlabs.com"
+                COMMAND: 'deploy'
+                APPLICATION_NAME: 'portal.staging.gerberlabs.com'
+                DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
+                S3_BUCKET: 'portal.staging.gerberlabs.com'
+    master:
+      - step:
+          name: Deploy
+          deployment: Production
+          script:
+            - apt-get update
+            - apt-get install -y zip
+            - npm install
+            - echo "REACT_APP_API_URL=https://www.gerberlabs.com/api/" > .env
+            - npm run build
+            - cp -r scripts/* build/
+            - cp appspec.yml build/appspec.yml
+            - zip -rq gl-management-portal.zip *
+            - pipe: atlassian/aws-code-deploy:0.5.2
+              variables:
+                COMMAND: 'upload'
+                APPLICATION_NAME: 'portal.gerberlabs.com'
+                DEPLOYMENT_GROUP: 'portal.gerberlabs.com'
+                S3_BUCKET: 'portal.gerberlabs.com'
+                ZIP_FILE: 'prod-gl-management-portal.zip'
+            - pipe: atlassian/aws-code-deploy:0.5.2
+              variables:
+                COMMAND: 'deploy'
+                APPLICATION_NAME: 'portal.gerberlabs.com'
+                DEPLOYMENT_GROUP: 'portal.gerberlabs.com'
+                S3_BUCKET: 'portal.gerberlabs.com'
