@@ -36,16 +36,16 @@ pipelines:
     master:
       - step:
           name: Deploy
-          deployment: Production
+          deployment: production
           script:
             - apt-get update
             - apt-get install -y zip
             - npm install
-            - echo "REACT_APP_API_URL=https://www.gerberlabs.com/api/" > .env
+            - echo "REACT_APP_API_URL=https://www.gerberlabs.com/api" > .env
             - npm run build
             - cp -r scripts/* build/
             - cp appspec.yml build/appspec.yml
-            - zip -rq gl-management-portal.zip *
+            - zip -rq prod-gl-management-portal.zip *
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'upload'
