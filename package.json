@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "sh -ac '. ./.env.${REACT_APP_ENV}; react-scripts build'",
+    "build": "react-scripts build",
     "build:staging": "sh -ac '. ./.env.staging; react-scripts build'",
     "build:production": "sh -ac '. ./.env.production; react-scripts build'",
     "test": "react-scripts test",
