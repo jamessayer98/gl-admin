@@ -43,12 +43,6 @@ rm -rf build
 
 if [ $env == "staging" ]
 then
-  if [ ! -f ".env.staging" ]
-  then
-    err "Could not find .env.staging"
-    exit 1
-  fi
-
   echo "Starting staging build..."
 
   npm run build
@@ -58,12 +52,6 @@ echo
 
 if [ $env == "production" ]
 then
-  if [ ! -f ".env.production" ]
-  then
-    err "Could not find .env.production"
-    exit 1
-  fi
-
   echo "Starting production build..."
 
   npm run build
