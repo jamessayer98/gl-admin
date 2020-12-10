@@ -19,10 +19,10 @@ pipelines:
             - cp -r scripts/* build/
             - cp appspec.yml build/appspec.yml
             - zip -rq gl-management-portal.zip *
+            - export REACT_APP_API_URL=$REACT_APP_API_URL_ST
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'upload'
-                REACT_APP_API_URL: $REACT_APP_API_URL_ST
                 APPLICATION_NAME: 'portal.staging.gerberlabs.com'
                 DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
                 S3_BUCKET: 'portal.staging.gerberlabs.com'
@@ -30,7 +30,6 @@ pipelines:
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'deploy'
-                REACT_APP_API_URL: $REACT_APP_API_URL_ST
                 APPLICATION_NAME: 'portal.staging.gerberlabs.com'
                 DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
                 S3_BUCKET: 'portal.staging.gerberlabs.com'
@@ -46,6 +45,7 @@ pipelines:
             - cp -r scripts/* build/
             - cp appspec.yml build/appspec.yml
             - zip -rq prod-gl-management-portal.zip *
+            - export REACT_APP_API_URL=$REACT_APP_API_URL_PD
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'upload'
