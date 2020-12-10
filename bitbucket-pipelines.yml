@@ -11,8 +11,6 @@ pipelines:
       - step:
           name: Deploy
           deployment: staging
-          caches:
-            - node
           script:
             - apt-get update
             - apt-get install -y zip
@@ -32,6 +30,7 @@ pipelines:
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'deploy'
+                REACT_APP_API_URL: $REACT_APP_API_URL_ST
                 APPLICATION_NAME: 'portal.staging.gerberlabs.com'
                 DEPLOYMENT_GROUP: 'portal.staging.gerberlabs.com'
                 S3_BUCKET: 'portal.staging.gerberlabs.com'
@@ -58,6 +57,7 @@ pipelines:
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'deploy'
+                REACT_APP_API_URL: $REACT_APP_API_URL_PD
                 APPLICATION_NAME: 'portal.gerberlabs.com'
                 DEPLOYMENT_GROUP: 'portal.gerberlabs.com'
                 S3_BUCKET: 'portal.gerberlabs.com'
