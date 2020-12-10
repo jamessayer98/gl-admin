@@ -51,7 +51,7 @@ then
 
   echo "Starting staging build..."
 
-  npm run build:staging 
+  npm run build
 fi
 
 echo 
@@ -66,7 +66,7 @@ then
 
   echo "Starting production build..."
 
-  npm run build:production
+  npm run build
 fi
 
 echo "Archiving..."
