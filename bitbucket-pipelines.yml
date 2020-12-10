@@ -19,7 +19,7 @@ pipelines:
             - cp -r scripts/* build/
             - cp appspec.yml build/appspec.yml
             - zip -rq gl-management-portal.zip *
-            - export REACT_APP_API_URL=$REACT_APP_API_URL_ST
+            - echo "REACT_APP_API_URL_ST = $REACT_APP_API_URL_ST"
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'upload'
@@ -45,7 +45,7 @@ pipelines:
             - cp -r scripts/* build/
             - cp appspec.yml build/appspec.yml
             - zip -rq prod-gl-management-portal.zip *
-            - export REACT_APP_API_URL=$REACT_APP_API_URL_PD
+            - echo "REACT_APP_API_URL_PD = $REACT_APP_API_URL_PD"
             - pipe: atlassian/aws-code-deploy:0.5.2
               variables:
                 COMMAND: 'upload'
