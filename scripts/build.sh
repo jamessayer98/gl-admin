@@ -64,4 +64,4 @@ tar -czf $buildfile *
 
 echo 
 echo "Build complete. You can now deploy ${dest}/${buildfile}"
-echo 
+echo
