@@ -30,8 +30,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:staging": "sh -ac '. .env.staging; react-scripts build'",
-    "build:production": "sh -ac '. .env.production; react-scripts build'",
+    "build:staging": "npm run build --mode staging",
+    "build:production": "npm run build --mode production",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
