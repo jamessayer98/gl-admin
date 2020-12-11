@@ -88,7 +88,7 @@ export default function PackingSlip({ order }) {
           <Grid item xs={6}>
             <Typography align="right">
               <img
-                src="http://staging.gerberlabs.com/wp-content/themes/gl-2020/assets/images/logo-tagline-small.png"
+                src={process.env.REACT_APP_LOGO_URL}
                 alt="GerberLabs"
               />
             </Typography>
