@@ -97,20 +97,26 @@ export default function UserList({ history }) {
           { title: "Last Login", field: "lastLogin", type: "datetime" },
           { title: "IP", field: "ip" },
         ]}
-        data={users.map((user) => ({
-          name: user.name,
-          glid: user.glid,
-          type: user.role,
-          manufacturer: user.manufacturer ? (
-            user.manufacturer.name
-          ) : (
-            <span>&mdash;</span>
-          ),
-          email: user.email,
-          enabled: user.enabled,
-          lastLogin: user.lastAuth || <span>&mdash;</span>,
-          ip: user.ip || <span>&mdash;</span>,
-        }))}
+        data={users.map((user) => {
+          if (user.ip) {
+            user.ip = user.ip.replace("::ffff:", "");
+          }
+
+          return {
+            name: user.name,
+            glid: user.glid,
+            type: user.role,
+            manufacturer: user.manufacturer ? (
+              user.manufacturer.name
+            ) : (
+              <span>&mdash;</span>
+            ),
+            email: user.email,
+            enabled: user.enabled,
+            lastLogin: user.lastAuth || <span>&mdash;</span>,
+            ip: user.ip || <span>&mdash;</span>,
+          };
+        })}
         title="Users"
       />
       <Confirm

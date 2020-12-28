@@ -7,11 +7,7 @@ import { makeGLID } from "../../UI/GLID";
 
 export default function PackingSlipButton({ order }) {
   const [open, setOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    console.log("order === ", order);
-  }, [order]);
-
+  
   return (
     <Box>
       <Button
