@@ -37,6 +37,8 @@ class CRUD extends GLAPI_Interface {
   }
 
   static getAll() {
+    console.log("this--->", this.endpoint);
+
     return Axios.get(`/${this.endpoint}`)
       .then(this.handleResponse)
       .catch(this.handleError);

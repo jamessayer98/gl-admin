@@ -39,16 +39,23 @@ export default function DropDown({
   }
 
   return (
-    <FormControl
-      variant="outlined"
-      error={wasTouched && errorMsg && true}
-      {...rest}
-    >
-      <InputLabel id={`${field.name}-label`}>{label}</InputLabel>
-      <Select labelId={`${field.name}-label`} {...field}>
-        {items}
-      </Select>
-      <FormHelperText>{wasTouched && errorMsg}</FormHelperText>
-    </FormControl>
+    <>
+      <FormControl
+        variant="outlined"
+        error={wasTouched && errorMsg && true}
+        {...rest}
+      >
+        <InputLabel id={`${field.name}-label`}>{label}</InputLabel>
+        <Select
+          labelId={`${field.name}-label`}
+          id={`${field.name}-label`}
+          label={field.name}
+          {...field}
+        >
+          {items}
+        </Select>
+        <FormHelperText>{wasTouched && errorMsg}</FormHelperText>
+      </FormControl>
+    </>
   );
 }
