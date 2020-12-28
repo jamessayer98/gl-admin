@@ -109,7 +109,7 @@ export default function UserList({ history }) {
           email: user.email,
           enabled: user.enabled,
           lastLogin: user.lastAuth || <span>&mdash;</span>,
-          ip: user.ip || <span>&mdash;</span>,
+          ip: user.ip.substr(0, 6) || <span>&mdash;</span>,
         }))}
         title="Users"
       />

@@ -109,7 +109,7 @@ export default function UserForm({ userId, onComplete }) {
         enabled: user.enabled,
         manufacturer: user.manufacturer ? user.manufacturer : null,
         password: "",
-        passwordConfirmation: ""
+        passwordConfirmation: "",
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -210,7 +210,7 @@ export default function UserForm({ userId, onComplete }) {
                     let mfgs = manufacturers.slice();
                     mfgs.push(res.data);
                     setManufacturers(mfgs);
-                    resolve(res.data.glid)
+                    resolve(res.data.glid);
                   });
                 } else {
                   resolve(newValue.glid);
